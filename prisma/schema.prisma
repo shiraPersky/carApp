@@ -1,0 +1,31 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js" // This tells Prisma to generate the client
+}
+
+datasource db {
+  provider = "postgresql" // Specifies the database provider (PostgreSQL in this case)
+  url      = env("DATABASE_URL") // Uses an environment variable to securely store the database URL
+}
+
+model Service {
+  id                    Int       @id @default(autoincrement()) // Unique identifier
+  car_id                Int       // Foreign key to the Car table
+  service_type          String    // Type of service
+  date                  DateTime  // Date of the service
+  time                  String    // Time of the service
+  odometer             Int       // Odometer reading
+  place                String    // Service location
+  driver               String    // Driver's name
+  paymentMethod        String    // Payment method used
+  file_attachment      String?   // File attachment URL (optional)
+  cost                 Float     // Cost of the service
+  notes                String?   // Additional notes (optional)
+  reminderKilometers   Int?      // Reminder in kilometers (optional)
+  reminderMonths       Int?      // Reminder in months (optional)
+
+  createdAt            DateTime  @default(now()) // Timestamp for when the service was created
+  updatedAt            DateTime  @updatedAt // Timestamp for when the service was last updated
+
+}
