@@ -1,16 +1,45 @@
-export interface ServiceDto {
-    car_id: number;              // Foreign Key to Cars table
-    date: string;                // Service date
-    time: string;                // Service time
-    odometer: number;            // Odometer reading
-    service_type: string;        // Type of service
-    place: string;               // Service location
-    driver: string;              // Driver's name
-    payment_method: string;      // Payment method
-    file_attachment?: string;    // URL of file attachment
-    cost: number;                // Service cost
-    notes?: string;              // Additional notes 
-    reminder_kilometers?: number;// Reminder in kilometers 
-    reminder_months?: number;    // Reminder in months 
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+export class ServiceDto {
+  // Instance properties (non-static)
+  car_id: number;
+  date: string;
+  time: string;
+  odometer: number;
+  service_type: string;
+  place: string;
+  driver: string;
+  payment_method: string;
+  file_attachment?: string;
+  cost: number;
+  notes?: string;
+  reminder_kilometers?: number;
+  reminder_months?: number;
+
+  // Static method to create a new service record
+  static async create(data: ServiceDto) {
+    return await prisma.service.create({ data });
   }
-  
+
+  // Static method to get all service records
+  static async getAll() {
+    return await prisma.service.findMany();
+  }
+
+  // Static method to update a specific service record
+  static async update(id: number, data: Partial<ServiceDto>) {
+    return await prisma.service.update({
+      where: { id },
+      data,
+    });
+  }
+
+  // Static method to delete a service record
+  static async delete(id: number) {
+    return await prisma.service.delete({
+      where: { id },
+    });
+  }
+}
