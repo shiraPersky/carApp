@@ -3,7 +3,6 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export class ServiceDto {
-  // Instance properties (non-static)
   car_id: number;
   date: string;
   time: string;
@@ -11,12 +10,12 @@ export class ServiceDto {
   service_type: string;
   place: string;
   driver: string;
-  payment_method: string;
+  paymentMethod: string; // Change to camelCase
   file_attachment?: string;
   cost: number;
   notes?: string;
-  reminder_kilometers?: number;
-  reminder_months?: number;
+  reminderKilometers?: number; // Change to camelCase
+  reminderMonths?: number; // Change to camelCase
 
   // Static method to create a new service record
   static async create(data: ServiceDto) {

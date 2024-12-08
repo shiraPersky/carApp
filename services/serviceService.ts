@@ -39,11 +39,11 @@ export class ServiceService {
       throw new Error('Cost must be a positive number');
     }
 
-    if (data.reminder_kilometers !== undefined && data.reminder_kilometers <= 0) {
+    if (data.reminderKilometers !== undefined && data.reminderKilometers <= 0) {
       throw new Error('Reminder kilometers must be a positive number');
     }
 
-    if (data.reminder_months !== undefined && data.reminder_months <= 0) {
+    if (data.reminderMonths !== undefined && data.reminderMonths <= 0) {
       throw new Error('Reminder months must be a positive number');
     }
   }
