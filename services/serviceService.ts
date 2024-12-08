@@ -3,7 +3,7 @@ import { ServiceDto } from '../dto/serviceDto';
 export class ServiceService {
   // Create a new service with validation
   async createService(data: ServiceDto) {
-    this.validateServiceData(data); // Call the private validation method
+    this.validateServiceData(data); // Call the private validation method .Throws error if data is invalid
     return await ServiceDto.create(data); // Call the DTO method
   }
 
