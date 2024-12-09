@@ -3,19 +3,19 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export class ServiceDto {
-  car_id: number;
-  date: string;
-  time: string;
-  odometer: number;
-  service_type: string;
-  place: string;
-  driver: string;
-  paymentMethod: string; // Change to camelCase
+  car_id!: number;
+  date!: string;
+  time!: string;
+  odometer!: number;
+  service_type!: string;
+  place!: string;
+  driver!: string;
+  paymentMethod!: string; 
   file_attachment?: string;
-  cost: number;
+  cost!: number;
   notes?: string;
-  reminderKilometers?: number; // Change to camelCase
-  reminderMonths?: number; // Change to camelCase
+  reminderKilometers?: number; 
+  reminderMonths?: number; 
 
   // Static method to create a new service record
   static async create(data: ServiceDto) {

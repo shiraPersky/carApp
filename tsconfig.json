@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "module": "ESNext",  // Use ES Modules
+      "target": "ES2020",  // Set the target to modern JavaScript
+      "moduleResolution": "node",  // Allow Node-style resolution
+      "esModuleInterop": true,  // Allow interop with non-ESM modules
+      "skipLibCheck": true,  // Skip checking types of library files
+      "strict": true,  // Enable strict type-checking options
+      "forceConsistentCasingInFileNames": true,  // Ensure consistent casing for filenames
+      "outDir": "./dist",             // Output compiled files to a `dist` folder
+      "resolveJsonModule": true,
+      "allowSyntheticDefaultImports": true
+    },
+    "include": ["app.ts", "controller/**/*.ts"],  // Include your TypeScript files
+    "exclude": ["node_modules"]  // Exclude node_modules
+  }
+  

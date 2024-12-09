@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import { ServiceService } from '../services/serviceService';//This service contains the business logic for handling Service operations.
-import { ServiceDto } from '../dto/serviceDto';
+import { ServiceService } from '../services/serviceService.js';//This service contains the business logic for handling Service operations.
+import { ServiceDto } from '../dto/serviceDto.js';
 
 const serviceService = new ServiceService();
 
@@ -13,6 +13,7 @@ router.post('/', async (req: Request, res: Response) => {
     const service = await serviceService.createService(data);
     res.status(201).json(service);
   } catch (error) {
+    console.error("Error creating service:", error);  // Log the error
     res.status(500).json({ error: 'Failed to create service' });
   }
 });
