@@ -31,7 +31,7 @@ export class ServiceService {  // Create a new service record
             return newService;
         }
         catch(error){
-            throw new Error(`Failed to create service: ${error.message}`);  
+            throw new Error(`Failed to create service: ${(error as Error).message}`);  
         }  
     }
 

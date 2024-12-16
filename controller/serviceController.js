@@ -13,49 +13,48 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const refuelService_js_1 = require("../services/refuelService.js"); // Business logic for handling refueling operations
-const refuelingService = new refuelService_js_1.RefuelingService();
-const router = express_1.default.Router();
-// Create a new refueling record
+const serviceService_1 = require("../services/serviceService"); //This service contains the business logic for handling Service operations.
+const serviceService = new serviceService_1.ServiceService();
+const router = express_1.default.Router(); //For define routes for handling API requests.
+// Create a new service
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const data = req.body; // Cast incoming data to RefuelingDto
-        const refueling = yield refuelingService.createRefueling(data);
-        res.status(201).json(refueling);
+        const data = req.body; // Cast incoming data to ServiceDto
+        const service = yield serviceService.createService(data);
+        res.status(201).json(service);
     }
     catch (error) {
-        console.error("Error creating refueling:", error);
-        res.status(500).json({ error: 'Failed to create refueling' });
+        res.status(500).json({ error: 'Failed to create service' });
     }
 }));
-// Get all refueling records
+// Get all services
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const refuelings = yield refuelingService.getAllRefuelings();
-        res.json(refuelings);
+        const services = yield serviceService.getAllServices();
+        res.json(services);
     }
     catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve refuelings' });
+        res.status(500).json({ error: 'Failed to retrieve services' });
     }
 }));
-// Update a refueling record
+// Update a service
 router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const updatedRefueling = yield refuelingService.updateRefueling(Number(req.params.id), req.body);
-        res.json(updatedRefueling);
+        const updatedService = yield serviceService.updateService(Number(req.params.id), req.body);
+        res.json(updatedService);
     }
     catch (error) {
-        res.status(500).json({ error: 'Failed to update refueling' });
+        res.status(500).json({ error: 'Failed to update service' });
     }
 }));
-// Delete a refueling record
+// Delete a service
 router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield refuelingService.deleteRefueling(Number(req.params.id));
-        res.status(200).json({ message: 'Refueling deleted successfully' });
+        yield serviceService.deleteService(Number(req.params.id));
+        res.status(200).json({ message: 'Service deleted successfully' });
     }
     catch (error) {
-        res.status(500).json({ error: 'Failed to delete refueling' });
+        res.status(500).json({ error: 'Failed to delete service' });
     }
 }));
 exports.default = router;

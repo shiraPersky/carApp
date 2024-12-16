@@ -13,49 +13,63 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const refuelService_js_1 = require("../services/refuelService.js"); // Business logic for handling refueling operations
-const refuelingService = new refuelService_js_1.RefuelingService();
+const add_carService_1 = require("../services/add_carService");
+const carService = new add_carService_1.CarService();
 const router = express_1.default.Router();
-// Create a new refueling record
+// Create a new car
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const data = req.body; // Cast incoming data to RefuelingDto
-        const refueling = yield refuelingService.createRefueling(data);
-        res.status(201).json(refueling);
+        const data = req.body; // Cast incoming data to CarDto
+        const car = yield carService.createCar(data);
+        res.status(201).json(car);
     }
     catch (error) {
-        console.error("Error creating refueling:", error);
-        res.status(500).json({ error: 'Failed to create refueling' });
+        res.status(500).json({ error: 'Failed to create car' });
     }
 }));
-// Get all refueling records
+// Get all cars
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const refuelings = yield refuelingService.getAllRefuelings();
-        res.json(refuelings);
+        const cars = yield carService.getAllCars();
+        res.json(cars);
     }
     catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve refuelings' });
+        res.status(500).json({ error: 'Failed to retrieve cars' });
     }
 }));
-// Update a refueling record
+// Get a car by ID
+router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const car = yield carService.getCarById(Number(req.params.id));
+        if (car) {
+            res.json(car);
+        }
+        else {
+            res.status(404).json({ error: 'Car not found' });
+        }
+    }
+    catch (error) {
+        res.status(500).json({ error: 'Failed to retrieve car' });
+    }
+}));
+// Update a car
 router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const updatedRefueling = yield refuelingService.updateRefueling(Number(req.params.id), req.body);
-        res.json(updatedRefueling);
+        const updatedCar = yield carService.updateCar(Number(req.params.id), req.body);
+        res.json(updatedCar);
     }
     catch (error) {
-        res.status(500).json({ error: 'Failed to update refueling' });
+        res.status(500).json({ error: 'Failed to update car' });
     }
 }));
-// Delete a refueling record
+// Delete a car
 router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield refuelingService.deleteRefueling(Number(req.params.id));
-        res.status(200).json({ message: 'Refueling deleted successfully' });
+        yield carService.deleteCar(Number(req.params.id));
+        res.status(200).json({ message: 'Car deleted successfully' });
     }
     catch (error) {
-        res.status(500).json({ error: 'Failed to delete refueling' });
+        res.status(500).json({ error: 'Failed to delete car' });
     }
 }));
 exports.default = router;
