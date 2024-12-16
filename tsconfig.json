@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-      "module": "ESNext",  // Use ES Modules
+      "module": "CommonJS",  // Use ES Modules
       "target": "ES2020",  // Set the target to modern JavaScript
       "moduleResolution": "node",  // Allow Node-style resolution
       "esModuleInterop": true,  // Allow interop with non-ESM modules
