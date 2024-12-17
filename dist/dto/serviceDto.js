@@ -1,32 +1,46 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-<<<<<<< HEAD
 exports.ServiceDto = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 class ServiceDto {
     // Static method to create a new service record
-    static async create(data) {
-        return await prisma.service.create({ data });
+    static create(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.service.create({ data });
+        });
     }
     // Static method to get all service records
-    static async getAll() {
-        return await prisma.service.findMany();
+    static getAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.service.findMany();
+        });
     }
     // Static method to update a specific service record
-    static async update(id, data) {
-        return await prisma.service.update({
-            where: { id },
-            data,
+    static update(id, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.service.update({
+                where: { id },
+                data,
+            });
         });
     }
     // Static method to delete a service record
-    static async delete(id) {
-        return await prisma.service.delete({
-            where: { id },
+    static delete(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.service.delete({
+                where: { id },
+            });
         });
     }
 }
 exports.ServiceDto = ServiceDto;
-=======
->>>>>>> addCar_feature
