@@ -1,31 +1,44 @@
-// prisma/schema.prisma
-
 generator client {
-  provider = "prisma-client-js" // This tells Prisma to generate the client
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql" // Specifies the database provider (PostgreSQL in this case)
-  url      = env("DATABASE_URL") // Uses an environment variable to securely store the database URL
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Service {
-  id                    Int       @id @default(autoincrement()) // Unique identifier
-  car_id                Int       // Foreign key to the Car table
-  service_type          String    // Type of service
-  date                  DateTime  // Date of the service
-  time                  String    // Time of the service
-  odometer             Int       // Odometer reading
-  place                String    // Service location
-  driver               String    // Driver's name
-  paymentMethod        String    // Payment method used
-  file_attachment      String?   // File attachment URL (optional)
-  cost                 Float     // Cost of the service
-  notes                String?   // Additional notes (optional)
-  reminderKilometers   Int?      // Reminder in kilometers (optional)
-  reminderMonths       Int?      // Reminder in months (optional)
+  id                 Int      @id @default(autoincrement())
+  car_id             Int
+  service_type       String
+  date               DateTime
+  time               String
+  odometer           Int
+  place              String
+  driver             String
+  paymentMethod      String
+  file_attachment    String?
+  cost               Float
+  notes              String?
+  reminderKilometers Int?
+  reminderMonths     Int?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
 
-  createdAt            DateTime  @default(now()) // Timestamp for when the service was created
-  updatedAt            DateTime  @updatedAt // Timestamp for when the service was last updated
-
+model Refueling {
+  id             Int      @id @default(autoincrement())
+  date           DateTime
+  time           String
+  odometer       Int
+  kindOfFuel     String
+  pricePerLiter  Float
+  totalCost      Float
+  liters         Float
+  gasStation     String
+  driver         String
+  fileAttachment String?
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
