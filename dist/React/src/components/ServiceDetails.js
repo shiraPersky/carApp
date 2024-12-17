@@ -13,27 +13,62 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
-const react_router_dom_1 = require("react-router-dom"); //allows you to access the dynamic URL parameters (ID)
-const serviceApi_1 = require("../services/serviceApi"); //fetches all services from the backend API.
+const react_router_dom_1 = require("react-router-dom");
+const serviceApi_1 = require("../services/serviceApi");
 const react_2 = __importDefault(require("react"));
 const ServiceDetails = () => {
-    const [service, setService] = (0, react_1.useState)(null); //update the service state.
     const { id } = (0, react_router_dom_1.useParams)();
+    const navigate = (0, react_router_dom_1.useNavigate)();
+    const [service, setService] = (0, react_1.useState)(null);
     (0, react_1.useEffect)(() => {
         const fetchService = () => __awaiter(void 0, void 0, void 0, function* () {
-            const services = yield (0, serviceApi_1.getServices)();
-            const serviceDetails = services.find((s) => s.id === Number(id));
-            setService(serviceDetails);
+            const data = yield (0, serviceApi_1.getServiceById)(Number(id));
+            setService(data);
         });
         fetchService();
     }, [id]);
-    //This line checks if the service state is null. If it is, it means the service details haven't been loaded yet, so the component returns a "Loading..." message.
+    const handleDelete = () => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            yield (0, serviceApi_1.deleteService)(Number(id));
+            navigate('/services');
+        }
+        catch (error) {
+            console.error('Error deleting service:', error);
+        }
+    });
     if (!service)
         return react_2.default.createElement("div", null, "Loading...");
     return (react_2.default.createElement("div", null,
         react_2.default.createElement("h2", null, "Service Details"),
         react_2.default.createElement("p", null,
             "Service Type: ",
-            service.service_type)));
+            service.service_type),
+        react_2.default.createElement("p", null,
+            "Date: ",
+            new Date(service.date).toLocaleDateString()),
+        react_2.default.createElement("p", null,
+            "Odometer: ",
+            service.odometer),
+        react_2.default.createElement("p", null,
+            "Place: ",
+            service.place),
+        react_2.default.createElement("p", null,
+            "Driver: ",
+            service.driver),
+        react_2.default.createElement("p", null,
+            "Payment Method: ",
+            service.payment_method),
+        react_2.default.createElement("p", null,
+            "Cost: ",
+            service.cost),
+        react_2.default.createElement("p", null,
+            "Notes: ",
+            service.notes),
+        react_2.default.createElement("p", null,
+            "Reminder: ",
+            service.reminder),
+        react_2.default.createElement("div", null,
+            react_2.default.createElement(react_router_dom_1.Link, { to: `/services/edit/${service.id}` }, "Edit"),
+            react_2.default.createElement("button", { onClick: handleDelete }, "Delete"))));
 };
 exports.default = ServiceDetails;

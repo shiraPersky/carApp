@@ -1,6 +1,14 @@
 import { useForm } from 'react-hook-form';
 import React from 'react';
 
+const serviceTypes = [
+  "Air conditioning", "Air filter", "Battery", "Belts", "Brake fluid", "Brake pad", 
+  "Car wash", "Fuel filter", "Inspection", "Labor cost", "Lights", "New tires", 
+  "Oil change", "Oil filter", "Rotate tires", "Suspension system", "Tire pressure", 
+  "Wheel alignment", "Engine oil", "Spark plugs", "Change Tires", "Coolant", 
+  "Turn signals", "Parking lights", "Windshields wipers"
+];
+
 const ServiceForm = ({ existingService, onSubmit }: any) => {
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: existingService || {},
@@ -21,9 +29,17 @@ const ServiceForm = ({ existingService, onSubmit }: any) => {
         <input type="number" {...register('odometer', { required: 'Odometer is required' })} />
       </div>
       <div>
-        <label>Service Type</label>
-        <input {...register('service_type', { required: 'Service type is required' })} />
-      </div>
+      <label>Service Type</label>
+        <select {...register('service_type', { required: 'Service type is required' })}>
+          <option value="">Select a service</option>
+          {serviceTypes.map((service, index) => (
+            <option key={index} value={service}>
+              {service}
+            </option>
+          ))}
+        </select>
+        {errors.service_type && <span>{(errors.service_type as any).message}</span>} 
+        </div>
       <div>
         <label>Place</label>
         <input {...register('place')} />
