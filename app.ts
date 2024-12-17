@@ -1,9 +1,12 @@
 import express from 'express';
+import cors from 'cors';
 import serviceController from './controller/serviceController.js'; // Import the controller
 import refuelingController from './controller/refuelController.js';
 import carController from './controller/add_carController.js'; 
 
 const app = express();
+
+app.use(cors());  // This allows requests from any origin
 
 app.use(express.json());// Middleware to parse incoming JSON requests
 

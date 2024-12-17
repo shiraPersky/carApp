@@ -10,117 +10,72 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ServiceService = void 0;
-const prisma = new PrismaClient();
+const serviceDto_js_1 = require("../dto/serviceDto.js");
+const client_1 = require("@prisma/client");
+const prisma = new client_1.PrismaClient();
 class ServiceService {
+    // Create a new service with validation
     createService(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Validate input data
-            this.validateServiceData(data);
-            // Create service record in the database using Prisma
+            this.validateServiceData(data); // Call the private validation method .Throws error if data is invalid
             try {
-                const newService = yield prisma.service.create({
-                    data: {
-                        car_id: data.car_id, //(must)
-                        service_type: data.service_type, // Type of service(must)
-                        date: new Date(data.date), // Date of the service
-                        time: data.time, // Time of the service
-                        odometer: data.odometer, // Odometer reading
-                        place: data.place, // Place of service
-                        driver: data.driver, // Driver's name or ID
-                        paymentMethod: data.payment_method, // Payment method used
-                        cost: data.cost, // Cost of the service
-                        notes: data.notes, // Additional notes
-                        file_attachment: data.file_attachment, // (file)
-                        reminderKilometers: data.reminder_kilometers, // Reminder (in kilometers)
-                        reminderMonths: data.reminder_months, // Reminder (in months)
-                    },
-                });
-                return newService;
+                this.validateServiceData(data); // Validate service data
+                const service = yield serviceDto_js_1.ServiceDto.create(data); // Attempt to create service
+                return service;
             }
             catch (error) {
-                throw new Error(`Failed to create service: ${error.message}`);
+                if (error instanceof Error) {
+                    console.error("Error during service creation:", error.message); // Log specific error message
+                }
+                else {
+                    console.error("An unknown error occurred:", error); // Log the unknown error
+                }
+                throw error; // Rethrow error to be caught by controller
             }
         });
-    }
-    // Validation logic for service data
-    validateServiceData(data) {
-        if (!data.service_type || !data.car_id) {
-            throw new Error('Car ID and Service Type are required');
-        }
-        if (data.odometer && data.odometer <= 0) {
-            throw new Error('Odometer must be a positive number');
-        }
-        if (data.cost && data.cost <= 0) {
-            throw new Error('Cost must be a positive number');
-        }
-        if (data.reminder_kilometers && data.reminder_kilometers <= 0) {
-            throw new Error('Reminder kilometers must be a positive number');
-        }
-        if (data.reminder_months && data.reminder_months <= 0) {
-            throw new Error('Reminder months must be a positive number');
-        }
     }
     getAllServices() {
         return __awaiter(this, void 0, void 0, function* () {
-            // Simulate getting all services from the database
-            return [{ id: 1, type: 'Oil Change' }, { id: 2, type: 'Brake Check' }];
+            return serviceDto_js_1.ServiceDto.getAll(); // Call the DTO method
         });
     }
+    // Update a service with validation
     updateService(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Simulate updating a service
-            return Object.assign({ id }, data);
+            this.validateServiceData(data, true); // Call the private validation method
+            return serviceDto_js_1.ServiceDto.update(id, data); // Call the DTO method
         });
     }
+    // Delete a service
     deleteService(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Simulate deleting a service
-            return { id };
+            return serviceDto_js_1.ServiceDto.delete(id); // Call the DTO method
         });
+    }
+    // Validation logic for service data
+    validateServiceData(data, isUpdate = false) {
+        if (!isUpdate) {
+            if (!data.service_type || !data.car_id) {
+                console.error("Validation failed: Missing service_type or car_id");
+                throw new Error('Car ID and Service Type are required');
+            }
+        }
+        if (data.odometer !== undefined && data.odometer <= 0) {
+            console.error("Validation failed: Invalid odometer value");
+            throw new Error('Odometer must be a positive number');
+        }
+        if (data.cost !== undefined && data.cost <= 0) {
+            console.error("Validation failed: Invalid cost value");
+            throw new Error('Cost must be a positive number');
+        }
+        if (data.reminderKilometers !== undefined && data.reminderKilometers <= 0) {
+            console.error("Validation failed: Invalid reminderKilometers value");
+            throw new Error('Reminder kilometers must be a positive number');
+        }
+        if (data.reminderMonths !== undefined && data.reminderMonths <= 0) {
+            console.error("Validation failed: Invalid reminderMonths value");
+            throw new Error('Reminder months must be a positive number');
+        }
     }
 }
 exports.ServiceService = ServiceService;
-// Retrieve all services
-async;
-getAllServices();
-{
-    return serviceDto_js_1.ServiceDto.getAll(); // Call the DTO method
-}
-// Update a service with validation
-async;
-updateService(id, number, data, (Partial));
-{
-    this.validateServiceData(data, true); // Call the private validation method
-    return serviceDto_js_1.ServiceDto.update(id, data); // Call the DTO method
-}
-// Delete a service
-async;
-deleteService(id, number);
-{
-    return serviceDto_js_1.ServiceDto.delete(id); // Call the DTO method
-}
-validateServiceData(data, (Partial), isUpdate = false);
-{
-    if (!isUpdate) {
-        if (!data.service_type || !data.car_id) {
-            console.error("Validation failed: Missing service_type or car_id");
-            throw new Error('Car ID and Service Type are required');
-        }
-    }
-    if (data.odometer !== undefined && data.odometer <= 0) {
-        console.error("Validation failed: Invalid odometer value");
-        throw new Error('Odometer must be a positive number');
-    }
-    if (data.cost !== undefined && data.cost <= 0) {
-        console.error("Validation failed: Invalid cost value");
-        throw new Error('Cost must be a positive number');
-    }
-    if (data.reminderKilometers !== undefined && data.reminderKilometers <= 0) {
-        console.error("Validation failed: Invalid reminderKilometers value");
-        throw new Error('Reminder kilometers must be a positive number');
-    }
-    if (data.reminderMonths !== undefined && data.reminderMonths <= 0) {
-        console.error("Validation failed: Invalid reminderMonths value");
-        throw new Error('Reminder months must be a positive number');
-    }
-}
