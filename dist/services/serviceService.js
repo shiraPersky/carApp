@@ -17,9 +17,16 @@ class ServiceService {
     // Create a new service with validation
     createService(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.validateServiceData(data); // Call the private validation method .Throws error if data is invalid
+            this.validateServiceData(data); // Call the private validation method. Throws error if data is invalid
             try {
-                this.validateServiceData(data); // Validate service data
+                // Perform type casting before creating the service
+                data.car_id = parseInt(data.car_id, 10); // Ensure car_id is an integer
+                data.odometer = parseInt(data.odometer, 10); // Ensure odometer is an integer
+                data.cost = parseFloat(data.cost); // Ensure cost is a float
+                // Ensure date is a valid Date object or ISO-8601 string
+                if (typeof data.date === 'string') {
+                    data.date = new Date(data.date).toISOString(); // Convert to ISO-8601 string if it's a string
+                }
                 const service = yield serviceDto_js_1.ServiceDto.create(data); // Attempt to create service
                 return service;
             }
@@ -39,6 +46,16 @@ class ServiceService {
             return serviceDto_js_1.ServiceDto.getAll(); // Call the DTO method
         });
     }
+    // async getServiceById(id: number) {
+    //   try {
+    //     return await prisma.service.findUnique({
+    //       where: { id },
+    //     });
+    //   } catch (error) {
+    //     console.error('Error fetching service by ID from database:', error);
+    //     throw error;
+    //   }
+    // }
     // Update a service with validation
     updateService(id, data) {
         return __awaiter(this, void 0, void 0, function* () {

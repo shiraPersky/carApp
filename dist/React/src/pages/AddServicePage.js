@@ -20,6 +20,7 @@ const AddServicePage = () => {
     const navigate = (0, react_router_dom_1.useNavigate)();
     // Handle form submission
     const handleSubmit = (data) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log('Form data being sent:', data); // Log the data to inspect before submitting
         try {
             yield (0, serviceApi_1.createService)(data);
             navigate('/services'); // Navigate back to the services list

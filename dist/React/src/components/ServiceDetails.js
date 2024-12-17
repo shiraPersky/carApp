@@ -20,16 +20,34 @@ const ServiceDetails = () => {
     const { id } = (0, react_router_dom_1.useParams)();
     const navigate = (0, react_router_dom_1.useNavigate)();
     const [service, setService] = (0, react_1.useState)(null);
+    const [services, setServices] = (0, react_1.useState)([]);
     (0, react_1.useEffect)(() => {
-        const fetchService = () => __awaiter(void 0, void 0, void 0, function* () {
-            const data = yield (0, serviceApi_1.getServiceById)(Number(id));
-            setService(data);
+        const fetchServices = () => __awaiter(void 0, void 0, void 0, function* () {
+            try {
+                const response = yield fetch('http://localhost:3000/services'); // Fetch all services
+                if (!response.ok) {
+                    throw new Error('Failed to fetch services');
+                }
+                const data = yield response.json();
+                setServices(data);
+            }
+            catch (error) {
+                console.error('Error fetching services:', error);
+            }
         });
-        fetchService();
-    }, [id]);
+        fetchServices();
+    }, []); // Fetch all services once on component mount
+    (0, react_1.useEffect)(() => {
+        // Once services are fetched, find the service that matches the ID
+        if (id && services.length > 0) {
+            const foundService = services.find((service) => service.id === Number(id));
+            setService(foundService || null);
+        }
+    }, [id, services]);
+    // Handle delete operation
     const handleDelete = () => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            yield (0, serviceApi_1.deleteService)(Number(id));
+            yield (0, serviceApi_1.deleteService)(Number(id)); // Call deleteService function
             navigate('/services');
         }
         catch (error) {

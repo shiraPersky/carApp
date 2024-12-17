@@ -12,10 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const react_router_dom_1 = require("react-router-dom");
 const react_1 = require("react");
 const serviceApi_1 = require("../services/serviceApi");
 const react_2 = __importDefault(require("react"));
+const react_router_dom_1 = require("react-router-dom");
 const ServiceList = () => {
     const [services, setServices] = (0, react_1.useState)([]);
     (0, react_1.useEffect)(() => {
@@ -45,7 +45,38 @@ const ServiceList = () => {
                         new Date(service.date).toLocaleDateString()),
                     react_2.default.createElement("p", null,
                         "Cost: ",
-                        service.cost))))),
+                        service.cost),
+                    react_2.default.createElement("p", null,
+                        "Car ID: ",
+                        service.car_id),
+                    react_2.default.createElement("p", null,
+                        "Time: ",
+                        service.time),
+                    react_2.default.createElement("p", null,
+                        "Odometer: ",
+                        service.odometer),
+                    react_2.default.createElement("p", null,
+                        "Place: ",
+                        service.place),
+                    react_2.default.createElement("p", null,
+                        "Driver: ",
+                        service.driver),
+                    react_2.default.createElement("p", null,
+                        "Payment Method: ",
+                        service.paymentMethod),
+                    react_2.default.createElement("p", null,
+                        "File Attachment: ",
+                        service.file_attachment),
+                    react_2.default.createElement("p", null,
+                        "Notes: ",
+                        service.notes),
+                    react_2.default.createElement("p", null,
+                        "Reminder Kilometers: ",
+                        service.reminderKilometers),
+                    react_2.default.createElement("p", null,
+                        "Reminder Months: ",
+                        service.reminderMonths)),
+                react_2.default.createElement("button", { onClick: () => handleDelete(service.id) }, "Delete")))),
             react_2.default.createElement("div", { className: "service-card add-button" },
                 react_2.default.createElement(react_router_dom_1.Link, { to: "/services/add" }, "+")))));
 };

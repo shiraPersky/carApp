@@ -16,6 +16,16 @@ const ServiceForm = ({ existingService, onSubmit }: any) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {/* Car ID */}
+      <div>
+        <label>Car ID</label>
+        <input 
+          type="number" 
+          {...register('car_id', { required: 'Car ID is required' })} 
+        />
+        {errors.car_id && <span>{(errors.car_id as any).message}</span>}
+      </div>
+
       <div>
         <label>Date</label>
         <input type="date" {...register('date', { required: 'Date is required' })} />
@@ -29,7 +39,7 @@ const ServiceForm = ({ existingService, onSubmit }: any) => {
         <input type="number" {...register('odometer', { required: 'Odometer is required' })} />
       </div>
       <div>
-      <label>Service Type</label>
+        <label>Service Type</label>
         <select {...register('service_type', { required: 'Service type is required' })}>
           <option value="">Select a service</option>
           {serviceTypes.map((service, index) => (
@@ -39,7 +49,7 @@ const ServiceForm = ({ existingService, onSubmit }: any) => {
           ))}
         </select>
         {errors.service_type && <span>{(errors.service_type as any).message}</span>} 
-        </div>
+      </div>
       <div>
         <label>Place</label>
         <input {...register('place')} />
@@ -50,7 +60,8 @@ const ServiceForm = ({ existingService, onSubmit }: any) => {
       </div>
       <div>
         <label>Payment Method</label>
-        <input {...register('payment_method')} />
+        <input {...register('paymentMethod', { required: 'Payment method is required' })} />
+        {errors.paymentMethod && <span>{(errors.paymentMethod as any).message}</span>}
       </div>
       <div>
         <label>Cost</label>
@@ -59,10 +70,6 @@ const ServiceForm = ({ existingService, onSubmit }: any) => {
       <div>
         <label>Notes</label>
         <textarea {...register('notes')} />
-      </div>
-      <div>
-        <label>Reminder</label>
-        <input {...register('reminder')} />
       </div>
       <button type="submit">Save</button>
     </form>

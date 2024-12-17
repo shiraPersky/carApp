@@ -54,20 +54,32 @@ const EditServicePage = () => {
     const navigate = (0, react_router_dom_1.useNavigate)();
     const [service, setService] = (0, react_1.useState)(null);
     const [loading, setLoading] = (0, react_1.useState)(true);
-    // Fetch the existing service details
+    const [services, setServices] = (0, react_1.useState)([]);
+    // Fetch all services and then find the specific one by ID
     (0, react_1.useEffect)(() => {
-        const fetchService = () => __awaiter(void 0, void 0, void 0, function* () {
+        const fetchServices = () => __awaiter(void 0, void 0, void 0, function* () {
             try {
-                const data = yield (0, serviceApi_1.getServiceById)(Number(id));
-                setService(data);
-                setLoading(false);
+                const response = yield fetch('http://localhost:3000/services'); // Fetch all services
+                if (!response.ok) {
+                    throw new Error('Failed to fetch services');
+                }
+                const data = yield response.json();
+                setServices(data);
             }
             catch (error) {
-                console.error('Error fetching service details:', error);
+                console.error('Error fetching services:', error);
             }
         });
-        fetchService();
-    }, [id]);
+        fetchServices();
+    }, []); // Fetch all services once on component mount
+    // Once services are fetched, find the specific service by ID
+    (0, react_1.useEffect)(() => {
+        if (id && services.length > 0) {
+            const foundService = services.find((service) => service.id === Number(id));
+            setService(foundService || null);
+            setLoading(false); // Stop loading when the service is found
+        }
+    }, [id, services]); // Only run when services or id change
     // Handle form submission
     const handleSubmit = (data) => __awaiter(void 0, void 0, void 0, function* () {
         try {

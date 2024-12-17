@@ -8,6 +8,7 @@ const AddServicePage = () => {
 
   // Handle form submission
   const handleSubmit = async (data: any) => {
+    console.log('Form data being sent:', data); // Log the data to inspect before submitting
     try {
       await createService(data);
       navigate('/services'); // Navigate back to the services list

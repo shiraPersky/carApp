@@ -2,13 +2,22 @@ import { ServiceDto } from '../dto/serviceDto.js';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
-export class ServiceService {  // Create a new service record
-    
-    // Create a new service with validation
+
+export class ServiceService {
+  // Create a new service with validation
   async createService(data: ServiceDto) {
-    this.validateServiceData(data); // Call the private validation method .Throws error if data is invalid
+    this.validateServiceData(data); // Call the private validation method. Throws error if data is invalid
     try {
-      this.validateServiceData(data); // Validate service data
+      // Perform type casting before creating the service
+      data.car_id = parseInt(data.car_id as unknown as string, 10); // Ensure car_id is an integer
+      data.odometer = parseInt(data.odometer as unknown as string, 10); // Ensure odometer is an integer
+      data.cost = parseFloat(data.cost as unknown as string); // Ensure cost is a float
+
+      // Ensure date is a valid Date object or ISO-8601 string
+      if (typeof data.date === 'string') {
+        data.date = new Date(data.date).toISOString(); // Convert to ISO-8601 string if it's a string
+      }
+
       const service = await ServiceDto.create(data); // Attempt to create service
       return service;
     } catch (error: unknown) {
@@ -24,6 +33,18 @@ export class ServiceService {  // Create a new service record
     async getAllServices() {
       return ServiceDto.getAll(); // Call the DTO method
     }
+
+    // async getServiceById(id: number) {
+    //   try {
+    //     return await prisma.service.findUnique({
+    //       where: { id },
+    //     });
+    //   } catch (error) {
+    //     console.error('Error fetching service by ID from database:', error);
+    //     throw error;
+    //   }
+    // }
+    
   
     // Update a service with validation
     async updateService(id: number, data: Partial<ServiceDto>) {

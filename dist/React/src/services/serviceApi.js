@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteService = exports.updateService = exports.createService = exports.getServiceById = exports.getServices = void 0;
+exports.deleteService = exports.updateService = exports.createService = exports.getServices = void 0;
 const axios_1 = __importDefault(require("axios")); //Axios simplifies making GET, POST, PUT, and DELETE requests to interact with APIs.
 const API_URL = 'http://localhost:3000/services';
 const getServices = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -25,16 +25,14 @@ const getServices = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getServices = getServices;
-const getServiceById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const response = yield axios_1.default.get(`${API_URL}/${id}`);
-        return response.data;
-    }
-    catch (error) {
-        throw new Error('Error fetching service by ID');
-    }
-});
-exports.getServiceById = getServiceById;
+// export const getServiceById = async (id: number) => { // New function to get a service by ID
+//   try {
+//     const response = await axios.get(`${API_URL}/${id}`);
+//     return response.data;
+//   } catch (error) {
+//     throw new Error('Error fetching service by ID');
+//   }
+// };
 const createService = (serviceData) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield axios_1.default.post(API_URL, serviceData);

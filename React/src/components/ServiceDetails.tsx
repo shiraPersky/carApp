@@ -1,24 +1,44 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getServiceById, deleteService } from '../services/serviceApi';
+import { deleteService } from '../services/serviceApi';
 import React from 'react';
 
 const ServiceDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [service, setService] = useState<any>(null);
+  const [services, setServices] = useState<any[]>([]);
+
 
   useEffect(() => {
-    const fetchService = async () => {
-      const data = await getServiceById(Number(id));
-      setService(data);
+    const fetchServices = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/services'); // Fetch all services
+        if (!response.ok) {
+          throw new Error('Failed to fetch services');
+        }
+        const data = await response.json();
+        setServices(data);
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      }
     };
-    fetchService();
-  }, [id]);
 
+    fetchServices();
+  }, []); // Fetch all services once on component mount
+
+  useEffect(() => {
+    // Once services are fetched, find the service that matches the ID
+    if (id && services.length > 0) {
+      const foundService = services.find((service) => service.id === Number(id));
+      setService(foundService || null);
+    }
+  }, [id, services])
+
+  // Handle delete operation
   const handleDelete = async () => {
     try {
-      await deleteService(Number(id));
+      await deleteService(Number(id)); // Call deleteService function
       navigate('/services');
     } catch (error) {
       console.error('Error deleting service:', error);
@@ -38,7 +58,6 @@ const ServiceDetails = () => {
       <p>Payment Method: {service.payment_method}</p>
       <p>Cost: {service.cost}</p>
       <p>Notes: {service.notes}</p>
-      <p>Reminder: {service.reminder}</p>
 
       <div>
         <Link to={`/services/edit/${service.id}`}>Edit</Link>
