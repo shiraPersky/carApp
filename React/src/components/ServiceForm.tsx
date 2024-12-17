@@ -1,38 +1,54 @@
-import { useForm } from 'react-hook-form';//For  simplifies form management, validation, and submission
-import { createService, updateService } from '../services/serviceApi';//to interact with the backend API for creating and updating services.
-import { useNavigate, useParams } from 'react-router-dom';//useNavigate-to navigate between pages,useParams-to access dynamic URL parameters(ID)
+import { useForm } from 'react-hook-form';
 import React from 'react';
 
-const ServiceForm = ({ existingService }: any) => {//will contain the data of the service to be updated
-  const { register, handleSubmit, formState: { errors } } = useForm();//register-to register input field to the form.
-  //handleSubmit:function to handle form submission.
-  //errors: An object that contains any validation errors for the form fields.
-  const navigate = useNavigate();
-  const { id } = useParams();//Extracts the id parameter from the URL
-
-  const onSubmit = async (data: any) => {//the function called when the form is submitted
-    try {
-      if (id) {
-        await updateService(Number(id), data);
-      } else {
-        await createService(data);
-      }
-      navigate('/services');
-    } catch (error) {
-      console.error('Error saving service:', error);
-    }
-  };
+const ServiceForm = ({ existingService, onSubmit }: any) => {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: existingService || {},
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div>
-        <label>Service Type</label>
-        <input {...register('service_type', { required: 'Service type is required' })} defaultValue={existingService?.service_type} />
-        {/* Ensure the error message is rendered as a string */}
-        {errors.service_type && <span>{errors.service_type?.message as string}</span>}
+        <label>Date</label>
+        <input type="date" {...register('date', { required: 'Date is required' })} />
       </div>
-      {/* Add fields for other service data here */}
-      <button type="submit">{id ? 'Update' : 'Create'} Service</button>
+      <div>
+        <label>Time</label>
+        <input type="time" {...register('time', { required: 'Time is required' })} />
+      </div>
+      <div>
+        <label>Odometer</label>
+        <input type="number" {...register('odometer', { required: 'Odometer is required' })} />
+      </div>
+      <div>
+        <label>Service Type</label>
+        <input {...register('service_type', { required: 'Service type is required' })} />
+      </div>
+      <div>
+        <label>Place</label>
+        <input {...register('place')} />
+      </div>
+      <div>
+        <label>Driver</label>
+        <input {...register('driver')} />
+      </div>
+      <div>
+        <label>Payment Method</label>
+        <input {...register('payment_method')} />
+      </div>
+      <div>
+        <label>Cost</label>
+        <input type="number" {...register('cost', { required: 'Cost is required' })} />
+      </div>
+      <div>
+        <label>Notes</label>
+        <textarea {...register('notes')} />
+      </div>
+      <div>
+        <label>Reminder</label>
+        <input {...register('reminder')} />
+      </div>
+      <button type="submit">Save</button>
     </form>
   );
 };

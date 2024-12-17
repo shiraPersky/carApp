@@ -1,50 +1,47 @@
-import { Link } from 'react-router-dom'; // For navigation
-import { useState, useEffect } from 'react'; // For state and side-effects
-import { getServices } from '../services/serviceApi'; // API to fetch services
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { getServices, deleteService } from '../services/serviceApi';
 import React from 'react';
 
 const ServiceList = () => {
-  const [services, setServices] = useState<any[]>([]); // State to hold the list of services
+  const [services, setServices] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchServices = async () => {
-      const data = await getServices(); // Fetch services
-      setServices(data); // Set services into state
+      const data = await getServices();
+      setServices(data);
     };
     fetchServices();
   }, []);
 
-    function handleDelete(id: any): void {
-        throw new Error('Function not implemented.');
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteService(id);
+      setServices(services.filter((service) => service.id !== id));
+    } catch (error) {
+      console.error('Error deleting service:', error);
     }
+  };
 
   return (
     <div>
       <h2>Your Services</h2>
-      <Link to="/services/add">Add New Service</Link>
-      <table>
-        <thead>
-          <tr>
-            <th>Service Type</th>
-            <th>Date</th>
-            <th>Cost</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {services.map((service) => (
-            <tr key={service.id}>
-              <td>{service.service_type}</td>
-              <td>{new Date(service.date).toLocaleDateString()}</td>
-              <td>{service.cost}</td>
-              <td>
-                <Link to={`/services/edit/${service.id}`}>Edit</Link>
-                <button onClick={() => handleDelete(service.id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="service-grid">
+        {/* Grid for services */}
+        {services.map((service) => (
+          <div key={service.id} className="service-card">
+            <Link to={`/services/details/${service.id}`}>
+              <h3>{service.service_type}</h3>
+              <p>Date: {new Date(service.date).toLocaleDateString()}</p>
+              <p>Cost: {service.cost}</p>
+            </Link>
+          </div>
+        ))}
+        {/* Add New Service Button */}
+        <div className="service-card add-button">
+          <Link to="/services/add">+</Link>
+        </div>
+      </div>
     </div>
   );
 };

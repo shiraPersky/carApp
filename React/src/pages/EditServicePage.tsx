@@ -1,42 +1,44 @@
-import { useState, useEffect } from 'react'; // To manage the state and side effects.
-import { useNavigate, useParams } from 'react-router-dom'; // To navigate and get the service ID from the URL.
-import { getServiceById, updateService } from '../services/serviceApi'; // To interact with the backend to fetch and update the service.
-import ServiceForm from '../components/ServiceForm'; // Assuming you have a form component for editing the service
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import ServiceForm from '../components/ServiceForm';
+import { getServiceById, updateService } from '../services/serviceApi';
 
 const EditServicePage = () => {
-  const { id } = useParams(); // Get the service ID from the URL.
-  const navigate = useNavigate(); // For redirecting after updating the service.
-  const [existingService, setExistingService] = useState<any>(null); // To store the existing service data.
-  
-  // Fetch the service details when the component mounts
+  const { id } = useParams(); // Get the service ID from the URL
+  const navigate = useNavigate();
+  const [service, setService] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch the existing service details
   useEffect(() => {
     const fetchService = async () => {
-      if (id) {
-        const serviceData = await getServiceById(Number(id)); // Fetch the service by ID.
-        setExistingService(serviceData); // Set the service data.
+      try {
+        const data = await getServiceById(Number(id));
+        setService(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching service details:', error);
       }
     };
     fetchService();
-  }, [id]); // Only run when the `id` changes.
+  }, [id]);
 
+  // Handle form submission
   const handleSubmit = async (data: any) => {
     try {
-      if (id) {
-        await updateService(Number(id), data); // Update the service.
-        navigate('/services'); // Redirect to the services page after success.
-      }
+      await updateService(Number(id), data);
+      navigate('/services'); // Navigate back to the services list
     } catch (error) {
       console.error('Error updating service:', error);
     }
   };
 
-  if (!existingService) return <div>Loading...</div>; // Show loading state while data is being fetched.
+  if (loading) return <div>Loading...</div>; // Show loading while fetching data
 
   return (
     <div>
       <h2>Edit Service</h2>
-      <ServiceForm existingService={existingService} onSubmit={handleSubmit} /> {/* Use the form component to edit the service */}
+      <ServiceForm existingService={service} onSubmit={handleSubmit} />
     </div>
   );
 };
