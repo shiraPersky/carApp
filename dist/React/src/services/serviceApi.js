@@ -25,14 +25,6 @@ const getServices = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getServices = getServices;
-// export const getServiceById = async (id: number) => { // New function to get a service by ID
-//   try {
-//     const response = await axios.get(`${API_URL}/${id}`);
-//     return response.data;
-//   } catch (error) {
-//     throw new Error('Error fetching service by ID');
-//   }
-// };
 const createService = (serviceData) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield axios_1.default.post(API_URL, serviceData);

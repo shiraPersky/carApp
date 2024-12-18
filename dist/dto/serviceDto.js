@@ -16,7 +16,9 @@ class ServiceDto {
     // Static method to create a new service record
     static create(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma.service.create({ data });
+            const services = yield prisma.service.findMany();
+            console.log(services); // Log the fetched services to ensure all fields are included
+            return services;
         });
     }
     // Static method to get all service records

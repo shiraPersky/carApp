@@ -18,7 +18,9 @@ export class ServiceDto {
 
   // Static method to create a new service record
   static async create(data: ServiceDto) {
-    return await prisma.service.create({ data });
+    const services = await prisma.service.findMany();
+    console.log(services); // Log the fetched services to ensure all fields are included
+    return services;
   }
 
   // Static method to get all service records

@@ -11,14 +11,6 @@ export const getServices = async () => {
   }
 };
 
-// export const getServiceById = async (id: number) => { // New function to get a service by ID
-//   try {
-//     const response = await axios.get(`${API_URL}/${id}`);
-//     return response.data;
-//   } catch (error) {
-//     throw new Error('Error fetching service by ID');
-//   }
-// };
 
 export const createService = async (serviceData: any) => {
   try {
