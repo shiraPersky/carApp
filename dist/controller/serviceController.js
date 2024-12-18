@@ -38,20 +38,6 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ error: 'Failed to retrieve services' });
     }
 }));
-// // Get a single service by ID
-// router.get('/:id', async (req: Request, res: Response) => {
-//   try {
-//     const serviceId = Number(req.params.id);
-//     const service = await serviceService.getServiceById(serviceId);
-//     if (!service) {
-//       return res.status(404).json({ message: 'Service not found' });
-//     }
-//     res.json(service);
-//   } catch (error) {
-//     console.error('Error fetching service by ID:', error);
-//     res.status(500).json({ message: 'Failed to fetch service by ID' });
-//   }
-// });
 // Update a service
 router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -59,7 +45,8 @@ router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.json(updatedService);
     }
     catch (error) {
-        res.status(500).json({ error: 'Failed to update service' });
+        console.error("Error updating service:", error); // Log the error
+        res.status(500).json({ error: error.message || 'Failed to update service' }); // Send actual error message
     }
 }));
 // Delete a service

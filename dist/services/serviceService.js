@@ -46,21 +46,28 @@ class ServiceService {
             return serviceDto_js_1.ServiceDto.getAll(); // Call the DTO method
         });
     }
-    // async getServiceById(id: number) {
-    //   try {
-    //     return await prisma.service.findUnique({
-    //       where: { id },
-    //     });
-    //   } catch (error) {
-    //     console.error('Error fetching service by ID from database:', error);
-    //     throw error;
-    //   }
-    // }
     // Update a service with validation
     updateService(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.validateServiceData(data, true); // Call the private validation method
-            return serviceDto_js_1.ServiceDto.update(id, data); // Call the DTO method
+            try {
+                // Perform type casting before creating the service
+                data.car_id = parseInt(data.car_id, 10); // Ensure car_id is an integer
+                data.odometer = parseInt(data.odometer, 10); // Ensure odometer is an integer
+                data.cost = parseFloat(data.cost); // Ensure cost is a float
+                // Ensure the date is in ISO-8601 format if it's a string
+                if (data.date && typeof data.date === 'string') {
+                    data.date = new Date(data.date).toISOString(); // Format date to ISO-8601 string
+                }
+                // Validate data before updating
+                this.validateServiceData(data, true); // Validation
+                // Update service in the database
+                const updatedService = yield serviceDto_js_1.ServiceDto.update(id, data); // Call DTO method
+                return updatedService;
+            }
+            catch (error) {
+                console.error("Error in updateService:", error); // Log the error
+                throw error; // Re-throw for the controller to catch
+            }
         });
     }
     // Delete a service
@@ -84,14 +91,6 @@ class ServiceService {
         if (data.cost !== undefined && data.cost <= 0) {
             console.error("Validation failed: Invalid cost value");
             throw new Error('Cost must be a positive number');
-        }
-        if (data.reminderKilometers !== undefined && data.reminderKilometers <= 0) {
-            console.error("Validation failed: Invalid reminderKilometers value");
-            throw new Error('Reminder kilometers must be a positive number');
-        }
-        if (data.reminderMonths !== undefined && data.reminderMonths <= 0) {
-            console.error("Validation failed: Invalid reminderMonths value");
-            throw new Error('Reminder months must be a positive number');
         }
     }
 }

@@ -42,8 +42,6 @@ const ServiceList = () => {
               <p>Payment Method: {service.paymentMethod}</p>
               <p>File Attachment: {service.file_attachment}</p>
               <p>Notes: {service.notes}</p>
-              <p>Reminder Kilometers: {service.reminderKilometers}</p>
-              <p>Reminder Months: {service.reminderMonths}</p>
             </Link>
             <button onClick={() => handleDelete(service.id)}>Delete</button>
           </div>

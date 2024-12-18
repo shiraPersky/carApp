@@ -28,10 +28,17 @@ class ServiceDto {
     // Static method to update a specific service record
     static update(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma.service.update({
-                where: { id },
-                data,
-            });
+            try {
+                console.log("Updating service with id:", id, "and data:", data); // Log inputs
+                return yield prisma.service.update({
+                    where: { id },
+                    data,
+                });
+            }
+            catch (error) {
+                console.error("Error updating service in Prisma:", error); // Log Prisma error
+                throw error; // Re-throw for the service layer to catch
+            }
         });
     }
     // Static method to delete a service record

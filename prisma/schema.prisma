@@ -20,8 +20,6 @@ model Service {
   file_attachment    String?
   cost               Float
   notes              String?
-  reminderKilometers Int?
-  reminderMonths     Int?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 }

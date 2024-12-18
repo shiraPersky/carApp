@@ -52,9 +52,6 @@ const ServiceForm = ({ existingService, onSubmit }) => {
         react_1.default.createElement("div", null,
             react_1.default.createElement("label", null, "Notes"),
             react_1.default.createElement("textarea", Object.assign({}, register('notes')))),
-        react_1.default.createElement("div", null,
-            react_1.default.createElement("label", null, "Reminder"),
-            react_1.default.createElement("input", Object.assign({}, register('reminder')))),
         react_1.default.createElement("button", { type: "submit" }, "Save")));
 };
 exports.default = ServiceForm;

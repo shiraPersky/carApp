@@ -14,8 +14,7 @@ export class ServiceDto {
   file_attachment?: string;
   cost!: number;
   notes?: string;
-  reminderKilometers?: number; 
-  reminderMonths?: number; 
+
 
   // Static method to create a new service record
   static async create(data: ServiceDto) {
@@ -29,11 +28,18 @@ export class ServiceDto {
 
   // Static method to update a specific service record
   static async update(id: number, data: Partial<ServiceDto>) {
-    return await prisma.service.update({
-      where: { id },
-      data,
-    });
+    try {
+      console.log("Updating service with id:", id, "and data:", data); // Log inputs
+      return await prisma.service.update({
+        where: { id },
+        data,
+      });
+    } catch (error) {
+      console.error("Error updating service in Prisma:", error); // Log Prisma error
+      throw error; // Re-throw for the service layer to catch
+    }
   }
+  
 
   // Static method to delete a service record
   static async delete(id: number) {

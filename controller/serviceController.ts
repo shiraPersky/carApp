@@ -28,22 +28,6 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
-// // Get a single service by ID
-// router.get('/:id', async (req: Request, res: Response) => {
-//   try {
-//     const serviceId = Number(req.params.id);
-//     const service = await serviceService.getServiceById(serviceId);
-
-//     if (!service) {
-//       return res.status(404).json({ message: 'Service not found' });
-//     }
-
-//     res.json(service);
-//   } catch (error) {
-//     console.error('Error fetching service by ID:', error);
-//     res.status(500).json({ message: 'Failed to fetch service by ID' });
-//   }
-// });
 
 
 // Update a service
@@ -52,9 +36,11 @@ router.put('/:id', async (req: Request, res: Response) => {
     const updatedService = await serviceService.updateService(Number(req.params.id), req.body);
     res.json(updatedService);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update service' });
+    console.error("Error updating service:", error); // Log the error
+    res.status(500).json({ error: error.message || 'Failed to update service' }); // Send actual error message
   }
 });
+
 
 // Delete a service
 router.delete('/:id', async (req: Request, res: Response) => {

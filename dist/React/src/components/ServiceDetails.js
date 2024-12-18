@@ -82,9 +82,6 @@ const ServiceDetails = () => {
         react_2.default.createElement("p", null,
             "Notes: ",
             service.notes),
-        react_2.default.createElement("p", null,
-            "Reminder: ",
-            service.reminder),
         react_2.default.createElement("div", null,
             react_2.default.createElement(react_router_dom_1.Link, { to: `/services/edit/${service.id}` }, "Edit"),
             react_2.default.createElement("button", { onClick: handleDelete }, "Delete"))));
