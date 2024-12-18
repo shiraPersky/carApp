@@ -13,12 +13,30 @@ exports.ServiceDto = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 class ServiceDto {
-    // Static method to create a new service record
     static create(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            const services = yield prisma.service.findMany();
-            console.log(services); // Log the fetched services to ensure all fields are included
-            return services;
+            try {
+                // Log data to ensure it's formatted correctly
+                console.log("Creating service with data:", data);
+                // Directly use Prisma to create the service
+                return yield prisma.service.create({
+                    data: Object.assign(Object.assign({}, data), { date: new Date(data.date) }),
+                });
+            }
+            catch (error) {
+                // Log the error with full details
+                console.error("Error during service creation:", error);
+                // Check if it's a Prisma error and log specific details
+                if (error instanceof Error) {
+                    console.error("Error message:", error.message); // Log the error message
+                    console.error("Error stack:", error.stack); // Log the error stack trace
+                }
+                if (error instanceof client_1.Prisma.PrismaClientKnownRequestError) {
+                    console.error("Prisma error code:", error.code); // Prisma error code
+                    console.error("Prisma error meta:", error.meta); // Prisma error metadata
+                }
+                throw new Error("Failed to create service");
+            }
         });
     }
     // Static method to get all service records
