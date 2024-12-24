@@ -1,5 +1,20 @@
 import axios from 'axios';//Axios simplifies making GET, POST, PUT, and DELETE requests to interact with APIs.
 
+export interface Service {
+  id: number;
+  service_type: string;
+  date: string;
+  cost: number;
+  car_id: number;
+  time: string;
+  odometer: number;
+  place: string;
+  driver: string;
+  paymentMethod: string;
+  file_attachment?: string;
+  notes?: string;
+}
+
 const API_URL = 'http://localhost:3000/services';
 
 export const getServices = async () => {

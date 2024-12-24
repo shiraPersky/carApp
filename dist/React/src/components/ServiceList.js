@@ -20,8 +20,13 @@ const ServiceList = () => {
     const [services, setServices] = (0, react_1.useState)([]);
     (0, react_1.useEffect)(() => {
         const fetchServices = () => __awaiter(void 0, void 0, void 0, function* () {
-            const data = yield (0, serviceApi_1.getServices)();
-            setServices(data);
+            try {
+                const data = yield (0, serviceApi_1.getServices)();
+                setServices(data);
+            }
+            catch (error) {
+                console.error('Error fetching services:', error);
+            }
         });
         fetchServices();
     }, []);

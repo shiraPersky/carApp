@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
-import { getServices, deleteService } from '../services/serviceApi';
+import { Service, getServices, deleteService } from '../services/serviceApi';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 const ServiceList = () => {
-  const [services, setServices] = useState<any[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
 
   useEffect(() => {
     const fetchServices = async () => {
-      const data = await getServices();
-      setServices(data);
+      try {
+        const data = await getServices() as Service[];
+        setServices(data);
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      }
     };
     fetchServices();
   }, []);

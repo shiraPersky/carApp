@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
-import { getServices, deleteService } from '../services/serviceApi';
+import { Service ,getServices, deleteService } from '../services/serviceApi';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
 const ServicesPage = () => {
-  const [services, setServices] = useState<any[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
 
   useEffect(() => {
     const fetchServices = async () => {
-      const data = await getServices();
+      const data = await getServices() as Service[];
       setServices(data);
     };
     fetchServices();
   }, []);
-
+  
   const handleDelete = async (id: number) => {
     try {
       await deleteService(id);

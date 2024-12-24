@@ -7,6 +7,8 @@ export class ServiceService {
   // Create a new service with validation
   async createService(data: ServiceDto) {
     this.validateServiceData(data); // Call the private validation method. Throws error if data is invalid
+
+    
     try {
       // Perform type casting before creating the service
       data.car_id = parseInt(data.car_id as unknown as string, 10); // Ensure car_id is an integer

@@ -1,8 +1,13 @@
+import dotenv from 'dotenv';
+dotenv.config();  // This will load the environment variables from the .env file
+
+
 import express from 'express';
 import cors from 'cors';
 import serviceController from './controller/serviceController.js'; // Import the controller
 import refuelingController from './controller/refuelController.js';
 import carController from './controller/add_carController.js'; 
+
 
 const app = express();
 
