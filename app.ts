@@ -16,7 +16,7 @@ app.use(cors());  // This allows requests from any origin
 app.use(express.json());// Middleware to parse incoming JSON requests
 
 app.use('/services', serviceController);// Use serviceController for any requests to /services
-app.use('/refuelings', refuelingController); // Use refuelingController for any requests to /refuelings
+app.use('/refuels', refuelingController); // Use refuelingController for any requests to /refuels
 app.use('/cars', carController);
 
 const PORT = process.env.PORT || 3000;// Define the port

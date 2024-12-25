@@ -15,7 +15,24 @@ export interface Service {
   notes?: string;
 }
 
-const API_URL = 'http://localhost:3000/services';
+export interface Refueling {
+  id: number;
+  date: string;
+  time: string;
+  odometer: number;
+  kindOfFuel: String;
+  pricePerLiter: GLfloat;
+  totalCost: GLfloat;
+  liters: GLfloat;
+  gasStation: string;
+  driver: string;
+  file_attachment?: string;
+  notes?: string;
+}
+
+const API_URL = 'http://localhost:3000/services';//service API
+const REFUEL_API_URL = 'http://localhost:3000/refuels';//refuel API
+
 
 export const getServices = async () => {
   try {
@@ -50,5 +67,41 @@ export const deleteService = async (id: number) => {
     await axios.delete(`${API_URL}/${id}`);
   } catch (error) {
     throw new Error('Error deleting service');
+  }
+};
+
+// Refuel API Functions (Added)
+export const getRefuels = async () => {
+  try {
+    const response = await axios.get(REFUEL_API_URL); // GET request for refuels
+    return response.data; // Return the actual data
+  } catch (error) {
+    throw new Error('Error fetching refuels');
+  }
+};
+
+export const createRefuel = async (refuelData: any) => {
+  try {
+    const response = await axios.post(REFUEL_API_URL, refuelData); // POST request for refuels
+    return response.data;
+  } catch (error) {
+    throw new Error('Error creating refuel');
+  }
+};
+
+export const updateRefuel = async (id: number, refuelData: any) => {
+  try {
+    const response = await axios.put(`${REFUEL_API_URL}/${id}`, refuelData); // PUT request for refuels
+    return response.data;
+  } catch (error) {
+    throw new Error('Error updating refuel');
+  }
+};
+
+export const deleteRefuel = async (id: number) => {
+  try {
+    await axios.delete(`${REFUEL_API_URL}/${id}`); // DELETE request for refuels
+  } catch (error) {
+    throw new Error('Error deleting refuel');
   }
 };

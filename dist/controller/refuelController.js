@@ -45,6 +45,7 @@ router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.json(updatedRefueling);
     }
     catch (error) {
+        console.error('Error during refuel update:', error); //test
         res.status(500).json({ error: 'Failed to update refueling' });
     }
 }));

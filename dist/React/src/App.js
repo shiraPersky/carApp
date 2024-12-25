@@ -10,6 +10,9 @@ const react_router_dom_1 = require("react-router-dom"); // No need to import Rou
 const ServicePage_1 = __importDefault(require("./pages/ServicePage"));
 const AddServicePage_1 = __importDefault(require("./pages/AddServicePage"));
 const EditServicePage_1 = __importDefault(require("./pages/EditServicePage"));
+const RefuelingPage_1 = __importDefault(require("./pages/RefuelingPage")); // Import RefuelingPage
+const AddRefuelingPage_1 = __importDefault(require("./pages/AddRefuelingPage")); // Import AddRefuelingPage
+const EditRefuelingPage_1 = __importDefault(require("./pages/EditRefuelingPage")); // Import EditRefuelingPage
 const react_1 = __importDefault(require("react"));
 require("./app.css");
 function App() {
@@ -17,6 +20,9 @@ function App() {
         react_1.default.createElement(react_router_dom_1.Route, { path: "/services", element: react_1.default.createElement(ServicePage_1.default, null) }),
         react_1.default.createElement(react_router_dom_1.Route, { path: "/services/add", element: react_1.default.createElement(AddServicePage_1.default, null) }),
         react_1.default.createElement(react_router_dom_1.Route, { path: "/services/edit/:id", element: react_1.default.createElement(EditServicePage_1.default, null) }),
+        react_1.default.createElement(react_router_dom_1.Route, { path: "/refuels", element: react_1.default.createElement(RefuelingPage_1.default, null) }),
+        react_1.default.createElement(react_router_dom_1.Route, { path: "/refuels/add", element: react_1.default.createElement(AddRefuelingPage_1.default, null) }),
+        react_1.default.createElement(react_router_dom_1.Route, { path: "/refuels/edit/:id", element: react_1.default.createElement(EditRefuelingPage_1.default, null) }),
         react_1.default.createElement(react_router_dom_1.Route, { path: "/", element: react_1.default.createElement(react_router_dom_1.Navigate, { to: "/services" }) })));
 }
 exports.default = App;

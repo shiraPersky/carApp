@@ -29,7 +29,21 @@ export class RefuelingDto {
   static async update(id: number, data: Partial<RefuelingDto>) {
     return await prisma.refueling.update({
       where: { id },
-      data,
+      data: {
+        // Do not include `id` in the `data` object
+        date: data.date,
+        time: data.time,
+        odometer: data.odometer,
+        kindOfFuel: data.kindOfFuel,
+        pricePerLiter: data.pricePerLiter,
+        totalCost: data.totalCost,
+        liters: data.liters,
+        gasStation: data.gasStation,
+        driver: data.driver,
+        fileAttachment: data.fileAttachment,
+        notes: data.notes,
+        updatedAt: new Date().toISOString(), // Automatically update `updatedAt`
+      },
     });
   }
 

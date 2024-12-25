@@ -34,6 +34,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     const updatedRefueling = await refuelingService.updateRefueling(Number(req.params.id), req.body);
     res.json(updatedRefueling);
   } catch (error) {
+    console.error('Error during refuel update:', error);//test
     res.status(500).json({ error: 'Failed to update refueling' });
   }
 });

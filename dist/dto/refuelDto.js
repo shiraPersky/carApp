@@ -30,7 +30,21 @@ class RefuelingDto {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.refueling.update({
                 where: { id },
-                data,
+                data: {
+                    // Do not include `id` in the `data` object
+                    date: data.date,
+                    time: data.time,
+                    odometer: data.odometer,
+                    kindOfFuel: data.kindOfFuel,
+                    pricePerLiter: data.pricePerLiter,
+                    totalCost: data.totalCost,
+                    liters: data.liters,
+                    gasStation: data.gasStation,
+                    driver: data.driver,
+                    fileAttachment: data.fileAttachment,
+                    notes: data.notes,
+                    updatedAt: new Date().toISOString(), // Automatically update `updatedAt`
+                },
             });
         });
     }

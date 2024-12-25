@@ -5,17 +5,28 @@ import { Route, Routes ,Navigate } from 'react-router-dom'; // No need to import
 import ServicesPage from './pages/ServicePage';
 import AddServicePage from './pages/AddServicePage';
 import EditServicePage from './pages/EditServicePage';
+
+import RefuelingPage from './pages/RefuelingPage';  // Import RefuelingPage
+import AddRefuelingPage from './pages/AddRefuelingPage';  // Import AddRefuelingPage
+import EditRefuelingPage from './pages/EditRefuelingPage';  // Import EditRefuelingPage
+
 import React from 'react';
 import './app.css';
 
 function App() {
   return (
     <Routes>
+      {/* Service Routes */}
       <Route path="/services" element={<ServicesPage />} />
       <Route path="/services/add" element={<AddServicePage />} />
       <Route path="/services/edit/:id" element={<EditServicePage />} />
 
-      {/* Add a default route */}
+      {/* Refueling Routes */}
+      <Route path="/refuels" element={<RefuelingPage />} />
+      <Route path="/refuels/add" element={<AddRefuelingPage />} />
+      <Route path="/refuels/edit/:id" element={<EditRefuelingPage />} />
+
+      {/*default route */}
       <Route path="/" element={<Navigate to="/services" />} /> 
 
     </Routes>
