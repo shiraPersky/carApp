@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteRefuel = exports.updateRefuel = exports.createRefuel = exports.getRefuels = exports.deleteService = exports.updateService = exports.createService = exports.getServices = void 0;
+exports.deleteCar = exports.updateCar = exports.createCar = exports.getCars = exports.deleteRefuel = exports.updateRefuel = exports.createRefuel = exports.getRefuels = exports.deleteService = exports.updateService = exports.createService = exports.getServices = void 0;
 const axios_1 = __importDefault(require("axios")); //Axios simplifies making GET, POST, PUT, and DELETE requests to interact with APIs.
 const API_URL = 'http://localhost:3000/services'; //service API
 const REFUEL_API_URL = 'http://localhost:3000/refuels'; //refuel API
+const CAR_API_URL = 'http://localhost:3000/cars'; // Car API
 const getServices = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield axios_1.default.get(API_URL); //This makes a GET request to the backend API at http://localhost:3000/services.
@@ -95,3 +96,43 @@ const deleteRefuel = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.deleteRefuel = deleteRefuel;
+// Car API Functions
+const getCars = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield axios_1.default.get(CAR_API_URL); // GET request for cars
+        return response.data; // Return the actual data
+    }
+    catch (error) {
+        throw new Error('Error fetching cars');
+    }
+});
+exports.getCars = getCars;
+const createCar = (carData) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield axios_1.default.post(CAR_API_URL, carData); // POST request for cars
+        return response.data;
+    }
+    catch (error) {
+        throw new Error('Error creating car');
+    }
+});
+exports.createCar = createCar;
+const updateCar = (id, carData) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield axios_1.default.put(`${CAR_API_URL}/${id}`, carData); // PUT request for cars
+        return response.data;
+    }
+    catch (error) {
+        throw new Error('Error updating car');
+    }
+});
+exports.updateCar = updateCar;
+const deleteCar = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield axios_1.default.delete(`${CAR_API_URL}/${id}`); // DELETE request for cars
+    }
+    catch (error) {
+        throw new Error('Error deleting car');
+    }
+});
+exports.deleteCar = deleteCar;

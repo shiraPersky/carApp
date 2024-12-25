@@ -42,17 +42,19 @@ model Refueling {
 }
 
 model Car {
-  id            Int      @id @default(autoincrement()) // Unique identifier for the car
-  make          String   // Car brand (e.g., Toyota)
-  model         String   // Car model (e.g., Corolla)
-  year          Int      // Year of manufacture
-  license_plate String   @unique // License plate number
-  color         String   // Color of the car
-  odometer      Int      // Odometer reading (mileage)
-  car_type      String   // Type of the car (Sedan, SUV, etc.)
-  fuel_type     String   // Fuel type (Petrol, Diesel, Electric)
-  engine_number String?  // Engine number (optional)
-  created_at    DateTime @default(now()) // Timestamp when car was added
-  updated_at    DateTime @updatedAt // Timestamp for last update
+  id              Int      @id @default(autoincrement())  // Unique identifier for the car
+  license_plate   String   @unique  // Car number (license plate)
+  make            String   // Car brand (e.g., Toyota)
+  model           String   // Car model (e.g., Corolla)
+  year            Int      // Year of manufacture
+  color           String   // Color of the car
+  emission_group  String?  // Infection group (emission classification, optional)
+  valid_until     DateTime // Validity of the license (license expiration)
+  trim_level      String?  // Finish level (trim level of the car, optional)
+  last_test       DateTime // Last test date
+  model_type      String   // Model type (private or commercial)
+  model_number    String   // Model number of the car
+  created_at      DateTime @default(now())  // Timestamp when car was added
+  updated_at      DateTime @updatedAt  // Timestamp for last update
 }
 

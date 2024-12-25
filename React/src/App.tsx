@@ -10,6 +10,10 @@ import RefuelingPage from './pages/RefuelingPage';  // Import RefuelingPage
 import AddRefuelingPage from './pages/AddRefuelingPage';  // Import AddRefuelingPage
 import EditRefuelingPage from './pages/EditRefuelingPage';  // Import EditRefuelingPage
 
+import CarPage from './pages/CarsPage'; // Import CarsPage
+import AddCarPage from './pages/AddCarPage'; // Import AddCarPage
+import EditCarPage from './pages/EditCarPage'; // Import EditCarPage
+
 import React from 'react';
 import './app.css';
 
@@ -25,6 +29,11 @@ function App() {
       <Route path="/refuels" element={<RefuelingPage />} />
       <Route path="/refuels/add" element={<AddRefuelingPage />} />
       <Route path="/refuels/edit/:id" element={<EditRefuelingPage />} />
+
+      {/* Car Routes */}
+      <Route path="/cars" element={<CarPage />} /> {/* List of cars */}
+      <Route path="/cars/add" element={<AddCarPage />} /> {/* Add new car */}
+      <Route path="/cars/edit/:id" element={<EditCarPage />} /> {/* Edit car by ID */}
 
       {/*default route */}
       <Route path="/" element={<Navigate to="/services" />} /> 

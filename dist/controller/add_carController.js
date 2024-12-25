@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const add_carService_1 = require("../services/add_carService");
-const carService = new add_carService_1.CarService();
+const add_carService_js_1 = require("../services/add_carService.js"); // Business logic for handling car operations
+const carService = new add_carService_js_1.CarService();
 const router = express_1.default.Router();
-// Create a new car
+// Create a new car record
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = req.body; // Cast incoming data to CarDto
@@ -24,10 +24,11 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(201).json(car);
     }
     catch (error) {
+        console.error('Error creating car:', error);
         res.status(500).json({ error: 'Failed to create car' });
     }
 }));
-// Get all cars
+// Get all car records
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const cars = yield carService.getAllCars();
@@ -37,32 +38,18 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(500).json({ error: 'Failed to retrieve cars' });
     }
 }));
-// Get a car by ID
-router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const car = yield carService.getCarById(Number(req.params.id));
-        if (car) {
-            res.json(car);
-        }
-        else {
-            res.status(404).json({ error: 'Car not found' });
-        }
-    }
-    catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve car' });
-    }
-}));
-// Update a car
+// Update a car record
 router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updatedCar = yield carService.updateCar(Number(req.params.id), req.body);
         res.json(updatedCar);
     }
     catch (error) {
+        console.error('Error updating car:', error);
         res.status(500).json({ error: 'Failed to update car' });
     }
 }));
-// Delete a car
+// Delete a car record
 router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield carService.deleteCar(Number(req.params.id));

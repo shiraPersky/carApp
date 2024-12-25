@@ -30,8 +30,27 @@ export interface Refueling {
   notes?: string;
 }
 
+export interface Car {
+  id: number;
+  license_plate: string;
+  make: string;
+  model: string;
+  year: number;
+  color: string;
+  emission_group?: string;
+  valid_until: string;
+  trim_level?: string;
+  last_test: string;
+  model_type: string;
+  model_number: string;
+  created_at: string;
+  updated_at: string;
+}
+
 const API_URL = 'http://localhost:3000/services';//service API
 const REFUEL_API_URL = 'http://localhost:3000/refuels';//refuel API
+const CAR_API_URL = 'http://localhost:3000/cars'; // Car API
+
 
 
 export const getServices = async () => {
@@ -103,5 +122,41 @@ export const deleteRefuel = async (id: number) => {
     await axios.delete(`${REFUEL_API_URL}/${id}`); // DELETE request for refuels
   } catch (error) {
     throw new Error('Error deleting refuel');
+  }
+};
+
+// Car API Functions
+export const getCars = async () => {
+  try {
+    const response = await axios.get(CAR_API_URL); // GET request for cars
+    return response.data; // Return the actual data
+  } catch (error) {
+    throw new Error('Error fetching cars');
+  }
+};
+
+export const createCar = async (carData: Car) => {
+  try {
+    const response = await axios.post(CAR_API_URL, carData); // POST request for cars
+    return response.data;
+  } catch (error) {
+    throw new Error('Error creating car');
+  }
+};
+
+export const updateCar = async (id: number, carData: Car) => {
+  try {
+    const response = await axios.put(`${CAR_API_URL}/${id}`, carData); // PUT request for cars
+    return response.data;
+  } catch (error) {
+    throw new Error('Error updating car');
+  }
+};
+
+export const deleteCar = async (id: number) => {
+  try {
+    await axios.delete(`${CAR_API_URL}/${id}`); // DELETE request for cars
+  } catch (error) {
+    throw new Error('Error deleting car');
   }
 };
