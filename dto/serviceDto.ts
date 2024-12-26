@@ -15,7 +15,6 @@ export class ServiceDto {
   cost!: number;
   notes?: string;
 
-
   static async create(data: ServiceDto) {
     try {
       // Log data to ensure it's formatted correctly
