@@ -19,20 +19,26 @@ class CarService {
                 this.validateCarData(data); // Validate car data
                 // Ensure the dates are valid and in ISO-8601 format if they're strings
                 if (data.valid_until && typeof data.valid_until === 'string') {
-                    // Ensure valid date format before converting
                     if (isNaN(Date.parse(data.valid_until))) {
                         throw new Error('Valid until must be a valid ISO-8601 date');
                     }
                     data.valid_until = new Date(data.valid_until); // Convert to Date object
                 }
                 if (data.last_test && typeof data.last_test === 'string') {
-                    // Ensure valid date format before converting
                     if (isNaN(Date.parse(data.last_test))) {
                         throw new Error('Last test must be a valid ISO-8601 date');
                     }
                     data.last_test = new Date(data.last_test); // Convert to Date object
                 }
-                // Log and inspect the data to ensure valid date objects before passing to Prisma
+                // Convert emission_group to a string if it is not null
+                if (data.emission_group !== undefined && data.emission_group !== null) {
+                    data.emission_group = String(data.emission_group);
+                }
+                // Convert model_number to a string if it is not null
+                if (data.model_number !== undefined && data.model_number !== null) {
+                    data.model_number = String(data.model_number);
+                }
+                // Log and inspect the data to ensure valid values before passing to Prisma
                 console.log('Prepared Car Data:', data);
                 const car = yield add_carDto_js_1.CarDto.create(data); // Create car record
                 return car;
@@ -53,24 +59,29 @@ class CarService {
     updateCar(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // Perform validation using the updated validateCarData method
                 this.validateCarData(data, true); // Validate updated data (isUpdate = true)
                 // Ensure the dates are valid and in ISO-8601 format if they're strings
                 if (data.valid_until && typeof data.valid_until === 'string') {
-                    // Ensure valid date format before converting
                     if (isNaN(Date.parse(data.valid_until))) {
                         throw new Error('Valid until must be a valid ISO-8601 date');
                     }
                     data.valid_until = new Date(data.valid_until); // Convert to Date object
                 }
                 if (data.last_test && typeof data.last_test === 'string') {
-                    // Ensure valid date format before converting
                     if (isNaN(Date.parse(data.last_test))) {
                         throw new Error('Last test must be a valid ISO-8601 date');
                     }
                     data.last_test = new Date(data.last_test); // Convert to Date object
                 }
-                // Log and inspect the data to ensure valid date objects before passing to Prisma
+                // Convert emission_group to a string if it is not null
+                if (data.emission_group !== undefined && data.emission_group !== null) {
+                    data.emission_group = String(data.emission_group);
+                }
+                // Convert model_number to a string if it is not null
+                if (data.model_number !== undefined && data.model_number !== null) {
+                    data.model_number = String(data.model_number);
+                }
+                // Log and inspect the data to ensure valid values before passing to Prisma
                 console.log('Updated Car Data:', data);
                 const updatedCar = yield add_carDto_js_1.CarDto.update(id, data); // Update car record
                 return updatedCar;
@@ -89,13 +100,11 @@ class CarService {
     }
     // Validation logic for car data
     validateCarData(data, isUpdate = false) {
-        // If it's an update, some fields may be optional
         if (!isUpdate) {
             if (!data.license_plate || !data.make || !data.model || !data.year || !data.color || !data.valid_until || !data.last_test || !data.model_type || !data.model_number) {
                 throw new Error('Required fields are missing: license_plate, make, model, year, color, valid_until, last_test, model_type, model_number');
             }
         }
-        // Ensure year is a valid positive number
         if (data.year !== undefined) {
             const yearValue = Number(data.year);
             if (isNaN(yearValue) || yearValue <= 0) {
@@ -103,7 +112,6 @@ class CarService {
             }
             data.year = yearValue;
         }
-        // Ensure valid_until and last_test are valid dates
         if (data.valid_until && isNaN(Date.parse(data.valid_until.toString()))) {
             throw new Error('Valid until must be a valid ISO-8601 date');
         }
