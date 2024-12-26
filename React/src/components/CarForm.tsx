@@ -1,13 +1,44 @@
 import { useForm } from 'react-hook-form';
-import React from 'react';
+import React, { useState } from 'react';
 
 const CarForm = ({ existingCar, onSubmit }: any) => {
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const [autoFill, setAutoFill] = useState(false); // Track whether to autofill
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm({
     defaultValues: existingCar || {},
   });
 
+  const handleAutoFill = () => {
+    if (existingCar) {
+      // Auto-fill the form with existing car data
+      Object.entries(existingCar).forEach(([key, value]) => {
+        setValue(key, value); // Set each field's value
+      });
+    }
+  };
+
+  const handleAutoFillChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    setAutoFill(isChecked);
+
+    if (isChecked) {
+      handleAutoFill(); // Call autofill when the checkbox is checked
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {/* Toggle for Auto-Fill */}
+      <div>
+        <label>
+          <input 
+            type="checkbox" 
+            checked={autoFill} 
+            onChange={handleAutoFillChange}
+          />
+          Auto-fill with Existing Car Data
+        </label>
+      </div>
+
       {/* License Plate */}
       <div>
         <label>License Plate</label>

@@ -8,6 +8,8 @@ import serviceController from './controller/serviceController.js'; // Import the
 import refuelingController from './controller/refuelController.js';
 import carController from './controller/add_carController.js'; 
 
+import csvImportController from './controller/csvImportController.js';
+
 
 const app = express();
 
@@ -18,6 +20,8 @@ app.use(express.json());// Middleware to parse incoming JSON requests
 app.use('/services', serviceController);// Use serviceController for any requests to /services
 app.use('/refuels', refuelingController); // Use refuelingController for any requests to /refuels
 app.use('/cars', carController);
+app.use('/csv', csvImportController);
+
 
 const PORT = process.env.PORT || 3000;// Define the port
 

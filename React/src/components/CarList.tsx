@@ -2,9 +2,15 @@ import { useState, useEffect } from 'react';
 import { Car, getCars, deleteCar } from '../services/serviceApi';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios'; // Import axios for making the CSV upload request
+
+interface ImportResponse {
+  data: Car[]; // Assuming the backend returns an array of cars in a `data` property
+}
 
 const CarList = () => {
   const [cars, setCars] = useState<Car[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File[]>([]);  // Store files as an array
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -24,6 +30,39 @@ const CarList = () => {
       setCars(cars.filter((car) => car.id !== id));
     } catch (error) {
       console.error('Error deleting car:', error);
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setSelectedFile(Array.from(event.target.files));  // Store all selected files
+    }
+  };
+
+  const handleImport = async () => {
+    if (!selectedFile || selectedFile.length === 0) {
+      alert('Please select a file to import.');
+      return;
+    }
+
+    const formData = new FormData();
+
+    selectedFile.forEach(file => {
+      formData.append('files', file);  // Append each file to the form data
+    });
+
+    try {
+      const response = await axios.post<ImportResponse>('/csv/import', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      alert('Cars imported successfully!');
+      setCars((prevCars) => [...prevCars, ...response.data.data]); // Update the cars list
+    } catch (error) {
+      console.error('Error importing cars:', error);
+      alert('Failed to import cars.');
     }
   };
 
@@ -49,10 +88,17 @@ const CarList = () => {
           );
         })}
 
-        {/* Add New Car Button */}
+        {/*Add New Car Button*/}
         <div className="car-card add-button">
           <Link to="/cars/add">+</Link>
         </div>
+      </div>
+
+      {/* File Upload and Import Button */}
+      <div className="import-section">
+        <h3>Import Cars</h3>
+        <input type="file" accept=".csv" onChange={handleFileChange} multiple />
+        <button onClick={handleImport}>Import</button>
       </div>
     </div>
   );

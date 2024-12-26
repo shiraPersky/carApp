@@ -16,8 +16,10 @@ const react_1 = require("react");
 const serviceApi_1 = require("../services/serviceApi");
 const react_2 = __importDefault(require("react"));
 const react_router_dom_1 = require("react-router-dom");
+const axios_1 = __importDefault(require("axios")); // Import axios for making the CSV upload request
 const CarList = () => {
     const [cars, setCars] = (0, react_1.useState)([]);
+    const [selectedFile, setSelectedFile] = (0, react_1.useState)([]); // Store files as an array
     (0, react_1.useEffect)(() => {
         const fetchCars = () => __awaiter(void 0, void 0, void 0, function* () {
             try {
@@ -37,6 +39,34 @@ const CarList = () => {
         }
         catch (error) {
             console.error('Error deleting car:', error);
+        }
+    });
+    const handleFileChange = (event) => {
+        if (event.target.files) {
+            setSelectedFile(Array.from(event.target.files)); // Store all selected files
+        }
+    };
+    const handleImport = () => __awaiter(void 0, void 0, void 0, function* () {
+        if (!selectedFile || selectedFile.length === 0) {
+            alert('Please select a file to import.');
+            return;
+        }
+        const formData = new FormData();
+        selectedFile.forEach(file => {
+            formData.append('files', file); // Append each file to the form data
+        });
+        try {
+            const response = yield axios_1.default.post('/csv/import', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            alert('Cars imported successfully!');
+            setCars((prevCars) => [...prevCars, ...response.data.data]); // Update the cars list
+        }
+        catch (error) {
+            console.error('Error importing cars:', error);
+            alert('Failed to import cars.');
         }
     });
     return (react_2.default.createElement("div", null,
@@ -71,6 +101,10 @@ const CarList = () => {
                     react_2.default.createElement("button", { onClick: () => handleDelete(car.id) }, "Delete")));
             }),
             react_2.default.createElement("div", { className: "car-card add-button" },
-                react_2.default.createElement(react_router_dom_1.Link, { to: "/cars/add" }, "+")))));
+                react_2.default.createElement(react_router_dom_1.Link, { to: "/cars/add" }, "+"))),
+        react_2.default.createElement("div", { className: "import-section" },
+            react_2.default.createElement("h3", null, "Import Cars"),
+            react_2.default.createElement("input", { type: "file", accept: ".csv", onChange: handleFileChange, multiple: true }),
+            react_2.default.createElement("button", { onClick: handleImport }, "Import"))));
 };
 exports.default = CarList;
