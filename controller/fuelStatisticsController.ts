@@ -7,8 +7,10 @@ const fuelStatisticsService = new FuelStatisticsService();
 const fuelStatisticsController = {
   getStatistics: async (req: Request, res: Response) => {
     try {
+        
        // Set "All Time" as the default if no timePeriod is provided
        const timePeriod = (req.query.timePeriod as string) || 'All Time';
+       console.log('Final timePeriod used:', timePeriod); // Log what value is being used
 
        // Get statistics from the service
        const statistics = await fuelStatisticsService.getStatistics(timePeriod);

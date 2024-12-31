@@ -12,11 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCar = exports.updateCar = exports.createCar = exports.getCars = exports.deleteRefuel = exports.updateRefuel = exports.createRefuel = exports.getRefuels = exports.deleteService = exports.updateService = exports.createService = exports.getServices = void 0;
+exports.getFrequentRefuelingStations = exports.getGraphData = exports.getFuelStatistics = exports.deleteCar = exports.updateCar = exports.createCar = exports.getCars = exports.deleteRefuel = exports.updateRefuel = exports.createRefuel = exports.getRefuels = exports.deleteService = exports.updateService = exports.createService = exports.getServices = void 0;
 const axios_1 = __importDefault(require("axios")); //Axios simplifies making GET, POST, PUT, and DELETE requests to interact with APIs.
 const API_URL = 'http://localhost:3000/services'; //service API
 const REFUEL_API_URL = 'http://localhost:3000/refuels'; //refuel API
 const CAR_API_URL = 'http://localhost:3000/cars'; // Car API
+const FUEL_STATISTICS_API_URL = 'http://localhost:3000/fuel-statistics'; // API URL for fuel statistics
 const getServices = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield axios_1.default.get(API_URL); //This makes a GET request to the backend API at http://localhost:3000/services.
@@ -136,3 +137,46 @@ const deleteCar = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.deleteCar = deleteCar;
+// Function to fetch fuel statistics
+// export const getFuelStatistics = async (timePeriod: string = 'All Time') => {
+//   try {
+//     const response = await axios.get(`${FUEL_STATISTICS_API_URL}?timePeriod=${timePeriod}`);
+//     return response.data;  // Return the response data from backend
+//   } catch (error) {
+//     throw new Error('Error fetching fuel statistics');
+//   }
+// };
+const getFuelStatistics = (timePeriod) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield fetch(`http://localhost:3000/fuel-statistics?timePeriod=${encodeURIComponent(timePeriod)}`);
+        const data = yield response.json();
+        return data;
+    }
+    catch (error) {
+        console.error("Error fetching fuel statistics:", error);
+        throw error;
+    }
+});
+exports.getFuelStatistics = getFuelStatistics;
+// Function to fetch graph data
+const getGraphData = (...args_1) => __awaiter(void 0, [...args_1], void 0, function* (timePeriod = 'All Time') {
+    try {
+        const response = yield axios_1.default.get(`${FUEL_STATISTICS_API_URL}/graph-data?timePeriod=${timePeriod}`);
+        return response.data; // Return the response data from backend
+    }
+    catch (error) {
+        throw new Error('Error fetching graph data');
+    }
+});
+exports.getGraphData = getGraphData;
+// Function to fetch frequent refueling stations
+const getFrequentRefuelingStations = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield axios_1.default.get(`${FUEL_STATISTICS_API_URL}/frequent-stations`);
+        return response.data; // Return the response data from backend
+    }
+    catch (error) {
+        throw new Error('Error fetching frequent refueling stations');
+    }
+});
+exports.getFrequentRefuelingStations = getFrequentRefuelingStations;

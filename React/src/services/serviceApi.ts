@@ -42,7 +42,7 @@ export interface Car {
   trim_level?: string;
   last_test: string;
   model_type: string;
-  model_number: string;
+  model_number: string;a
   created_at: string;
   updated_at: string;
 }
@@ -50,6 +50,8 @@ export interface Car {
 const API_URL = 'http://localhost:3000/services';//service API
 const REFUEL_API_URL = 'http://localhost:3000/refuels';//refuel API
 const CAR_API_URL = 'http://localhost:3000/cars'; // Car API
+const FUEL_STATISTICS_API_URL = 'http://localhost:3000/fuel-statistics';  // API URL for fuel statistics
+
 
 
 
@@ -158,5 +160,46 @@ export const deleteCar = async (id: number) => {
     await axios.delete(`${CAR_API_URL}/${id}`); // DELETE request for cars
   } catch (error) {
     throw new Error('Error deleting car');
+  }
+};
+
+// Function to fetch fuel statistics
+// export const getFuelStatistics = async (timePeriod: string = 'All Time') => {
+//   try {
+//     const response = await axios.get(`${FUEL_STATISTICS_API_URL}?timePeriod=${timePeriod}`);
+//     return response.data;  // Return the response data from backend
+//   } catch (error) {
+//     throw new Error('Error fetching fuel statistics');
+//   }
+// };
+export const getFuelStatistics = async (timePeriod: string) => {
+  try {
+    const response = await fetch(`http://localhost:3000/fuel-statistics?timePeriod=${encodeURIComponent(timePeriod)}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching fuel statistics:", error);
+    throw error;
+  }
+};
+
+
+// Function to fetch graph data
+export const getGraphData = async (timePeriod: string = 'All Time') => {
+  try {
+    const response = await axios.get(`${FUEL_STATISTICS_API_URL}/graph-data?timePeriod=${timePeriod}`);
+    return response.data;  // Return the response data from backend
+  } catch (error) {
+    throw new Error('Error fetching graph data');
+  }
+};
+
+// Function to fetch frequent refueling stations
+export const getFrequentRefuelingStations = async () => {
+  try {
+    const response = await axios.get(`${FUEL_STATISTICS_API_URL}/frequent-stations`);
+    return response.data;  // Return the response data from backend
+  } catch (error) {
+    throw new Error('Error fetching frequent refueling stations');
   }
 };

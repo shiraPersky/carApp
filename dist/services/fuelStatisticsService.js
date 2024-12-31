@@ -69,6 +69,7 @@ class FuelStatisticsService {
     }
     getDateRangeForFilter(filter) {
         const now = new Date();
+        console.log('Calculating date range for filter:', filter); // Log the filter value
         switch (filter) {
             case 'This Month':
                 return {
