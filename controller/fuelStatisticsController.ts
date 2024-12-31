@@ -7,8 +7,12 @@ const fuelStatisticsService = new FuelStatisticsService();
 const fuelStatisticsController = {
   getStatistics: async (req: Request, res: Response) => {
     try {
-      // Get statistics from the service
-      const statistics = await fuelStatisticsService.getStatistics();
+       // Set "All Time" as the default if no timePeriod is provided
+       const timePeriod = (req.query.timePeriod as string) || 'All Time';
+
+       // Get statistics from the service
+       const statistics = await fuelStatisticsService.getStatistics(timePeriod);
+ 
 
       // Create the DTO to format and structure the data
       const dto: FuelStatisticsDto = {

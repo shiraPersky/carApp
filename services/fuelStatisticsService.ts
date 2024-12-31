@@ -3,18 +3,29 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export class FuelStatisticsService {
-  async getStatistics() {
-    const refuelings = await prisma.refueling.findMany();//to fetch all refueling records from the refueling table
+  async getStatistics(timePeriod: string) {
+    const dateRange = this.getDateRangeForFilter(timePeriod);
+
+    const refuelings = await prisma.refueling.findMany({
+      where: dateRange ? { date: { gte: dateRange.startDate, lte: dateRange.endDate } } : undefined,
+    });;//to fetch all refueling records from the refueling table
 
     if (refuelings.length === 0) {
-      throw new Error('No refueling data available');
+        return {//there are no refuelings
+            averageEfficiency: 0,
+            averageDistanceBetweenFillups: 0,
+            averageDistancePerDay: 0,
+            averageLitersPerFill: 0,
+            averageCostPerFill: 0,
+            averagePricePerLiter: 0,
+            totalCost: 0,
+            totalDistance: 0,
+            totalLiters: 0,
+            averageTimeBetweenRefuels: "0 days, 0 hours",
+          };
     }
 
     const totalLiters = refuelings.reduce((sum, ref) => sum + ref.liters, 0);// calculates the total number of liters of fuel
-    // const totalDistance = refuelings.reduce((sum, ref, index) => {//calculates the total distance(based on the difference in odometer readings between consecutive refuelings)
-    //   if (index === 0) return sum;
-    //   return sum + (ref.odometer - refuelings[index - 1].odometer);
-    // }, 0);
 
     const totalCost = refuelings.reduce((sum, ref) => sum + ref.totalCost, 0);//calculates the total cost of refueling
     // Calculate total distance based on max and min odometer readings
@@ -51,6 +62,36 @@ export class FuelStatisticsService {
       averageTimeBetweenRefuels,
     };
   }
+
+  private getDateRangeForFilter(filter: string) {
+    const now = new Date();
+    switch (filter) {
+      case 'This Month':
+        return {
+          startDate: new Date(now.getFullYear(), now.getMonth(), 1),
+          endDate: new Date(now.getFullYear(), now.getMonth() + 1, 0),
+        };
+      case 'Last Month':
+        return {
+          startDate: new Date(now.getFullYear(), now.getMonth() - 1, 1),
+          endDate: new Date(now.getFullYear(), now.getMonth(), 0),
+        };
+      case 'This Year':
+        return {
+          startDate: new Date(now.getFullYear(), 0, 1),
+          endDate: new Date(now.getFullYear(), 11, 31),
+        };
+      case 'Last Year':
+        return {
+          startDate: new Date(now.getFullYear() - 1, 0, 1),
+          endDate: new Date(now.getFullYear() - 1, 11, 31),
+        };
+      case 'All Time':
+      default:
+        return null; // No filtering
+    }
+  }
+
   private getAverageTimeBetweenRefuels(refuelings: { date: Date }[]): string {
     if (refuelings.length <= 1) {
       return "0 days, 0 hours"; // If there's only one refuel, no time between refuels

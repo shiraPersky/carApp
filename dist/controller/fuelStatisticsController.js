@@ -14,8 +14,10 @@ const fuelStatisticsService = new fuelStatisticsService_js_1.FuelStatisticsServi
 const fuelStatisticsController = {
     getStatistics: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
+            // Set "All Time" as the default if no timePeriod is provided
+            const timePeriod = req.query.timePeriod || 'All Time';
             // Get statistics from the service
-            const statistics = yield fuelStatisticsService.getStatistics();
+            const statistics = yield fuelStatisticsService.getStatistics(timePeriod);
             // Create the DTO to format and structure the data
             const dto = {
                 averageFuelEfficiency: statistics.averageEfficiency,
