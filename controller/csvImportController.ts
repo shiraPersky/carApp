@@ -1,11 +1,12 @@
 import express, { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import axios from 'axios';
+import axios from 'axios';//Used for making HTTP requests to external services
 
 const prisma = new PrismaClient();
-const router = express.Router();
+const router = express.Router();//Initializes an Express Router to define routes for the API
 
 // Define types for the API response
+//This structure matches the data returned by the external API (data.gov.il).
 interface VehicleRecord {
   mispar_rechev: string;
   tozeret_nm: string;
@@ -20,7 +21,7 @@ interface VehicleRecord {
   degem_cd: string;
 }
 
-interface ApiResponse {
+interface ApiResponse {//Defines a TypeScript interface for the API response,
   success: boolean;
   result: {
     records: VehicleRecord[];
@@ -29,7 +30,7 @@ interface ApiResponse {
 
 // Function to fetch and search CSV data from data.gov.il
 const findCarInRemoteCSV = async (licensePlate: string): Promise<any> => {
-  try {
+  try {// HTTP GET request to the data.gov.il
     const response = await axios.get<ApiResponse>(
       'https://data.gov.il/api/3/action/datastore_search',
       {
@@ -41,12 +42,12 @@ const findCarInRemoteCSV = async (licensePlate: string): Promise<any> => {
       }
     );
 
-    const data = response.data;
+    const data = response.data;//Extracts the response data from the API request
 
     if (data.success && data.result.records.length > 0) {
       const record = data.result.records[0];
       
-      return {
+      return {// mapped to more readable names
         license_plate: record.mispar_rechev?.toString(),
         make: record.tozeret_nm,
         model: record.kinuy_mishari,
@@ -61,7 +62,7 @@ const findCarInRemoteCSV = async (licensePlate: string): Promise<any> => {
       };
     }
     
-    return null;
+    return null;//If no records are found, it returns null
   } catch (error) {
     console.error('Error fetching data from data.gov.il:', error);
     throw error;
@@ -70,7 +71,7 @@ const findCarInRemoteCSV = async (licensePlate: string): Promise<any> => {
 
 // Route to search for a car by license plate
 router.get('/search/:license_plate', (req: Request, res: Response) => {
-  const { license_plate } = req.params;
+  const { license_plate } = req.params;//Extracts the license_plate from the route parameters.
   
   findCarInRemoteCSV(license_plate)
     .then(carData => {

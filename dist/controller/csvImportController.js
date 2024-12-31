@@ -14,13 +14,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const client_1 = require("@prisma/client");
-const axios_1 = __importDefault(require("axios"));
+const axios_1 = __importDefault(require("axios")); //Used for making HTTP requests to external services
 const prisma = new client_1.PrismaClient();
-const router = express_1.default.Router();
+const router = express_1.default.Router(); //Initializes an Express Router to define routes for the API
 // Function to fetch and search CSV data from data.gov.il
 const findCarInRemoteCSV = (licensePlate) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    try {
+    try { // HTTP GET request to the data.gov.il
         const response = yield axios_1.default.get('https://data.gov.il/api/3/action/datastore_search', {
             params: {
                 resource_id: '053cea08-09bc-40ec-8f7a-156f0677aff3',
@@ -28,7 +28,7 @@ const findCarInRemoteCSV = (licensePlate) => __awaiter(void 0, void 0, void 0, f
                 limit: 1
             }
         });
-        const data = response.data;
+        const data = response.data; //Extracts the response data from the API request
         if (data.success && data.result.records.length > 0) {
             const record = data.result.records[0];
             return {
@@ -45,7 +45,7 @@ const findCarInRemoteCSV = (licensePlate) => __awaiter(void 0, void 0, void 0, f
                 model_number: record.degem_cd
             };
         }
-        return null;
+        return null; //If no records are found, it returns null
     }
     catch (error) {
         console.error('Error fetching data from data.gov.il:', error);
@@ -54,7 +54,7 @@ const findCarInRemoteCSV = (licensePlate) => __awaiter(void 0, void 0, void 0, f
 });
 // Route to search for a car by license plate
 router.get('/search/:license_plate', (req, res) => {
-    const { license_plate } = req.params;
+    const { license_plate } = req.params; //Extracts the license_plate from the route parameters.
     findCarInRemoteCSV(license_plate)
         .then(carData => {
         if (carData) {

@@ -9,6 +9,7 @@ import refuelingController from './controller/refuelController.js';
 import carController from './controller/add_carController.js'; 
 
 import csvImportController from './controller/csvImportController.js';
+import fuelStatisticsController from './controller/fuelStatisticsController.js'; // Import the fuel statistics controller
 
 
 const app = express();
@@ -21,6 +22,11 @@ app.use('/services', serviceController);// Use serviceController for any request
 app.use('/refuels', refuelingController); // Use refuelingController for any requests to /refuels
 app.use('/cars', carController);
 app.use('/csv', csvImportController);
+app.use('/fuel-statistics', fuelStatisticsController.getStatistics);
+app.use('/fuel-statistics/graph-data', fuelStatisticsController.getGraphData);
+app.use('/fuel-statistics/frequent-stations', fuelStatisticsController.getFrequentRefuelingStations);
+
+
 
 
 const PORT = process.env.PORT || 3000;// Define the port

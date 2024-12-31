@@ -11,6 +11,7 @@ const serviceController_js_1 = __importDefault(require("./controller/serviceCont
 const refuelController_js_1 = __importDefault(require("./controller/refuelController.js"));
 const add_carController_js_1 = __importDefault(require("./controller/add_carController.js"));
 const csvImportController_js_1 = __importDefault(require("./controller/csvImportController.js"));
+const fuelStatisticsController_js_1 = __importDefault(require("./controller/fuelStatisticsController.js")); // Import the fuel statistics controller
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)()); // This allows requests from any origin
 app.use(express_1.default.json()); // Middleware to parse incoming JSON requests
@@ -18,6 +19,9 @@ app.use('/services', serviceController_js_1.default); // Use serviceController f
 app.use('/refuels', refuelController_js_1.default); // Use refuelingController for any requests to /refuels
 app.use('/cars', add_carController_js_1.default);
 app.use('/csv', csvImportController_js_1.default);
+app.use('/fuel-statistics', fuelStatisticsController_js_1.default.getStatistics);
+app.use('/fuel-statistics/graph-data', fuelStatisticsController_js_1.default.getGraphData);
+app.use('/fuel-statistics/frequent-stations', fuelStatisticsController_js_1.default.getFrequentRefuelingStations);
 const PORT = process.env.PORT || 3000; // Define the port
 // Start the Express server and listen on the specified port
 app.listen(PORT, () => {
