@@ -41,12 +41,14 @@ const fuelStatisticsController = {
   
   getGraphData: async (req: Request, res: Response) => {
     try {
-      const graphData = await fuelStatisticsService.getGraphData();
+      const timePeriod = (req.query.timePeriod as string) || 'All Time';//set all time as default
+      const graphData = await fuelStatisticsService.getGraphData(timePeriod);
       res.json(graphData);
     } catch (error) {
       res.status(500).json({ message: 'Error retrieving graph data', error: error.message });
     }
   },
+  
 
   getFrequentRefuelingStations: async (req: Request, res: Response) => {
     try {

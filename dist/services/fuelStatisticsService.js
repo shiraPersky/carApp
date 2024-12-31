@@ -113,16 +113,30 @@ class FuelStatisticsService {
         const minutes = Math.floor((averageTimeDifference % (1000 * 60 * 60)) / (1000 * 60));
         return `${days} days, ${hours} hours, ${minutes} minutes`;
     }
-    getGraphData() {
+    getGraphData(timePeriod) {
         return __awaiter(this, void 0, void 0, function* () {
-            const refuelings = yield prisma.refueling.findMany({ orderBy: { date: 'asc' } }); //etches all refueling records from the database, ordered by date in ascending order
+            const dateRange = this.getDateRangeForFilter(timePeriod);
+            const refuelings = yield prisma.refueling.findMany({
+                where: dateRange ? { date: { gte: dateRange.startDate, lte: dateRange.endDate } } : undefined,
+                orderBy: { date: 'asc' }, // Ensure data is sorted by date
+            });
+            if (refuelings.length === 0) {
+                return {
+                    efficiencyGraph: [],
+                    distanceGraph: [],
+                    distancePerDayGraph: [],
+                    litersGraph: [],
+                    costGraph: [],
+                    priceGraph: [],
+                };
+            }
             const efficiencyGraph = refuelings.map((ref, index) => {
                 if (index === 0)
                     return null;
                 const distance = ref.odometer - refuelings[index - 1].odometer;
                 return {
                     date: ref.date,
-                    efficiency: distance / ref.liters,
+                    efficiency: distance / ref.liters, // km/l
                 };
             }).filter(Boolean);
             const distanceGraph = refuelings.map((ref, index) => {
@@ -130,14 +144,39 @@ class FuelStatisticsService {
                     return null;
                 return {
                     date: ref.date,
-                    distance: ref.odometer - refuelings[index - 1].odometer,
+                    distance: ref.odometer - refuelings[index - 1].odometer, // km/fillup
                 };
             }).filter(Boolean);
-            const priceGraph = refuelings.map((ref) => ({
+            const distancePerDayGraph = refuelings.map((ref, index) => {
+                if (index === 0)
+                    return null;
+                const distance = ref.odometer - refuelings[index - 1].odometer;
+                const days = (ref.date.getTime() - refuelings[index - 1].date.getTime()) / (1000 * 60 * 60 * 24);
+                return {
+                    date: ref.date,
+                    distancePerDay: distance / days, // km/day
+                };
+            }).filter(Boolean);
+            const litersGraph = refuelings.map(ref => ({
                 date: ref.date,
-                price: ref.pricePerLiter,
+                liters: ref.liters, // liters/fillup
             }));
-            return { efficiencyGraph, distanceGraph, priceGraph };
+            const costGraph = refuelings.map(ref => ({
+                date: ref.date,
+                cost: ref.totalCost, // NIS/fillup
+            }));
+            const priceGraph = refuelings.map(ref => ({
+                date: ref.date,
+                price: ref.pricePerLiter, // NIS/liter
+            }));
+            return {
+                efficiencyGraph,
+                distanceGraph,
+                distancePerDayGraph,
+                litersGraph,
+                costGraph,
+                priceGraph,
+            };
         });
     }
     getFrequentStations() {

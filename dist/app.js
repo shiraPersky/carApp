@@ -19,9 +19,9 @@ app.use('/services', serviceController_js_1.default); // Use serviceController f
 app.use('/refuels', refuelController_js_1.default); // Use refuelingController for any requests to /refuels
 app.use('/cars', add_carController_js_1.default);
 app.use('/csv', csvImportController_js_1.default);
-app.use('/fuel-statistics', fuelStatisticsController_js_1.default.getStatistics);
-app.use('/fuel-statistics/graph-data', fuelStatisticsController_js_1.default.getGraphData);
-app.use('/fuel-statistics/frequent-stations', fuelStatisticsController_js_1.default.getFrequentRefuelingStations);
+app.get('/fuel-statistics', fuelStatisticsController_js_1.default.getStatistics);
+app.get('/fuel-statistics/graph-data', fuelStatisticsController_js_1.default.getGraphData);
+app.get('/fuel-statistics/frequent-stations', fuelStatisticsController_js_1.default.getFrequentRefuelingStations);
 const PORT = process.env.PORT || 3000; // Define the port
 // Start the Express server and listen on the specified port
 app.listen(PORT, () => {

@@ -22,9 +22,10 @@ app.use('/services', serviceController);// Use serviceController for any request
 app.use('/refuels', refuelingController); // Use refuelingController for any requests to /refuels
 app.use('/cars', carController);
 app.use('/csv', csvImportController);
-app.use('/fuel-statistics', fuelStatisticsController.getStatistics);
-app.use('/fuel-statistics/graph-data', fuelStatisticsController.getGraphData);
-app.use('/fuel-statistics/frequent-stations', fuelStatisticsController.getFrequentRefuelingStations);
+
+app.get('/fuel-statistics', fuelStatisticsController.getStatistics);
+app.get('/fuel-statistics/graph-data', fuelStatisticsController.getGraphData);
+app.get('/fuel-statistics/frequent-stations', fuelStatisticsController.getFrequentRefuelingStations);
 
 
 

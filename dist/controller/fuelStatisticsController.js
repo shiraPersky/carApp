@@ -43,7 +43,8 @@ const fuelStatisticsController = {
     }),
     getGraphData: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const graphData = yield fuelStatisticsService.getGraphData();
+            const timePeriod = req.query.timePeriod || 'All Time'; //set all time as default
+            const graphData = yield fuelStatisticsService.getGraphData(timePeriod);
             res.json(graphData);
         }
         catch (error) {
