@@ -69,7 +69,26 @@ class FuelStatisticsService {
     }
     getDateRangeForFilter(filter) {
         const now = new Date();
-        console.log('Calculating date range for filter:', filter); // Log the filter value
+        //console.log('Calculating date range for filter:', filter); // Log the filter value
+        // Handle custom date range format: "Custom Dates|startDate|endDate"
+        if (filter.startsWith('Custom Dates|')) {
+            const [_, startDateStr, endDateStr] = filter.split('|');
+            if (!startDateStr || !endDateStr) {
+                throw new Error('Invalid custom date range format');
+            }
+            const startDate = new Date(startDateStr);
+            const endDate = new Date(endDateStr);
+            // Set endDate to end of day (23:59:59.999)
+            endDate.setHours(23, 59, 59, 999);
+            // Validate dates
+            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                throw new Error('Invalid date format');
+            }
+            return {
+                startDate,
+                endDate,
+            };
+        }
         switch (filter) {
             case 'This Month':
                 return {

@@ -137,20 +137,27 @@ const deleteCar = (id) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.deleteCar = deleteCar;
-// Function to fetch fuel statistics
-// export const getFuelStatistics = async (timePeriod: string = 'All Time') => {
+// export const getFuelStatistics = async (timePeriod: string, startDate?: string, endDate?: string) => {
 //   try {
-//     const response = await axios.get(`${FUEL_STATISTICS_API_URL}?timePeriod=${timePeriod}`);
-//     return response.data;  // Return the response data from backend
+//     const response = await fetch(`http://localhost:3000/fuel-statistics?timePeriod=${encodeURIComponent(timePeriod)}`);
+//     const data = await response.json();
+//     return data;
 //   } catch (error) {
-//     throw new Error('Error fetching fuel statistics');
+//     console.error("Error fetching fuel statistics:", error);
+//     throw error;
 //   }
 // };
-const getFuelStatistics = (timePeriod) => __awaiter(void 0, void 0, void 0, function* () {
+const getFuelStatistics = (timePeriod, startDate, endDate) => __awaiter(void 0, void 0, void 0, function* () {
+    let url = `http://localhost:3000/fuel-statistics?timePeriod=${encodeURIComponent(timePeriod)}`;
+    if (timePeriod === 'customDates' && startDate && endDate) {
+        url = `http://localhost:3000/fuel-statistics?timePeriod=Custom Dates|${encodeURIComponent(startDate)}|${encodeURIComponent(endDate)}`;
+    }
     try {
-        const response = yield fetch(`http://localhost:3000/fuel-statistics?timePeriod=${encodeURIComponent(timePeriod)}`);
-        const data = yield response.json();
-        return data;
+        const response = yield fetch(url);
+        if (!response.ok) {
+            throw new Error('Failed to fetch fuel statistics');
+        }
+        return yield response.json();
     }
     catch (error) {
         console.error("Error fetching fuel statistics:", error);
