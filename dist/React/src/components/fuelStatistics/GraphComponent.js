@@ -18,7 +18,6 @@ const chart_js_1 = require("chart.js");
 const react_chartjs_2_1 = require("react-chartjs-2");
 chart_js_1.Chart.register(chart_js_1.CategoryScale, chart_js_1.LinearScale, chart_js_1.PointElement, chart_js_1.LineElement, chart_js_1.Title, chart_js_1.Tooltip, chart_js_1.Legend);
 const GraphComponent = (props) => {
-    console.log("Graph Component Props:", props);
     const createChartData = (labels = [], values = [], label, color) => {
         if (!labels.length || !values.length) {
             labels = ['No Data'];
