@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import RefuelingForm from '../components/RefuelingForm';
-import { createRefuel } from '../services/serviceApi';
+import RefuelingForm from '../../components/Refueling/RefuelingForm';
+import { createRefuel } from '../../services/serviceApi';
 
 const AddRefuelingPage = () => {
   const navigate = useNavigate();

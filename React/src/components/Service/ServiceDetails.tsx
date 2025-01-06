@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { deleteService } from '../services/serviceApi';
+import { deleteService } from '../../services/serviceApi';
 import React from 'react';
 
 const ServiceDetails = () => {

@@ -62,29 +62,10 @@ const FuelStatisticsPage = () => {
         function fetchStatistics() {
             return __awaiter(this, void 0, void 0, function* () {
                 try {
-                    let queryTimePeriod = normalizeTimePeriod(timePeriod);
+                    const queryTimePeriod = normalizeTimePeriod(timePeriod);
                     const response = yield (0, serviceApi_1.getFuelStatistics)(queryTimePeriod, startDate, endDate);
                     const currentDate = new Date().toISOString();
-                    const enhancedResponse = Object.assign(Object.assign({}, response), { efficiencyGraph: [{
-                                date: currentDate,
-                                efficiency: response.averageFuelEfficiency
-                            }], distanceGraph: [{
-                                date: currentDate,
-                                distance: response.averageDistanceBetweenFillups
-                            }], distancePerDayGraph: [{
-                                date: currentDate,
-                                distancePerDay: response.averageDistancePerDay
-                            }], litersGraph: [{
-                                date: currentDate,
-                                liters: response.averageLitersPerFillup
-                            }], costGraph: [{
-                                date: currentDate,
-                                cost: response.averageTotalCostPerFillup
-                            }], priceGraph: [{
-                                date: currentDate,
-                                price: response.averagePricePerLiter
-                            }] });
-                    console.log("Enhanced response:", enhancedResponse);
+                    const enhancedResponse = Object.assign(Object.assign({}, response), { efficiencyGraph: [{ date: currentDate, efficiency: response.averageFuelEfficiency }], distanceGraph: [{ date: currentDate, distance: response.averageDistanceBetweenFillups }], distancePerDayGraph: [{ date: currentDate, distancePerDay: response.averageDistancePerDay }], litersGraph: [{ date: currentDate, liters: response.averageLitersPerFillup }], costGraph: [{ date: currentDate, cost: response.averageTotalCostPerFillup }], priceGraph: [{ date: currentDate, price: response.averagePricePerLiter }] });
                     setStatistics(enhancedResponse);
                 }
                 catch (error) {
@@ -100,9 +81,7 @@ const FuelStatisticsPage = () => {
             try {
                 const response = yield fetch(`http://localhost:3000/fuel-statistics/graph-data?timePeriod=${normalizeTimePeriod(timePeriod)}`);
                 const data = yield response.json();
-                console.log("API response data:", data);
-                //Map the graph data properly using the mapGraphData function
-                const graphData = {
+                const mappedGraphData = {
                     efficiencyGraph: mapGraphData(data.efficiencyGraph),
                     distanceGraph: mapGraphData(data.distanceGraph),
                     distancePerDayGraph: mapGraphData(data.distancePerDayGraph),
@@ -110,7 +89,7 @@ const FuelStatisticsPage = () => {
                     costGraph: mapGraphData(data.costGraph),
                     priceGraph: mapGraphData(data.priceGraph),
                 };
-                setGraphData(graphData); // Update the state with the graph data
+                setGraphData(mappedGraphData); // Update the state with the graph data
             }
             catch (error) {
                 console.error("Error fetching graph data:", error);
@@ -202,7 +181,7 @@ const FuelStatisticsPage = () => {
                 react_1.default.createElement(FuelStatisticItem_1.default, { title: "Average time between refuels", value: statistics.averageTimeBetweenRefuels })),
             react_1.default.createElement("div", null,
                 react_1.default.createElement("h2", null, "Graphs"),
-                react_1.default.createElement(GraphComponent_1.default, { efficiencyGraph: statisticsWithMappedGraphs.efficiencyGraph, distanceGraph: statisticsWithMappedGraphs.distanceGraph, distancePerDayGraph: statisticsWithMappedGraphs.distancePerDayGraph, litersGraph: statisticsWithMappedGraphs.litersGraph, costGraph: statisticsWithMappedGraphs.costGraph, priceGraph: statisticsWithMappedGraphs.priceGraph })),
+                react_1.default.createElement(GraphComponent_1.default, Object.assign({}, graphData))),
             react_1.default.createElement("div", null,
                 react_1.default.createElement("h2", null, "Frequent Refueling Stations"),
                 react_1.default.createElement(PieChart_1.default, { data: statistics.frequentRefuelingStations }),

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ServiceForm from '../components/ServiceForm';
-import { updateService } from '../services/serviceApi';
+import ServiceForm from '../../components/Service/ServiceForm';
+import { updateService } from '../../services/serviceApi';
 
 const EditServicePage = () => {
   const { id } = useParams(); // Get the service ID from the URL

@@ -2,17 +2,17 @@
 //Route - Defines a single route in the application. It specifies which component should be rendered when the URL matches a specific path.
 //Routes - A container for all the Route components. It manages the routing logic and renders the correct Route based on the current path.
 import { Route, Routes ,Navigate } from 'react-router-dom'; // No need to import Router here
-import ServicesPage from './pages/ServicePage';
-import AddServicePage from './pages/AddServicePage';
-import EditServicePage from './pages/EditServicePage';
+import ServicesPage from './pages/Service/ServicePage';
+import AddServicePage from './pages/Service/AddServicePage';
+import EditServicePage from './pages/Service/EditServicePage';
 
-import RefuelingPage from './pages/RefuelingPage';  // Import RefuelingPage
-import AddRefuelingPage from './pages/AddRefuelingPage';  // Import AddRefuelingPage
-import EditRefuelingPage from './pages/EditRefuelingPage';  // Import EditRefuelingPage
+import RefuelingPage from './pages/Refueling/RefuelingPage';  // Import RefuelingPage
+import AddRefuelingPage from './pages/Refueling/AddRefuelingPage';  // Import AddRefuelingPage
+import EditRefuelingPage from './pages/Refueling/EditRefuelingPage';  // Import EditRefuelingPage
 
-import CarPage from './pages/CarsPage'; // Import CarsPage
-import AddCarPage from './pages/AddCarPage'; // Import AddCarPage
-import EditCarPage from './pages/EditCarPage'; // Import EditCarPage
+import CarPage from './pages/Cars/CarsPage'; // Import CarsPage
+import AddCarPage from './pages/Cars/AddCarPage'; // Import AddCarPage
+import EditCarPage from './pages/Cars/EditCarPage'; // Import EditCarPage
 
 import FuelStatisticsPage from './pages/FuelStatisticsPage';  // Import your FuelStatisticsPage
 

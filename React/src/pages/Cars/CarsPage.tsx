@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Car, getCars, deleteCar } from '../services/serviceApi';
+import { Car, getCars, deleteCar } from '../../services/serviceApi';
 import { Link } from 'react-router-dom';
 import React from 'react';
 

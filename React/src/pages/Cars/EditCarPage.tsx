@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import CarForm from '../components/CarForm'; // Assuming you have a CarForm component
-import { updateCar } from '../services/serviceApi';
+import CarForm from '../../components/Cars/CarForm'; // Assuming you have a CarForm component
+import { updateCar } from '../../services/serviceApi';
 
 const EditCarPage = () => {
   const { id } = useParams(); // Get the car ID from the URL

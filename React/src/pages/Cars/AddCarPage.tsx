@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import CarForm from '../components/CarForm'; 
-import { createCar } from '../services/serviceApi';
+import CarForm from '../../components/Cars/CarForm'; 
+import { createCar } from '../../services/serviceApi';
 
 const AddCarPage = () => {
   const navigate = useNavigate();

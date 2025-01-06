@@ -7,15 +7,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //Route - Defines a single route in the application. It specifies which component should be rendered when the URL matches a specific path.
 //Routes - A container for all the Route components. It manages the routing logic and renders the correct Route based on the current path.
 const react_router_dom_1 = require("react-router-dom"); // No need to import Router here
-const ServicePage_1 = __importDefault(require("./pages/ServicePage"));
-const AddServicePage_1 = __importDefault(require("./pages/AddServicePage"));
-const EditServicePage_1 = __importDefault(require("./pages/EditServicePage"));
-const RefuelingPage_1 = __importDefault(require("./pages/RefuelingPage")); // Import RefuelingPage
-const AddRefuelingPage_1 = __importDefault(require("./pages/AddRefuelingPage")); // Import AddRefuelingPage
-const EditRefuelingPage_1 = __importDefault(require("./pages/EditRefuelingPage")); // Import EditRefuelingPage
-const CarsPage_1 = __importDefault(require("./pages/CarsPage")); // Import CarsPage
-const AddCarPage_1 = __importDefault(require("./pages/AddCarPage")); // Import AddCarPage
-const EditCarPage_1 = __importDefault(require("./pages/EditCarPage")); // Import EditCarPage
+const ServicePage_1 = __importDefault(require("./pages/Service/ServicePage"));
+const AddServicePage_1 = __importDefault(require("./pages/Service/AddServicePage"));
+const EditServicePage_1 = __importDefault(require("./pages/Service/EditServicePage"));
+const RefuelingPage_1 = __importDefault(require("./pages/Refueling/RefuelingPage")); // Import RefuelingPage
+const AddRefuelingPage_1 = __importDefault(require("./pages/Refueling/AddRefuelingPage")); // Import AddRefuelingPage
+const EditRefuelingPage_1 = __importDefault(require("./pages/Refueling/EditRefuelingPage")); // Import EditRefuelingPage
+const CarsPage_1 = __importDefault(require("./pages/Cars/CarsPage")); // Import CarsPage
+const AddCarPage_1 = __importDefault(require("./pages/Cars/AddCarPage")); // Import AddCarPage
+const EditCarPage_1 = __importDefault(require("./pages/Cars/EditCarPage")); // Import EditCarPage
 const FuelStatisticsPage_1 = __importDefault(require("./pages/FuelStatisticsPage")); // Import your FuelStatisticsPage
 const react_1 = __importDefault(require("react"));
 require("./app.css");

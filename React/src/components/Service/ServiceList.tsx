@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Service, getServices, deleteService } from '../services/serviceApi';
+import { Service, getServices, deleteService } from '../../services/serviceApi';
 import React from 'react';
 import { Link } from 'react-router-dom';
 

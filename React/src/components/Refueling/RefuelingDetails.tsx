@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { deleteRefuel } from '../services/serviceApi';
+import { deleteRefuel } from '../../services/serviceApi';
 import React from 'react';
 
 const RefuelingDetails  = () => {

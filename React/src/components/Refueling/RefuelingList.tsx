@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Refueling, getRefuels, deleteRefuel } from '../services/serviceApi';
+import { Refueling, getRefuels, deleteRefuel } from '../../services/serviceApi';
 import React from 'react';
 import { Link } from 'react-router-dom';
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import RefuelingForm from '../components/RefuelingForm';
-import { updateRefuel } from '../services/serviceApi';
+import RefuelingForm from '../../components/Refueling/RefuelingForm';
+import { updateRefuel } from '../../services/serviceApi';
 
 const EditRefuelingPage = () => {
   const { id } = useParams(); // Get the refuel ID from the URL
