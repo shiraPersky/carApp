@@ -4,12 +4,12 @@ dotenv.config();  // This will load the environment variables from the .env file
 
 import express from 'express';
 import cors from 'cors';
-import serviceController from './controller/serviceController.js'; // Import the controller
-import refuelingController from './controller/refuelController.js';
-import carController from './controller/add_carController.js'; 
+import serviceController from './Backend/controller/serviceController.js'; // Import the controller
+import refuelingController from './Backend/controller/refuelController.js';
+import carController from './Backend/controller/add_carController.js'; 
 
-import csvImportController from './controller/csvImportController.js';
-import fuelStatisticsController from './controller/fuelStatisticsController.js'; // Import the fuel statistics controller
+import csvImportController from './Backend/controller/csvImportController.js';
+import fuelStatisticsController from './Backend/controller/fuelStatisticsController.js'; // Import the fuel statistics controller
 
 
 const app = express();
