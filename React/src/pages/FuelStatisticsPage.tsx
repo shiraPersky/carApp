@@ -176,9 +176,10 @@ const FuelStatisticsPage = () => {
               <h2>Graphs</h2>
               <GraphComponent {...graphData} />
               </div>
-            <div>
-              <h2>Frequent Refueling Stations</h2>
-              <PieChart data={statistics.frequentRefuelingStations} />            </div>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '20px' }}>
+              <h2 style={{ textAlign: 'center', marginBottom: '10px' }}>Frequent Refueling Stations</h2>
+              <PieChart data={statistics.frequentRefuelingStations} />
+            </div>
           </>
         )}
       </div>
