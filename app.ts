@@ -12,6 +12,7 @@ import csvImportController from './Backend/controller/csvImportController.js';
 import fuelStatisticsController from './Backend/controller/fuelStatisticsController.js'; // Import the fuel statistics controller
 
 import emailController from './Backend/controller/emailController.js'; // Import the emailController
+import cron from 'node-cron'; // Import node-cron for scheduling tasks
 
 const app = express();
 
@@ -29,7 +30,31 @@ app.get('/fuel-statistics/graph-data', fuelStatisticsController.getGraphData);
 app.get('/fuel-statistics/frequent-stations', fuelStatisticsController.getFrequentRefuelingStations);
 
 app.post('/send-monthly-statistics', emailController.sendMonthlyStatistics);
-
+// Schedule to run on the 1st day of every month at midnight (00:00)
+//cron.schedule('0 0 1 * *', async () => {
+cron.schedule('39 11 7 * *', async () => {//test
+  try {
+    console.log('Sending monthly statistics email...');
+    // Mock request and response objects
+    const mockReq = {};  // Request object (can stay empty if not used)
+    const mockRes = {
+      status: function(statusCode: number) {
+        console.log(`Response status: ${statusCode}`);
+        return this;  // Return mockRes to allow chaining
+      },
+      json: function(message: any) {
+        console.log('Response:', message);
+      },
+      send: function(message: any) {
+        console.log('Sent:', message);
+      }
+    };
+    await emailController.sendMonthlyStatistics(mockReq as any, mockRes as any);
+    console.log('Monthly statistics email sent successfully!');
+  } catch (error) {
+    console.error('Error sending monthly statistics email:', error);
+  }
+});
 
 
 const PORT = process.env.PORT || 3000;// Define the port
