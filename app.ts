@@ -31,8 +31,8 @@ app.get('/fuel-statistics/frequent-stations', fuelStatisticsController.getFreque
 
 app.post('/send-monthly-statistics', emailController.sendMonthlyStatistics);
 // Schedule to run on the 1st day of every month at midnight (00:00)
-//cron.schedule('0 0 1 * *', async () => {
-cron.schedule('39 11 7 * *', async () => {//test
+cron.schedule('0 0 1 * *', async () => {
+//cron.schedule('45 11 7 * *', async () => {//test
   try {
     console.log('Sending monthly statistics email...');
     // Mock request and response objects

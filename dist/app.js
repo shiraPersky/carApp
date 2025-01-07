@@ -36,7 +36,7 @@ app.get('/fuel-statistics/frequent-stations', fuelStatisticsController_js_1.defa
 app.post('/send-monthly-statistics', emailController_js_1.default.sendMonthlyStatistics);
 // Schedule to run on the 1st day of every month at midnight (00:00)
 //cron.schedule('0 0 1 * *', async () => {
-node_cron_1.default.schedule('39 11 7 * *', () => __awaiter(void 0, void 0, void 0, function* () {
+node_cron_1.default.schedule('45 11 7 * *', () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log('Sending monthly statistics email...');
         // Mock request and response objects
