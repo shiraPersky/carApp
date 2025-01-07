@@ -1,0 +1,60 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RefuelingDto = void 0;
+const client_1 = require("@prisma/client");
+const prisma = new client_1.PrismaClient();
+class RefuelingDto {
+    // Static method to create a new refueling record
+    static create(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.refueling.create({ data });
+        });
+    }
+    // Static method to get all refueling records
+    static getAll() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.refueling.findMany();
+        });
+    }
+    // Static method to update a specific refueling record
+    static update(id, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.refueling.update({
+                where: { id },
+                data: {
+                    // Do not include `id` in the `data` object
+                    date: data.date,
+                    time: data.time,
+                    odometer: data.odometer,
+                    kindOfFuel: data.kindOfFuel,
+                    pricePerLiter: data.pricePerLiter,
+                    totalCost: data.totalCost,
+                    liters: data.liters,
+                    gasStation: data.gasStation,
+                    driver: data.driver,
+                    fileAttachment: data.fileAttachment,
+                    notes: data.notes,
+                    updatedAt: new Date().toISOString(), // Automatically update `updatedAt`
+                },
+            });
+        });
+    }
+    // Static method to delete a refueling record
+    static delete(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.refueling.delete({
+                where: { id },
+            });
+        });
+    }
+}
+exports.RefuelingDto = RefuelingDto;

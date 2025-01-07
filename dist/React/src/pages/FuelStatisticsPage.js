@@ -182,9 +182,8 @@ const FuelStatisticsPage = () => {
             react_1.default.createElement("div", null,
                 react_1.default.createElement("h2", null, "Graphs"),
                 react_1.default.createElement(GraphComponent_1.default, Object.assign({}, graphData))),
-            react_1.default.createElement("div", null,
-                react_1.default.createElement("h2", null, "Frequent Refueling Stations"),
-                react_1.default.createElement(PieChart_1.default, { data: statistics.frequentRefuelingStations }),
-                "            "))))));
+            react_1.default.createElement("div", { style: { display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', marginTop: '20px' } },
+                react_1.default.createElement("h2", { style: { textAlign: 'center', marginBottom: '10px' } }, "Frequent Refueling Stations"),
+                react_1.default.createElement(PieChart_1.default, { data: statistics.frequentRefuelingStations })))))));
 };
 exports.default = FuelStatisticsPage;

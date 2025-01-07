@@ -1,19 +1,8 @@
 "use strict";
-//render the pie chart for frequent refueling stations
-// import React from 'react';
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// const PieChart = ({ data }: { data: any }) => {
-//   return (
-//     <div>
-//       {/* Use a charting library like Chart.js or Recharts for pie chart */}
-//       <p>Pie chart data goes here</p>
-//     </div>
-//   );
-// };
-// export default PieChart;
 const react_1 = __importDefault(require("react"));
 const recharts_1 = require("recharts");
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];

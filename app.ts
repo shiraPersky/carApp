@@ -11,6 +11,7 @@ import carController from './Backend/controller/add_carController.js';
 import csvImportController from './Backend/controller/csvImportController.js';
 import fuelStatisticsController from './Backend/controller/fuelStatisticsController.js'; // Import the fuel statistics controller
 
+import emailController from './Backend/controller/emailController.js'; // Import the emailController
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.get('/fuel-statistics', fuelStatisticsController.getStatistics);
 app.get('/fuel-statistics/graph-data', fuelStatisticsController.getGraphData);
 app.get('/fuel-statistics/frequent-stations', fuelStatisticsController.getFrequentRefuelingStations);
 
+app.post('/send-monthly-statistics', emailController.sendMonthlyStatistics);
 
 
 
