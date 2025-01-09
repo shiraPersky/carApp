@@ -18,6 +18,9 @@ const react_router_dom_1 = require("react-router-dom");
 const react_2 = __importDefault(require("react"));
 const CarPage = () => {
     const [cars, setCars] = (0, react_1.useState)([]);
+    const [selectedCar, setSelectedCar] = (0, react_1.useState)(null); // Selected car for updating odometer
+    const [newOdometer, setNewOdometer] = (0, react_1.useState)(null); // New odometer value
+    const [isModalOpen, setIsModalOpen] = (0, react_1.useState)(false); // Modal state
     (0, react_1.useEffect)(() => {
         const fetchCars = () => __awaiter(void 0, void 0, void 0, function* () {
             const data = yield (0, serviceApi_1.getCars)(); // Fetching the list of cars
@@ -32,6 +35,24 @@ const CarPage = () => {
         }
         catch (error) {
             console.error('Error deleting car:', error);
+        }
+    });
+    const openOdometerModal = (car) => {
+        setSelectedCar(car);
+        setIsModalOpen(true);
+    };
+    const handleUpdateOdometer = () => __awaiter(void 0, void 0, void 0, function* () {
+        if (!selectedCar || newOdometer === null)
+            return;
+        try {
+            yield (0, serviceApi_1.updateOdometer)(selectedCar.license_plate, newOdometer); // Call the API to update the odometer
+            setCars(cars.map((car) => car.id === selectedCar.id ? Object.assign(Object.assign({}, car), { odometer: newOdometer }) : car)); // Update the car list with the new odometer
+            setIsModalOpen(false); // Close the modal
+            setSelectedCar(null); // Reset selected car
+            setNewOdometer(null); // Reset new odometer
+        }
+        catch (error) {
+            console.error('Error updating odometer:', error);
         }
     });
     return (react_2.default.createElement("div", null,
@@ -55,7 +76,6 @@ const CarPage = () => {
                     react_2.default.createElement("th", null, "Actions"))),
             react_2.default.createElement("tbody", null, cars.map((car) => (react_2.default.createElement("tr", { key: car.id },
                 react_2.default.createElement("td", null, car.id),
-                react_2.default.createElement(react_router_dom_1.Link, { to: "/cars/add", className: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" }, "Add New Car"),
                 react_2.default.createElement("td", null, car.license_plate),
                 react_2.default.createElement("td", null, car.make),
                 react_2.default.createElement("td", null, car.model),
@@ -68,9 +88,22 @@ const CarPage = () => {
                 react_2.default.createElement("td", null, car.model_type),
                 react_2.default.createElement("td", null, car.model_number),
                 react_2.default.createElement("td", null,
+                    react_2.default.createElement("button", { onClick: () => openOdometerModal(car) }, "Update Odometer"),
                     react_2.default.createElement(react_router_dom_1.Link, { to: `/cars/edit/${car.id}` }, "Edit"),
                     " ",
                     react_2.default.createElement("button", { onClick: () => handleDelete(car.id) }, "Delete"),
-                    " "))))))));
+                    " ")))))),
+        isModalOpen && (react_2.default.createElement("div", { className: "modal" },
+            react_2.default.createElement("h3", null,
+                "Update Odometer for ", selectedCar === null || selectedCar === void 0 ? void 0 :
+                selectedCar.make,
+                " ", selectedCar === null || selectedCar === void 0 ? void 0 :
+                selectedCar.model),
+            react_2.default.createElement("p", null,
+                "Current Odometer: ", selectedCar === null || selectedCar === void 0 ? void 0 :
+                selectedCar.odometer),
+            react_2.default.createElement("input", { type: "number", value: newOdometer || '', onChange: (e) => setNewOdometer(Number(e.target.value)), placeholder: "Enter new odometer value" }),
+            react_2.default.createElement("button", { onClick: handleUpdateOdometer }, "Update"),
+            react_2.default.createElement("button", { onClick: () => setIsModalOpen(false) }, "Cancel")))));
 };
 exports.default = CarPage;

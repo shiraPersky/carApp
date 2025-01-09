@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Car, getCars, deleteCar } from '../../services/serviceApi';
+import { Car, getCars, deleteCar, updateOdometer } from '../../services/serviceApi';
 import { Link } from 'react-router-dom';
 import React from 'react';
 
 const CarPage = () => {
   const [cars, setCars] = useState<Car[]>([]);
+  const [selectedCar, setSelectedCar] = useState<Car | null>(null); // Selected car for updating odometer
+  const [newOdometer, setNewOdometer] = useState<number | null>(null); // New odometer value
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -20,6 +23,27 @@ const CarPage = () => {
       setCars(cars.filter((car) => car.id !== id)); // Remove the deleted car from the state
     } catch (error) {
       console.error('Error deleting car:', error);
+    }
+  };
+
+  const openOdometerModal = (car: Car) => {
+    setSelectedCar(car);
+    setIsModalOpen(true);
+  };
+
+  const handleUpdateOdometer = async () => {
+    if (!selectedCar || newOdometer === null) return;
+
+    try {
+      await updateOdometer(selectedCar.license_plate, newOdometer); // Call the API to update the odometer
+      setCars(cars.map((car) =>
+        car.id === selectedCar.id ? { ...car, odometer: newOdometer } : car
+      )); // Update the car list with the new odometer
+      setIsModalOpen(false); // Close the modal
+      setSelectedCar(null); // Reset selected car
+      setNewOdometer(null); // Reset new odometer
+    } catch (error) {
+      console.error('Error updating odometer:', error);
     }
   };
 
@@ -61,6 +85,7 @@ const CarPage = () => {
               <td>{car.model_type}</td>
               <td>{car.model_number}</td>
               <td>
+                <button onClick={() => openOdometerModal(car)}>Update Odometer</button>
                 <Link to={`/cars/edit/${car.id}`}>Edit</Link> {/* Link to the edit page */}
                 <button onClick={() => handleDelete(car.id)}>Delete</button> {/* Delete car */}
               </td>
@@ -68,6 +93,23 @@ const CarPage = () => {
           ))}
         </tbody>
       </table>
+
+      {/* Modal for Updating Odometer */}
+      {isModalOpen && (
+        <div className="modal">
+          <h3>Update Odometer for {selectedCar?.make} {selectedCar?.model}</h3>
+          {/* Display the current odometer */}
+          <p>Current Odometer: {selectedCar?.odometer}</p>
+          <input
+            type="number"
+            value={newOdometer || ''}
+            onChange={(e) => setNewOdometer(Number(e.target.value))}
+            placeholder="Enter new odometer value"
+          />
+          <button onClick={handleUpdateOdometer}>Update</button>
+          <button onClick={() => setIsModalOpen(false)}>Cancel</button>
+        </div>
+      )}
     </div>
   );
 };

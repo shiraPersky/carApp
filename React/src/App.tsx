@@ -15,7 +15,7 @@ import AddCarPage from './pages/Cars/AddCarPage'; // Import AddCarPage
 import EditCarPage from './pages/Cars/EditCarPage'; // Import EditCarPage
 
 import FuelStatisticsPage from './pages/FuelStatisticsPage';  // Import your FuelStatisticsPage
-import OdometerUpdatePage from './pages/Odometer/OdometerUpdatePage';
+import OdometerUpdatePage from './pages/Cars/OdometerUpdatedPage';
 
 
 import React from 'react';

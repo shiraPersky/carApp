@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Navigate } from 'react-router-dom';
-import OdometerForm from '../../components/Odometer/OdometerForm';
+import OdometerForm from '../../components/Cars/OdometerForm';
 
 const OdometerUpdatePage: React.FC = () => {
   const { licensePlate } = useParams<{ licensePlate: string }>();

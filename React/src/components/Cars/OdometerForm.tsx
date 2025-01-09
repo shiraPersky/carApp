@@ -45,10 +45,8 @@ const OdometerForm: React.FC<OdometerFormProps> = ({ licensePlate = '', onSubmit
         throw new Error('Invalid odometer value');
       }
 
-      await updateOdometer({
-        licensePlate: formData.licensePlate,
-        odometer: odometerValue
-      });
+      await updateOdometer(formData.licensePlate, odometerValue);
+
 
       if (onSubmitSuccess) {
         onSubmitSuccess();

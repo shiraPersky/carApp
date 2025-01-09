@@ -47,7 +47,9 @@ export interface Car {
   model_number: string;a
   created_at: string;
   updated_at: string;
+  odometer: number;
 }
+
 
 // Add new interface for Odometer
 export interface OdometerUpdate {
@@ -59,7 +61,7 @@ const API_URL = 'http://localhost:3000/services';//service API
 const REFUEL_API_URL = 'http://localhost:3000/refuels';//refuel API
 const CAR_API_URL = 'http://localhost:3000/cars'; // Car API
 const FUEL_STATISTICS_API_URL = 'http://localhost:3000/fuel-statistics';  // API URL for fuel statistics
-const ODOMETER_API_URL = 'http://localhost:3000/api/cars';
+//const ODOMETER_API_URL = 'http://localhost:3000/api/cars';
 
 
 
@@ -172,16 +174,7 @@ export const deleteCar = async (id: number) => {
   }
 };
 
-// export const getFuelStatistics = async (timePeriod: string, startDate?: string, endDate?: string) => {
-//   try {
-//     const response = await fetch(`http://localhost:3000/fuel-statistics?timePeriod=${encodeURIComponent(timePeriod)}`);
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error("Error fetching fuel statistics:", error);
-//     throw error;
-//   }
-// };
+
 export const getFuelStatistics = async (timePeriod: string, startDate?: string, endDate?: string) => {
   let url = `http://localhost:3000/fuel-statistics?timePeriod=${encodeURIComponent(timePeriod)}`;
 
@@ -223,20 +216,16 @@ export const getFrequentRefuelingStations = async () => {
   }
 };
 
-export const updateOdometer = async (data: OdometerUpdate) => {
-  try {
-    const response = await axios.put(`${ODOMETER_API_URL}/update-odometer`, data);
-    return response.data;
-  } catch (error) {
-    throw new Error('Error updating odometer');
-  }
-};
 
-export const getOdometerHistory = async (licensePlate: string) => {
+export const updateOdometer = async (licensePlate: string, odometer: number) => {
   try {
-    const response = await axios.get(`${ODOMETER_API_URL}/odometer-history/${licensePlate}`);
+    const response = await axios.put('http://localhost:3000/api/cars/update-odometer', {
+      licensePlate,
+      odometer,
+    });
     return response.data;
   } catch (error) {
-    throw new Error('Error fetching odometer history');
+    console.error('Error updating odometer:', error);
+    throw error;
   }
 };
