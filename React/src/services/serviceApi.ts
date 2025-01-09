@@ -229,3 +229,13 @@ export const updateOdometer = async (licensePlate: string, odometer: number) => 
     throw error;
   }
 };
+
+export const getCarDetails = async (licensePlate: string) => {
+  try {
+    const response = await axios.get(`${CAR_API_URL}/search/${licensePlate}`);
+    return response.data; // Assuming the API returns the car details in the response
+  } catch (error) {
+    throw new Error('Failed to fetch car details');
+  }
+};
+

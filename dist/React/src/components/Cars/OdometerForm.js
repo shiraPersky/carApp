@@ -49,25 +49,40 @@ const OdometerForm = ({ licensePlate = '', onSubmitSuccess }) => {
     const navigate = (0, react_router_dom_1.useNavigate)();
     const [formData, setFormData] = (0, react_1.useState)({
         licensePlate: licensePlate,
-        odometer: ''
+        odometer: '',
     });
+    const [currentOdometer, setCurrentOdometer] = (0, react_1.useState)(null);
     const [error, setError] = (0, react_1.useState)('');
     const [isSubmitting, setIsSubmitting] = (0, react_1.useState)(false);
+    // Fetch car details based on the license plate
     (0, react_1.useEffect)(() => {
-        if (licensePlate) {
-            setFormData(prev => (Object.assign(Object.assign({}, prev), { licensePlate: licensePlate })));
-        }
+        const fetchCarDetails = () => __awaiter(void 0, void 0, void 0, function* () {
+            if (licensePlate) {
+                try {
+                    const car = yield (0, serviceApi_1.getCarDetails)(licensePlate);
+                    console.log('Car details response:', car); // Log the response to check the structure
+                    // Type assertion if the API returns a correctly shaped response
+                    const typedCar = car;
+                    // Now we can safely access `odometer` as part of `CarDetails`
+                    setCurrentOdometer(typedCar.odometer);
+                    setFormData((prev) => (Object.assign(Object.assign({}, prev), { licensePlate: typedCar.license_plate, odometer: '' })));
+                }
+                catch (err) {
+                    setError('Failed to fetch car details');
+                }
+            }
+        });
+        fetchCarDetails();
     }, [licensePlate]);
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => (Object.assign(Object.assign({}, prev), { [name]: value })));
+        setFormData((prev) => (Object.assign(Object.assign({}, prev), { [name]: value })));
     };
     const handleSubmit = (e) => __awaiter(void 0, void 0, void 0, function* () {
         e.preventDefault();
         setError('');
         setIsSubmitting(true);
         try {
-            // Convert odometer to number and ensure it's a valid number
             const odometerValue = Number(formData.odometer);
             if (isNaN(odometerValue)) {
                 throw new Error('Invalid odometer value');
@@ -91,10 +106,15 @@ const OdometerForm = ({ licensePlate = '', onSubmitSuccess }) => {
         react_1.default.createElement("div", null,
             react_1.default.createElement("label", { className: "block text-sm font-medium text-gray-700" }, "License Plate"),
             react_1.default.createElement("input", { type: "text", name: "licensePlate", value: formData.licensePlate, onChange: handleChange, required: true, disabled: !!licensePlate, className: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" })),
+        currentOdometer !== null && (react_1.default.createElement("div", null,
+            react_1.default.createElement("label", { className: "block text-sm font-medium text-gray-700" }, "Current Odometer Reading"),
+            react_1.default.createElement("p", { className: "text-gray-600" },
+                currentOdometer,
+                " km"))),
         react_1.default.createElement("div", null,
-            react_1.default.createElement("label", { className: "block text-sm font-medium text-gray-700" }, "Odometer Reading"),
+            react_1.default.createElement("label", { className: "block text-sm font-medium text-gray-700" }, "New Odometer Reading"),
             react_1.default.createElement("input", { type: "number", name: "odometer", value: formData.odometer, onChange: handleChange, required: true, min: "0", className: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" })),
-        error && (react_1.default.createElement("div", { className: "text-red-500 text-sm" }, error)),
+        error && react_1.default.createElement("div", { className: "text-red-500 text-sm" }, error),
         react_1.default.createElement("div", { className: "flex justify-end space-x-3" },
             react_1.default.createElement("button", { type: "button", onClick: () => navigate('/cars'), className: "px-4 py-2 border rounded-md text-gray-600 hover:bg-gray-50", disabled: isSubmitting }, "Cancel"),
             react_1.default.createElement("button", { type: "submit", className: "px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-blue-300", disabled: isSubmitting }, isSubmitting ? 'Updating...' : 'Update Odometer'))));

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateOdometer = exports.getFrequentRefuelingStations = exports.getGraphData = exports.getFuelStatistics = exports.deleteCar = exports.updateCar = exports.createCar = exports.getCars = exports.deleteRefuel = exports.updateRefuel = exports.createRefuel = exports.getRefuels = exports.deleteService = exports.updateService = exports.createService = exports.getServices = void 0;
+exports.getCarDetails = exports.updateOdometer = exports.getFrequentRefuelingStations = exports.getGraphData = exports.getFuelStatistics = exports.deleteCar = exports.updateCar = exports.createCar = exports.getCars = exports.deleteRefuel = exports.updateRefuel = exports.createRefuel = exports.getRefuels = exports.deleteService = exports.updateService = exports.createService = exports.getServices = void 0;
 const axios_1 = __importDefault(require("axios")); //Axios simplifies making GET, POST, PUT, and DELETE requests to interact with APIs.
 const API_URL = 'http://localhost:3000/services'; //service API
 const REFUEL_API_URL = 'http://localhost:3000/refuels'; //refuel API
@@ -192,3 +192,13 @@ const updateOdometer = (licensePlate, odometer) => __awaiter(void 0, void 0, voi
     }
 });
 exports.updateOdometer = updateOdometer;
+const getCarDetails = (licensePlate) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield axios_1.default.get(`${CAR_API_URL}/search/${licensePlate}`);
+        return response.data; // Assuming the API returns the car details in the response
+    }
+    catch (error) {
+        throw new Error('Failed to fetch car details');
+    }
+});
+exports.getCarDetails = getCarDetails;

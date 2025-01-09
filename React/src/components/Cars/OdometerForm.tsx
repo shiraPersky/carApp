@@ -1,35 +1,79 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { updateOdometer } from '../../services/serviceApi';
+import { updateOdometer, getCarDetails } from '../../services/serviceApi';
 
+// Define CarDetails interface
+export interface CarDetails {
+  id: number;
+  license_plate: string;
+  make: string;
+  model: string;
+  year: number;
+  color: string;
+  emission_group?: string;
+  valid_until: string;
+  trim_level?: string;
+  last_test: string;
+  odometer: number;
+  model_type: string;
+  model_number: string;
+}
+
+// Define OdometerFormProps interface
 interface OdometerFormProps {
   licensePlate?: string;
   onSubmitSuccess?: () => void;
 }
 
+// Define FormData type for the form fields
+interface FormData {
+  licensePlate: string;
+  odometer: string;
+}
+
 const OdometerForm: React.FC<OdometerFormProps> = ({ licensePlate = '', onSubmitSuccess }) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     licensePlate: licensePlate,
-    odometer: ''
+    odometer: '',
   });
+  const [currentOdometer, setCurrentOdometer] = useState<number | null>(null);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Fetch car details based on the license plate
   useEffect(() => {
-    if (licensePlate) {
-      setFormData(prev => ({
-        ...prev,
-        licensePlate: licensePlate
-      }));
-    }
+    const fetchCarDetails = async () => {
+      if (licensePlate) {
+        try {
+          const car = await getCarDetails(licensePlate);
+          console.log('Car details response:', car); // Log the response to check the structure
+
+          // Type assertion if the API returns a correctly shaped response
+          const typedCar = car as CarDetails;
+
+          // Now we can safely access `odometer` as part of `CarDetails`
+          setCurrentOdometer(typedCar.odometer);
+
+          setFormData((prev) => ({
+            ...prev,
+            licensePlate: typedCar.license_plate, // Set the license plate value
+            odometer: '', // Clear the form odometer field
+          }));
+        } catch (err) {
+          setError('Failed to fetch car details');
+        }
+      }
+    };
+
+    fetchCarDetails();
   }, [licensePlate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -39,14 +83,12 @@ const OdometerForm: React.FC<OdometerFormProps> = ({ licensePlate = '', onSubmit
     setIsSubmitting(true);
 
     try {
-      // Convert odometer to number and ensure it's a valid number
       const odometerValue = Number(formData.odometer);
       if (isNaN(odometerValue)) {
         throw new Error('Invalid odometer value');
       }
 
       await updateOdometer(formData.licensePlate, odometerValue);
-
 
       if (onSubmitSuccess) {
         onSubmitSuccess();
@@ -77,9 +119,19 @@ const OdometerForm: React.FC<OdometerFormProps> = ({ licensePlate = '', onSubmit
         />
       </div>
 
+      {/* Display current odometer reading */}
+      {currentOdometer !== null && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Current Odometer Reading
+          </label>
+          <p className="text-gray-600">{currentOdometer} km</p>
+        </div>
+      )}
+
       <div>
         <label className="block text-sm font-medium text-gray-700">
-          Odometer Reading
+          New Odometer Reading
         </label>
         <input
           type="number"
@@ -92,11 +144,7 @@ const OdometerForm: React.FC<OdometerFormProps> = ({ licensePlate = '', onSubmit
         />
       </div>
 
-      {error && (
-        <div className="text-red-500 text-sm">
-          {error}
-        </div>
-      )}
+      {error && <div className="text-red-500 text-sm">{error}</div>}
 
       <div className="flex justify-end space-x-3">
         <button

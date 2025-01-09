@@ -41,32 +41,35 @@
   color: #888;
 }
 
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+/* Container for the modal below the table */
+.modal-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  padding: 20px;
+  margin-top: 2rem; /* Add space above the modal */
 }
 
+/* Modal content styling */
 .modal-content {
-  background: white;
+  background-color: white;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Make modal as wide as needed */
+  max-width: 500px; /* Maximum width of the modal */
   text-align: center;
+  margin-top: 20px; /* Adds spacing between the table and modal */
 }
 
+/* Optional styling for form fields inside the modal */
 .modal-content input {
   margin: 10px 0;
   padding: 8px;
   width: 100%;
 }
 
+/* Optional styling for buttons inside the modal */
 .modal-content button {
   margin: 5px;
   padding: 10px 20px;
