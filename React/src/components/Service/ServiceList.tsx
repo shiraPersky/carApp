@@ -38,6 +38,7 @@ const ServiceList = () => {
             <div key={service.id} className="service-card">
               <Link to={`/services/details/${service.id}`}>
                 <h3>{service.service_type}</h3>
+                <p>License Plate: {service.license_plate}</p> {/* Display License Plate */}
                 <p>Date: {new Date(service.date).toLocaleDateString()}</p>
                 <p>Cost: {service.cost}</p>
                 <p>Car ID: {service.car_id}</p>

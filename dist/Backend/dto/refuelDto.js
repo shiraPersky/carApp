@@ -16,7 +16,28 @@ class RefuelingDto {
     // Static method to create a new refueling record
     static create(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield prisma.refueling.create({ data });
+            // Ensure license_plate is provided, as it is required by Prisma
+            if (!data.license_plate) {
+                throw new Error("License plate is required.");
+            }
+            // Map the RefuelingDto to the RefuelingCreateInput type
+            const refuelingData = {
+                date: new Date(data.date),
+                time: data.time,
+                odometer: data.odometer,
+                kindOfFuel: data.kindOfFuel,
+                pricePerLiter: data.pricePerLiter,
+                totalCost: data.totalCost,
+                liters: data.liters,
+                gasStation: data.gasStation,
+                driver: data.driver,
+                fileAttachment: data.fileAttachment,
+                notes: data.notes,
+                license_plate: data.license_plate, // required
+            };
+            return yield prisma.refueling.create({
+                data: refuelingData,
+            });
         });
     }
     // Static method to get all refueling records
@@ -31,7 +52,6 @@ class RefuelingDto {
             return yield prisma.refueling.update({
                 where: { id },
                 data: {
-                    // Do not include `id` in the `data` object
                     date: data.date,
                     time: data.time,
                     odometer: data.odometer,
@@ -44,6 +64,7 @@ class RefuelingDto {
                     fileAttachment: data.fileAttachment,
                     notes: data.notes,
                     updatedAt: new Date().toISOString(), // Automatically update `updatedAt`
+                    license_plate: data.license_plate,
                 },
             });
         });

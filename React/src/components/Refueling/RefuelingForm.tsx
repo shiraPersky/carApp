@@ -13,6 +13,14 @@ const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {/* Car ID */}
+       {/* License Plate */}
+       <div>
+        <label>License Plate</label>
+        <input 
+          type="text" 
+          {...register('license_plate', { required: 'License plate is required' })} 
+        />
+      </div>
       <div>
         <label>Date</label>
         <input type="date" {...register('date', { required: 'Date is required' })} />

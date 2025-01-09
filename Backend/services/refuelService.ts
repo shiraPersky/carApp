@@ -1,4 +1,6 @@
 import { RefuelingDto } from '../dto/refuelDto.js';
+import { CarDto } from '../dto/add_carDto.js';
+
 
 export class RefuelingService {
   // Create a new refueling record with validation
@@ -14,8 +16,14 @@ export class RefuelingService {
         }
         data.date = parsedDate.toISOString(); // Format date to ISO-8601 string
       }
+      // Ensure license_plate is valid
+      data.license_plate = data.license_plate || "";  // Set a default or validate
 
       const refueling = await RefuelingDto.create(data); // Create refueling record
+
+      // Update car's odometer after refueling
+      await CarDto.updateOdometer(data.license_plate, data.odometer);
+
       return refueling;
     } catch (error) {
       console.error("Error during refueling creation:", error);
@@ -42,6 +50,9 @@ export class RefuelingService {
         }
         data.date = parsedDate.toISOString(); // Format date to ISO-8601 string
       }
+       // Update car's odometer after refueling
+       await CarDto.updateOdometer(data.license_plate, data.odometer);
+
   
       // Perform the update in the database using RefuelingDto
       const updatedRefuel = await RefuelingDto.update(id, data); // Call DTO method

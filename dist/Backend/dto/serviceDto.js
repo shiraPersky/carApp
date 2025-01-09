@@ -16,24 +16,24 @@ class ServiceDto {
     static create(data) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // Log data to ensure it's formatted correctly
+                // Ensure license_plate is provided, if it's required by the Prisma schema
+                if (!data.license_plate) {
+                    throw new Error("License plate is required.");
+                }
                 console.log("Creating service with data:", data);
-                // Directly use Prisma to create the service
                 return yield prisma.service.create({
                     data: Object.assign(Object.assign({}, data), { date: new Date(data.date) }),
                 });
             }
             catch (error) {
-                // Log the error with full details
                 console.error("Error during service creation:", error);
-                // Check if it's a Prisma error and log specific details
                 if (error instanceof Error) {
-                    console.error("Error message:", error.message); // Log the error message
-                    console.error("Error stack:", error.stack); // Log the error stack trace
+                    console.error("Error message:", error.message);
+                    console.error("Error stack:", error.stack);
                 }
                 if (error instanceof client_1.Prisma.PrismaClientKnownRequestError) {
-                    console.error("Prisma error code:", error.code); // Prisma error code
-                    console.error("Prisma error meta:", error.meta); // Prisma error metadata
+                    console.error("Prisma error code:", error.code);
+                    console.error("Prisma error meta:", error.meta);
                 }
                 throw new Error("Failed to create service");
             }

@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CarDto = void 0;
 const client_1 = require("@prisma/client");
+//as
 const prisma = new client_1.PrismaClient();
 class CarDto {
     // Static method to create a new car record
@@ -18,19 +19,7 @@ class CarDto {
         return __awaiter(this, void 0, void 0, function* () {
             // Map CarDto to the Prisma `CarCreateInput` type
             return yield prisma.car.create({
-                data: {
-                    license_plate: data.license_plate,
-                    make: data.make,
-                    model: data.model,
-                    year: data.year,
-                    color: data.color,
-                    emission_group: data.emission_group,
-                    valid_until: data.valid_until,
-                    trim_level: data.trim_level,
-                    last_test: data.last_test,
-                    model_type: data.model_type,
-                    model_number: data.model_number,
-                },
+                data: Object.assign({ license_plate: data.license_plate, make: data.make, model: data.model, year: data.year, color: data.color, emission_group: data.emission_group, valid_until: data.valid_until, trim_level: data.trim_level, last_test: data.last_test, model_type: data.model_type, model_number: data.model_number }, (data.odometer !== undefined && { odometer: data.odometer })),
             });
         });
     }
@@ -68,6 +57,17 @@ class CarDto {
         return __awaiter(this, void 0, void 0, function* () {
             return yield prisma.car.delete({
                 where: { id },
+            });
+        });
+    }
+    // Static method to update the car's odometer
+    static updateOdometer(licensePlate, odometer) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.car.update({
+                where: { license_plate: licensePlate },
+                data: {
+                    odometer: odometer,
+                }, // Explicitly cast to Prisma.CarUpdateInput
             });
         });
     }

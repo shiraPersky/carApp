@@ -16,13 +16,14 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config(); // This will load the environment variables from the .env file
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const node_cron_1 = __importDefault(require("node-cron")); // Import node-cron for scheduling tasks
 const serviceController_js_1 = __importDefault(require("./Backend/controller/serviceController.js")); // Import the controller
 const refuelController_js_1 = __importDefault(require("./Backend/controller/refuelController.js"));
 const add_carController_js_1 = __importDefault(require("./Backend/controller/add_carController.js"));
 const csvImportController_js_1 = __importDefault(require("./Backend/controller/csvImportController.js"));
 const fuelStatisticsController_js_1 = __importDefault(require("./Backend/controller/fuelStatisticsController.js")); // Import the fuel statistics controller
 const emailController_js_1 = __importDefault(require("./Backend/controller/emailController.js")); // Import the emailController
-const node_cron_1 = __importDefault(require("node-cron")); // Import node-cron for scheduling tasks
+const odometerController_js_1 = __importDefault(require("./Backend/controller/odometerController.js")); // Import the odometer controller router
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)()); // This allows requests from any origin
 app.use(express_1.default.json()); // Middleware to parse incoming JSON requests
@@ -30,13 +31,14 @@ app.use('/services', serviceController_js_1.default); // Use serviceController f
 app.use('/refuels', refuelController_js_1.default); // Use refuelingController for any requests to /refuels
 app.use('/cars', add_carController_js_1.default);
 app.use('/csv', csvImportController_js_1.default);
+app.use('/api/cars', odometerController_js_1.default);
 app.get('/fuel-statistics', fuelStatisticsController_js_1.default.getStatistics);
 app.get('/fuel-statistics/graph-data', fuelStatisticsController_js_1.default.getGraphData);
 app.get('/fuel-statistics/frequent-stations', fuelStatisticsController_js_1.default.getFrequentRefuelingStations);
 app.post('/send-monthly-statistics', emailController_js_1.default.sendMonthlyStatistics);
 // Schedule to run on the 1st day of every month at midnight (00:00)
-//cron.schedule('0 0 1 * *', async () => {
-node_cron_1.default.schedule('45 11 7 * *', () => __awaiter(void 0, void 0, void 0, function* () {
+node_cron_1.default.schedule('0 0 1 * *', () => __awaiter(void 0, void 0, void 0, function* () {
+    //cron.schedule('05 9 8 * *', async () => {//test
     try {
         console.log('Sending monthly statistics email...');
         // Mock request and response objects

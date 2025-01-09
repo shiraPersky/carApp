@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-
+import { PrismaClient, Prisma } from '@prisma/client';
+//as
 const prisma = new PrismaClient();
 
 export class CarDto {
@@ -14,6 +14,7 @@ export class CarDto {
   last_test!: Date;
   model_type!: string;
   model_number!: string;
+  odometer?: number;
 
   // Static method to create a new car record
   static async create(data: CarDto) {
@@ -31,6 +32,7 @@ export class CarDto {
         last_test: data.last_test,
         model_type: data.model_type,
         model_number: data.model_number,
+        ...(data.odometer !== undefined && { odometer: data.odometer }), // Only include odometer if provided
       },
     });
   }
@@ -66,6 +68,16 @@ export class CarDto {
   static async delete(id: number) {
     return await prisma.car.delete({
       where: { id },
+    });
+  }
+
+   // Static method to update the car's odometer
+   static async updateOdometer(licensePlate: string, odometer: number) {
+    return await prisma.car.update({
+      where: { license_plate: licensePlate },
+      data: {
+        odometer: odometer,  
+      } as Prisma.CarUpdateInput,  // Explicitly cast to Prisma.CarUpdateInput
     });
   }
 }

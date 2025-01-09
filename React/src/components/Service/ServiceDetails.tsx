@@ -51,6 +51,7 @@ const ServiceDetails = () => {
     <div>
       <h2>Service Details</h2>
       <p>Service Type: {service.service_type}</p>
+      <p>License Plate: {service.license_plate}</p>
       <p>Date: {new Date(service.date).toLocaleDateString()}</p>
       <p>Odometer: {service.odometer}</p>
       <p>Place: {service.place}</p>

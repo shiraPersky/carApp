@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RefuelingService = void 0;
 const refuelDto_js_1 = require("../dto/refuelDto.js");
+const add_carDto_js_1 = require("../dto/add_carDto.js");
 class RefuelingService {
     // Create a new refueling record with validation
     createRefueling(data) {
@@ -25,7 +26,11 @@ class RefuelingService {
                     }
                     data.date = parsedDate.toISOString(); // Format date to ISO-8601 string
                 }
+                // Ensure license_plate is valid
+                data.license_plate = data.license_plate || ""; // Set a default or validate
                 const refueling = yield refuelDto_js_1.RefuelingDto.create(data); // Create refueling record
+                // Update car's odometer after refueling
+                yield add_carDto_js_1.CarDto.updateOdometer(data.license_plate, data.odometer);
                 return refueling;
             }
             catch (error) {
@@ -54,6 +59,8 @@ class RefuelingService {
                     }
                     data.date = parsedDate.toISOString(); // Format date to ISO-8601 string
                 }
+                // Update car's odometer after refueling
+                yield add_carDto_js_1.CarDto.updateOdometer(data.license_plate, data.odometer);
                 // Perform the update in the database using RefuelingDto
                 const updatedRefuel = yield refuelDto_js_1.RefuelingDto.update(id, data); // Call DTO method
                 return updatedRefuel;

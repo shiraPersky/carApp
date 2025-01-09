@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFrequentRefuelingStations = exports.getGraphData = exports.getFuelStatistics = exports.deleteCar = exports.updateCar = exports.createCar = exports.getCars = exports.deleteRefuel = exports.updateRefuel = exports.createRefuel = exports.getRefuels = exports.deleteService = exports.updateService = exports.createService = exports.getServices = void 0;
+exports.getOdometerHistory = exports.updateOdometer = exports.getFrequentRefuelingStations = exports.getGraphData = exports.getFuelStatistics = exports.deleteCar = exports.updateCar = exports.createCar = exports.getCars = exports.deleteRefuel = exports.updateRefuel = exports.createRefuel = exports.getRefuels = exports.deleteService = exports.updateService = exports.createService = exports.getServices = void 0;
 const axios_1 = __importDefault(require("axios")); //Axios simplifies making GET, POST, PUT, and DELETE requests to interact with APIs.
 const API_URL = 'http://localhost:3000/services'; //service API
 const REFUEL_API_URL = 'http://localhost:3000/refuels'; //refuel API
 const CAR_API_URL = 'http://localhost:3000/cars'; // Car API
 const FUEL_STATISTICS_API_URL = 'http://localhost:3000/fuel-statistics'; // API URL for fuel statistics
+const ODOMETER_API_URL = 'http://localhost:3000/api/cars';
 const getServices = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield axios_1.default.get(API_URL); //This makes a GET request to the backend API at http://localhost:3000/services.
@@ -187,3 +188,23 @@ const getFrequentRefuelingStations = () => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.getFrequentRefuelingStations = getFrequentRefuelingStations;
+const updateOdometer = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield axios_1.default.put(`${ODOMETER_API_URL}/update-odometer`, data);
+        return response.data;
+    }
+    catch (error) {
+        throw new Error('Error updating odometer');
+    }
+});
+exports.updateOdometer = updateOdometer;
+const getOdometerHistory = (licensePlate) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield axios_1.default.get(`${ODOMETER_API_URL}/odometer-history/${licensePlate}`);
+        return response.data;
+    }
+    catch (error) {
+        throw new Error('Error fetching odometer history');
+    }
+});
+exports.getOdometerHistory = getOdometerHistory;

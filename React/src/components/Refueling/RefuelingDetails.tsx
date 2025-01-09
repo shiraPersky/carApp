@@ -49,6 +49,7 @@ const RefuelingDetails  = () => {
   return (
     <div>
       <h2>Refueling Details</h2>
+      <p>License Plate: {refuel.license_plate}</p>
       <p>Date: {new Date(refuel.date).toLocaleDateString()}</p>
       <p>Time: {new Date(refuel.time).toLocaleTimeString()}</p>
       <p>Odometer: {refuel.odometer}</p>

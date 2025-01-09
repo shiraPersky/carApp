@@ -55,6 +55,7 @@ const CarPage = () => {
                     react_2.default.createElement("th", null, "Actions"))),
             react_2.default.createElement("tbody", null, cars.map((car) => (react_2.default.createElement("tr", { key: car.id },
                 react_2.default.createElement("td", null, car.id),
+                react_2.default.createElement(react_router_dom_1.Link, { to: "/cars/add", className: "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" }, "Add New Car"),
                 react_2.default.createElement("td", null, car.license_plate),
                 react_2.default.createElement("td", null, car.make),
                 react_2.default.createElement("td", null, car.model),

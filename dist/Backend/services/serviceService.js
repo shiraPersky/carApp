@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ServiceService = void 0;
 const serviceDto_js_1 = require("../dto/serviceDto.js");
 const client_1 = require("@prisma/client");
+const add_carDto_js_1 = require("../dto/add_carDto.js");
 const prisma = new client_1.PrismaClient();
 class ServiceService {
     // Create a new service with validation
@@ -23,11 +24,14 @@ class ServiceService {
                 data.car_id = parseInt(data.car_id, 10); // Ensure car_id is an integer
                 data.odometer = parseInt(data.odometer, 10); // Ensure odometer is an integer
                 data.cost = parseFloat(data.cost); // Ensure cost is a float
+                data.license_plate = data.license_plate || ""; // Set a default or validate
                 // Ensure date is a valid Date object or ISO-8601 string
                 if (typeof data.date === 'string') {
                     data.date = new Date(data.date).toISOString(); // Convert to ISO-8601 string if it's a string
                 }
                 const service = yield serviceDto_js_1.ServiceDto.create(data); // Attempt to create service
+                // Update car's odometer after refueling
+                yield add_carDto_js_1.CarDto.updateOdometer(data.license_plate, data.odometer);
                 return service;
             }
             catch (error) {
@@ -54,12 +58,15 @@ class ServiceService {
                 data.car_id = parseInt(data.car_id, 10); // Ensure car_id is an integer
                 data.odometer = parseInt(data.odometer, 10); // Ensure odometer is an integer
                 data.cost = parseFloat(data.cost); // Ensure cost is a float
+                data.license_plate = data.license_plate || ""; // Set a default or validate
                 // Ensure the date is in ISO-8601 format if it's a string
                 if (data.date && typeof data.date === 'string') {
                     data.date = new Date(data.date).toISOString(); // Format date to ISO-8601 string
                 }
                 // Validate data before updating
                 this.validateServiceData(data, true); // Validation
+                // Update car's odometer after refueling
+                yield add_carDto_js_1.CarDto.updateOdometer(data.license_plate, data.odometer);
                 // Update service in the database
                 const updatedService = yield serviceDto_js_1.ServiceDto.update(id, data); // Call DTO method
                 return updatedService;

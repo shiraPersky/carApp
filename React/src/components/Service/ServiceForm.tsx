@@ -25,7 +25,13 @@ const ServiceForm = ({ existingService, onSubmit }: any) => {
         />
         {errors.car_id && <span>{(errors.car_id as any).message}</span>}
       </div>
-
+      <div>
+        <label>License Plate</label>
+        <input 
+          type="text" 
+          {...register('license_plate', { required: 'License plate is required' })} 
+        />
+      </div>
       <div>
         <label>Date</label>
         <input type="date" {...register('date', { required: 'Date is required' })} />

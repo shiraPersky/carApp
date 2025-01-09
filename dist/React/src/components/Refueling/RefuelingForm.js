@@ -14,6 +14,9 @@ const RefuelingForm = ({ existingRefuel, onSubmit }) => {
     });
     return (react_1.default.createElement("form", { onSubmit: handleSubmit(onSubmit) },
         react_1.default.createElement("div", null,
+            react_1.default.createElement("label", null, "License Plate"),
+            react_1.default.createElement("input", Object.assign({ type: "text" }, register('license_plate', { required: 'License plate is required' })))),
+        react_1.default.createElement("div", null,
             react_1.default.createElement("label", null, "Date"),
             react_1.default.createElement("input", Object.assign({ type: "date" }, register('date', { required: 'Date is required' })))),
         react_1.default.createElement("div", null,

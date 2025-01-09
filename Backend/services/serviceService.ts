@@ -1,5 +1,7 @@
 import { ServiceDto } from '../dto/serviceDto.js';
 import { PrismaClient } from '@prisma/client';
+import { CarDto } from '../dto/add_carDto.js';
+
 
 const prisma = new PrismaClient();
 
@@ -14,6 +16,7 @@ export class ServiceService {
       data.car_id = parseInt(data.car_id as unknown as string, 10); // Ensure car_id is an integer
       data.odometer = parseInt(data.odometer as unknown as string, 10); // Ensure odometer is an integer
       data.cost = parseFloat(data.cost as unknown as string); // Ensure cost is a float
+      data.license_plate = data.license_plate || "";  // Set a default or validate
 
       // Ensure date is a valid Date object or ISO-8601 string
       if (typeof data.date === 'string') {
@@ -21,6 +24,9 @@ export class ServiceService {
       }
 
       const service = await ServiceDto.create(data); // Attempt to create service
+       // Update car's odometer after refueling
+       await CarDto.updateOdometer(data.license_plate, data.odometer);
+
       return service;
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -44,7 +50,8 @@ export class ServiceService {
         data.car_id = parseInt(data.car_id as unknown as string, 10); // Ensure car_id is an integer
         data.odometer = parseInt(data.odometer as unknown as string, 10); // Ensure odometer is an integer
         data.cost = parseFloat(data.cost as unknown as string); // Ensure cost is a float
-
+        data.license_plate = data.license_plate || "";  // Set a default or validate
+        
         // Ensure the date is in ISO-8601 format if it's a string
         if (data.date && typeof data.date === 'string') {
           data.date = new Date(data.date).toISOString(); // Format date to ISO-8601 string
@@ -52,7 +59,9 @@ export class ServiceService {
   
         // Validate data before updating
         this.validateServiceData(data, true); // Validation
-  
+        // Update car's odometer after refueling
+        await CarDto.updateOdometer(data.license_plate, data.odometer);
+
         // Update service in the database
         const updatedService = await ServiceDto.update(id, data); // Call DTO method
         return updatedService;

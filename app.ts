@@ -4,6 +4,8 @@ dotenv.config();  // This will load the environment variables from the .env file
 
 import express from 'express';
 import cors from 'cors';
+import cron from 'node-cron'; // Import node-cron for scheduling tasks
+
 import serviceController from './Backend/controller/serviceController.js'; // Import the controller
 import refuelingController from './Backend/controller/refuelController.js';
 import carController from './Backend/controller/add_carController.js'; 
@@ -12,7 +14,7 @@ import csvImportController from './Backend/controller/csvImportController.js';
 import fuelStatisticsController from './Backend/controller/fuelStatisticsController.js'; // Import the fuel statistics controller
 
 import emailController from './Backend/controller/emailController.js'; // Import the emailController
-import cron from 'node-cron'; // Import node-cron for scheduling tasks
+import odometerRouter from './Backend/controller/odometerController.js';  // Import the odometer controller router
 
 const app = express();
 
@@ -24,6 +26,8 @@ app.use('/services', serviceController);// Use serviceController for any request
 app.use('/refuels', refuelingController); // Use refuelingController for any requests to /refuels
 app.use('/cars', carController);
 app.use('/csv', csvImportController);
+app.use('/api/cars', odometerRouter);
+
 
 app.get('/fuel-statistics', fuelStatisticsController.getStatistics);
 app.get('/fuel-statistics/graph-data', fuelStatisticsController.getGraphData);
@@ -32,7 +36,7 @@ app.get('/fuel-statistics/frequent-stations', fuelStatisticsController.getFreque
 app.post('/send-monthly-statistics', emailController.sendMonthlyStatistics);
 // Schedule to run on the 1st day of every month at midnight (00:00)
 cron.schedule('0 0 1 * *', async () => {
-//cron.schedule('45 11 7 * *', async () => {//test
+//cron.schedule('05 9 8 * *', async () => {//test
   try {
     console.log('Sending monthly statistics email...');
     // Mock request and response objects

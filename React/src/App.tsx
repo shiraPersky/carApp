@@ -15,6 +15,7 @@ import AddCarPage from './pages/Cars/AddCarPage'; // Import AddCarPage
 import EditCarPage from './pages/Cars/EditCarPage'; // Import EditCarPage
 
 import FuelStatisticsPage from './pages/FuelStatisticsPage';  // Import your FuelStatisticsPage
+import OdometerUpdatePage from './pages/Odometer/OdometerUpdatePage';
 
 
 import React from 'react';
@@ -37,6 +38,8 @@ function App() {
       <Route path="/cars" element={<CarPage />} /> {/* List of cars */}
       <Route path="/cars/add" element={<AddCarPage />} /> {/* Add new car */}
       <Route path="/cars/edit/:id" element={<EditCarPage />} /> {/* Edit car by ID */}
+      <Route path="/cars/odometer/:licensePlate" element={<OdometerUpdatePage />} />
+
 
       {/* Fuel Statistics Page */}
       <Route path="/fuel-statistics" element={<FuelStatisticsPage />} />

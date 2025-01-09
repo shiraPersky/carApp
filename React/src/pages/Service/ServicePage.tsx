@@ -30,6 +30,7 @@ const ServicesPage = () => {
       <table>
         <thead>
           <tr>
+            <th>License Plate</th>
             <th>Service Type</th>
             <th>Date</th>
             <th>Cost</th>
@@ -46,6 +47,7 @@ const ServicesPage = () => {
           {services.map((service) => (
             <tr key={service.id}>
               <td>{service.service_type}</td>
+              <td>{service.license_plate}</td>
               <td>{new Date(service.date).toLocaleDateString()}</td>
               <td>{service.cost}</td>
               <td>{service.odometer}</td>

@@ -30,6 +30,7 @@ const RefuelingPage = () => {
       <table>
         <thead>
           <tr>
+            <th>License Plate</th>
             <th>Car ID</th>
             <th>Date</th>
             <th>Time</th>
@@ -48,6 +49,7 @@ const RefuelingPage = () => {
         <tbody>
           {refuels.map((refuel) => (
             <tr key={refuel.id}>
+              <td>{refuel.license_plate}</td> 
               <td>{refuel.id}</td>
               <td>{new Date(refuel.date).toLocaleDateString()}</td>
               <td>{refuel.time}</td>

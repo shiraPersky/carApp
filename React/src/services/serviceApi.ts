@@ -2,6 +2,7 @@ import axios from 'axios';//Axios simplifies making GET, POST, PUT, and DELETE r
 
 export interface Service {
   id: number;
+  license_plate: string;
   service_type: string;
   date: string;
   cost: number;
@@ -17,6 +18,7 @@ export interface Service {
 
 export interface Refueling {
   id: number;
+  license_plate: string;
   date: string;
   time: string;
   odometer: number;
@@ -47,10 +49,17 @@ export interface Car {
   updated_at: string;
 }
 
+// Add new interface for Odometer
+export interface OdometerUpdate {
+  licensePlate: string;
+  odometer: number;
+}
+
 const API_URL = 'http://localhost:3000/services';//service API
 const REFUEL_API_URL = 'http://localhost:3000/refuels';//refuel API
 const CAR_API_URL = 'http://localhost:3000/cars'; // Car API
 const FUEL_STATISTICS_API_URL = 'http://localhost:3000/fuel-statistics';  // API URL for fuel statistics
+const ODOMETER_API_URL = 'http://localhost:3000/api/cars';
 
 
 
@@ -211,5 +220,23 @@ export const getFrequentRefuelingStations = async () => {
     return response.data;  // Return the response data from backend
   } catch (error) {
     throw new Error('Error fetching frequent refueling stations');
+  }
+};
+
+export const updateOdometer = async (data: OdometerUpdate) => {
+  try {
+    const response = await axios.put(`${ODOMETER_API_URL}/update-odometer`, data);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error updating odometer');
+  }
+};
+
+export const getOdometerHistory = async (licensePlate: string) => {
+  try {
+    const response = await axios.get(`${ODOMETER_API_URL}/odometer-history/${licensePlate}`);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error fetching odometer history');
   }
 };

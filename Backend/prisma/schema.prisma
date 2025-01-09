@@ -9,6 +9,7 @@ datasource db {
 
 model Service {
   id                 Int      @id @default(autoincrement())
+  license_plate   String   // Car number (license plate)
   car_id             Int
   service_type       String
   date               DateTime
@@ -26,6 +27,7 @@ model Service {
 
 model Refueling {
   id             Int      @id @default(autoincrement())
+  license_plate   String  // Car number (license plate)
   date           DateTime
   time           String
   odometer       Int
@@ -54,6 +56,7 @@ model Car {
   last_test       DateTime // Last test date
   model_type      String   // Model type (private or commercial)
   model_number    String   // Model number of the car
+  odometer        Int      @default(0) // Main odometer value
   created_at      DateTime @default(now())  // Timestamp when car was added
   updated_at      DateTime @updatedAt  // Timestamp for last update
 }

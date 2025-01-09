@@ -38,6 +38,7 @@ const RefuelingList = () => {
             <div key={refuel.id} className="refuel-card">
               <Link to={`/refuels/details/${refuel.id}`}>
                 <h3>{refuel.kindOfFuel} Refuel</h3>
+                <p>License Plate: {refuel.license_plate}</p> {/* Display License Plate */}
                 <p>Date: {new Date(refuel.date).toLocaleDateString()}</p>
                 <p>Odometer: {refuel.odometer}</p>
                 <p>Liters: {refuel.liters}</p>

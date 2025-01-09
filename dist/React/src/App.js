@@ -17,6 +17,7 @@ const CarsPage_1 = __importDefault(require("./pages/Cars/CarsPage")); // Import 
 const AddCarPage_1 = __importDefault(require("./pages/Cars/AddCarPage")); // Import AddCarPage
 const EditCarPage_1 = __importDefault(require("./pages/Cars/EditCarPage")); // Import EditCarPage
 const FuelStatisticsPage_1 = __importDefault(require("./pages/FuelStatisticsPage")); // Import your FuelStatisticsPage
+const OdometerUpdatePage_1 = __importDefault(require("./pages/Odometer/OdometerUpdatePage"));
 const react_1 = __importDefault(require("react"));
 require("./app.css");
 function App() {
@@ -33,6 +34,7 @@ function App() {
         " ",
         react_1.default.createElement(react_router_dom_1.Route, { path: "/cars/edit/:id", element: react_1.default.createElement(EditCarPage_1.default, null) }),
         " ",
+        react_1.default.createElement(react_router_dom_1.Route, { path: "/cars/odometer/:licensePlate", element: react_1.default.createElement(OdometerUpdatePage_1.default, null) }),
         react_1.default.createElement(react_router_dom_1.Route, { path: "/fuel-statistics", element: react_1.default.createElement(FuelStatisticsPage_1.default, null) }),
         react_1.default.createElement(react_router_dom_1.Route, { path: "/", element: react_1.default.createElement(react_router_dom_1.Navigate, { to: "/services" }) })));
 }
