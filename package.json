@@ -30,6 +30,8 @@
     "typescript": "^5.7.2"
   },
   "scripts": {
-    "start": "ts-node app.ts"
+    "start": "ts-node app.ts",
+    "prisma": "prisma generate --schema=Backend/prisma/schema.prisma"
+
   }
 }

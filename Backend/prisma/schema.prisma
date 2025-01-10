@@ -59,5 +59,32 @@ model Car {
   odometer        Int      @default(0) // Main odometer value
   created_at      DateTime @default(now())  // Timestamp when car was added
   updated_at      DateTime @updatedAt  // Timestamp for last update
+
+  reminders     Reminder[] // Relation to Reminder model
+
+  @@map("cars") // Map to database table 'cars'
 }
 
+model Reminder {
+  id                   Int       @id @default(autoincrement())  // Primary key
+  license_plate        String    // Foreign key to Car model
+  description          String    // Description of the reminder (e.g., "Oil Change", "Tire Replacement")
+  
+  due_date             DateTime? // Optional date for the next reminder (if time-based)
+  next_due_km          Int?      // Optional odometer value for the next reminder (if distance-based)
+  repeat_by_days       Int?      // Interval in days (e.g., every 180 days for oil change)
+  repeat_by_km         Int?      // Interval in kilometers (e.g., every 10,000 km)
+  
+  notify_before_days   Int?      // Notify this many days before the due date
+  notify_before_km     Int?      // Notify this many kilometers before the target distance
+  
+  completed            Boolean   @default(false) // Status of the reminder (true = completed)
+  
+  created_at           DateTime  @default(now())  // Timestamp when the reminder was created
+  updated_at           DateTime  @updatedAt       // Timestamp for the last update
+
+  // Relations
+  car                  Car       @relation(fields: [license_plate], references: [license_plate])  // Link to the Car model
+
+  @@map("reminders") // Optional: Map this model to a database table named 'reminders'
+}
