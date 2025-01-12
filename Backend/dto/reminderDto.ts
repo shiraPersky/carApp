@@ -5,6 +5,8 @@ const prisma = new PrismaClient();
 export class ReminderDto {
   license_plate!: string;
   description!: string;
+  start_date?: Date;
+  start_odometer?: number;
   due_date?: Date;
   next_due_km?: number;
   repeat_by_days?: number;
@@ -15,38 +17,28 @@ export class ReminderDto {
 
   static async create(data: ReminderDto) {
     try {
-      // Ensure required fields are provided
-      if (!data.license_plate) {
-        throw new Error("License plate is required.");
+      // Validate data
+      if (!data.license_plate || !data.description) {
+        throw new Error('License plate and description are required');
       }
-      if (!data.description) {
-        throw new Error("Description is required.");
-      }
-
+  
+      // Log the data
       console.log("Creating reminder with data:", data);
-
+  
       return await prisma.reminder.create({
         data: {
-          ...data, // Spread the entire reminder data
-          due_date: data.due_date ? new Date(data.due_date) : null, // Ensure date is valid
+          ...data,
+          due_date: data.due_date ? new Date(data.due_date) : null,
+          start_date: data.start_date ? new Date(data.start_date) : null, // Handle start date
+          start_odometer: data.start_odometer, // Handle start odometer
         },
       });
     } catch (error) {
       console.error("Error during reminder creation:", error);
-
-      if (error instanceof Error) {
-        console.error("Error message:", error.message);
-        console.error("Error stack:", error.stack);
-      }
-
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        console.error("Prisma error code:", error.code);
-        console.error("Prisma error meta:", error.meta);
-      }
-
-      throw new Error("Failed to create reminder");
+      throw error;
     }
   }
+  
 
   // Static method to get all reminders
   static async getAll() {

@@ -35,4 +35,21 @@ export class EmailService {
       throw new Error('Failed to send email');
     }
   }
+
+  // Method to send reminder email (in the same format as sendEmail)
+  async sendReminder(to: string, subject: string, htmlContent: string) {
+    try {
+      const info = await this.transporter.sendMail({
+        from: process.env.EMAIL_USER, // Use environment variable
+        to,
+        subject,
+        html: htmlContent,
+      });
+
+      console.log('Reminder email sent: ' + info.response);
+    } catch (error) {
+      console.error('Error sending reminder email:', error);
+      throw new Error('Failed to send reminder email');
+    }
+  }
 }

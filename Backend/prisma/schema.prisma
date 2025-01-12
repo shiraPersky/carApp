@@ -70,6 +70,9 @@ model Reminder {
   license_plate        String    // Foreign key to Car model
   description          String    // Description of the reminder (e.g., "Oil Change", "Tire Replacement")
   
+  start_date           DateTime? // The date when the reminder starts (optional)
+  start_odometer       Int?      // The odometer reading when the reminder starts (optional)
+  
   due_date             DateTime? // Optional date for the next reminder (if time-based)
   next_due_km          Int?      // Optional odometer value for the next reminder (if distance-based)
   repeat_by_days       Int?      // Interval in days (e.g., every 180 days for oil change)

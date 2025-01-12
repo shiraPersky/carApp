@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();  // This will load the environment variables from the .env file
 
-
 import express from 'express';
 import cors from 'cors';
 import cron from 'node-cron'; // Import node-cron for scheduling tasks
@@ -15,6 +14,8 @@ import fuelStatisticsController from './Backend/controller/fuelStatisticsControl
 
 import emailController from './Backend/controller/emailController.js'; // Import the emailController
 import odometerRouter from './Backend/controller/odometerController.js';  // Import the odometer controller router
+import { router as reminderRouter, initializeReminders } from './Backend/controller/reminderController.js'; 
+
 
 const app = express();
 
@@ -27,13 +28,14 @@ app.use('/refuels', refuelingController); // Use refuelingController for any req
 app.use('/cars', carController);
 app.use('/csv', csvImportController);
 app.use('/api/cars', odometerRouter);
-
+app.use('/reminders', reminderRouter); 
 
 app.get('/fuel-statistics', fuelStatisticsController.getStatistics);
 app.get('/fuel-statistics/graph-data', fuelStatisticsController.getGraphData);
 app.get('/fuel-statistics/frequent-stations', fuelStatisticsController.getFrequentRefuelingStations);
 
 app.post('/send-monthly-statistics', emailController.sendMonthlyStatistics);
+
 // Schedule to run on the 1st day of every month at midnight (00:00)
 cron.schedule('0 0 1 * *', async () => {
 //cron.schedule('05 9 8 * *', async () => {//test
@@ -60,6 +62,9 @@ cron.schedule('0 0 1 * *', async () => {
   }
 });
 
+
+// Initialize reminders
+initializeReminders().catch(console.error);
 
 const PORT = process.env.PORT || 3000;// Define the port
 

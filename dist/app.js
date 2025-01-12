@@ -24,6 +24,7 @@ const csvImportController_js_1 = __importDefault(require("./Backend/controller/c
 const fuelStatisticsController_js_1 = __importDefault(require("./Backend/controller/fuelStatisticsController.js")); // Import the fuel statistics controller
 const emailController_js_1 = __importDefault(require("./Backend/controller/emailController.js")); // Import the emailController
 const odometerController_js_1 = __importDefault(require("./Backend/controller/odometerController.js")); // Import the odometer controller router
+const reminderController_js_1 = require("./Backend/controller/reminderController.js");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)()); // This allows requests from any origin
 app.use(express_1.default.json()); // Middleware to parse incoming JSON requests
@@ -32,6 +33,7 @@ app.use('/refuels', refuelController_js_1.default); // Use refuelingController f
 app.use('/cars', add_carController_js_1.default);
 app.use('/csv', csvImportController_js_1.default);
 app.use('/api/cars', odometerController_js_1.default);
+app.use('/reminders', reminderController_js_1.router);
 app.get('/fuel-statistics', fuelStatisticsController_js_1.default.getStatistics);
 app.get('/fuel-statistics/graph-data', fuelStatisticsController_js_1.default.getGraphData);
 app.get('/fuel-statistics/frequent-stations', fuelStatisticsController_js_1.default.getFrequentRefuelingStations);
@@ -62,6 +64,8 @@ node_cron_1.default.schedule('0 0 1 * *', () => __awaiter(void 0, void 0, void 0
         console.error('Error sending monthly statistics email:', error);
     }
 }));
+// Initialize reminders
+(0, reminderController_js_1.initializeReminders)().catch(console.error);
 const PORT = process.env.PORT || 3000; // Define the port
 // Start the Express server and listen on the specified port
 app.listen(PORT, () => {

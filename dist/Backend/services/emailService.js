@@ -46,5 +46,23 @@ class EmailService {
             }
         });
     }
+    // Method to send reminder email (in the same format as sendEmail)
+    sendReminder(to, subject, htmlContent) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const info = yield this.transporter.sendMail({
+                    from: process.env.EMAIL_USER, // Use environment variable
+                    to,
+                    subject,
+                    html: htmlContent,
+                });
+                console.log('Reminder email sent: ' + info.response);
+            }
+            catch (error) {
+                console.error('Error sending reminder email:', error);
+                throw new Error('Failed to send reminder email');
+            }
+        });
+    }
 }
 exports.EmailService = EmailService;
