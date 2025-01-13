@@ -66,6 +66,18 @@ node_cron_1.default.schedule('0 0 1 * *', () => __awaiter(void 0, void 0, void 0
 }));
 // Initialize reminders
 (0, reminderController_js_1.initializeReminders)().catch(console.error);
+// Schedule daily reminder checks (runs at 8:00 AM every day)
+// cron.schedule('0 8 * * *', async () => {
+node_cron_1.default.schedule('* * * * *', () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log('Running daily reminder checks...');
+        yield reminderController_js_1.reminderService.checkDailyReminders();
+        console.log('Daily reminder checks completed');
+    }
+    catch (error) {
+        console.error('Error running daily reminder checks:', error);
+    }
+}));
 const PORT = process.env.PORT || 3000; // Define the port
 // Start the Express server and listen on the specified port
 app.listen(PORT, () => {

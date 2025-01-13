@@ -14,7 +14,7 @@ import fuelStatisticsController from './Backend/controller/fuelStatisticsControl
 
 import emailController from './Backend/controller/emailController.js'; // Import the emailController
 import odometerRouter from './Backend/controller/odometerController.js';  // Import the odometer controller router
-import { router as reminderRouter, initializeReminders } from './Backend/controller/reminderController.js'; 
+import { router as reminderRouter, initializeReminders, reminderService } from './Backend/controller/reminderController.js'; 
 
 
 const app = express();
@@ -64,7 +64,18 @@ cron.schedule('0 0 1 * *', async () => {
 
 
 // Initialize reminders
-initializeReminders().catch(console.error);
+initializeReminders().catch(console.error);//when the application starts, all pending reminders are properly loaded and scheduled into memory
+// Schedule daily reminder checks (runs at 8:00 AM every day)
+// cron.schedule('0 8 * * *', async () => {
+cron.schedule('* * * * *', async () => {  // runs every minute-for testing
+  try {
+    console.log('Running daily reminder checks...');
+    await reminderService.checkDailyReminders();
+    console.log('Daily reminder checks completed');
+  } catch (error) {
+    console.error('Error running daily reminder checks:', error);
+  }
+});
 
 const PORT = process.env.PORT || 3000;// Define the port
 

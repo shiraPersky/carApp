@@ -3,6 +3,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export class ReminderDto {
+  id?: number;
   license_plate!: string;
   description!: string;
   start_date?: Date;

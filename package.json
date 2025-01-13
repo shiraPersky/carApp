@@ -32,6 +32,5 @@
   "scripts": {
     "start": "ts-node app.ts",
     "prisma": "prisma generate --schema=Backend/prisma/schema.prisma"
-
   }
 }

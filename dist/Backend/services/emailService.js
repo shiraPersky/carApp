@@ -46,7 +46,6 @@ class EmailService {
             }
         });
     }
-    // Method to send reminder email (in the same format as sendEmail)
     sendReminder(to, subject, htmlContent) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

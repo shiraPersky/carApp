@@ -36,7 +36,6 @@ export class EmailService {
     }
   }
 
-  // Method to send reminder email (in the same format as sendEmail)
   async sendReminder(to: string, subject: string, htmlContent: string) {
     try {
       const info = await this.transporter.sendMail({

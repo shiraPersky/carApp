@@ -10,7 +10,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReminderService = void 0;
+const client_1 = require("@prisma/client");
 const reminderDto_js_1 = require("../dto/reminderDto.js");
+const emailService_1 = require("./emailService");
+const prisma = new client_1.PrismaClient();
+const emailService = new emailService_1.EmailService();
 class ReminderService {
     // Create a new reminder
     createReminder(data) {
@@ -69,14 +73,14 @@ class ReminderService {
             return reminderDto_js_1.ReminderDto.delete(id); // Delete the reminder
         });
     }
-    // Initialize reminders (e.g., scheduling email notifications for all active reminders)
+    // Initialize reminders
     initializeReminders() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const reminders = yield this.getAllReminders();
                 for (const reminder of reminders) {
                     if (!reminder.completed) {
-                        yield this.scheduleReminderEmail(reminder); // Schedule email notifications
+                        yield this.scheduleReminderEmail(reminder);
                     }
                 }
             }
@@ -90,9 +94,11 @@ class ReminderService {
     scheduleReminderEmail(reminder) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // Logic for scheduling email notifications
-                console.log(`Scheduling email for reminder: ${reminder.description}`);
-                // Example: Use a task scheduler like node-cron or Agenda.js here
+                // First check if the reminder needs a notification
+                const needsNotification = yield this.checkReminderConditions(reminder);
+                if (needsNotification) {
+                    yield this.sendReminderNotification(reminder);
+                }
             }
             catch (error) {
                 console.error("Error during email scheduling:", error);
@@ -140,6 +146,95 @@ class ReminderService {
                 throw new Error('Due date must be a valid ISO-8601 string');
             }
         }
+    }
+    checkDailyReminders() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const currentDate = new Date();
+                const reminders = yield this.getAllReminders();
+                for (const reminder of reminders) {
+                    if (reminder.completed)
+                        continue;
+                    const needsNotification = yield this.checkReminderConditions(reminder);
+                    if (needsNotification) {
+                        yield this.sendReminderNotification(reminder);
+                    }
+                }
+            }
+            catch (error) {
+                console.error("Error checking daily reminders:", error);
+                throw error;
+            }
+        });
+    }
+    checkReminderConditions(reminder) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // Get the associated car's current odometer reading
+                const car = yield prisma.car.findUnique({
+                    where: { license_plate: reminder.license_plate }
+                });
+                if (!car) {
+                    throw new Error(`Car not found for license plate: ${reminder.license_plate}`);
+                }
+                let needsNotification = false;
+                // Check date-based conditions
+                if (reminder.due_date) {
+                    const daysUntilDue = Math.ceil((reminder.due_date.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)); //Calculates the number of days until the due_date
+                    if (daysUntilDue <= 0) { //Checks if the due_date has already passed
+                        needsNotification = true;
+                    }
+                    else if (reminder.notify_before_days && daysUntilDue <= reminder.notify_before_days) {
+                        needsNotification = true;
+                    }
+                }
+                // Check odometer-based conditions
+                if (reminder.next_due_km) {
+                    const kmUntilDue = reminder.next_due_km - car.odometer;
+                    if (kmUntilDue <= 0) {
+                        needsNotification = true;
+                    }
+                    else if (reminder.notify_before_km && kmUntilDue <= reminder.notify_before_km) {
+                        needsNotification = true;
+                    }
+                }
+                return needsNotification;
+            }
+            catch (error) {
+                console.error("Error checking reminder conditions:", error);
+                throw error;
+            }
+        });
+    }
+    sendReminderNotification(reminder) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const car = yield prisma.car.findUnique({
+                    where: { license_plate: reminder.license_plate }
+                });
+                if (!car) {
+                    throw new Error(`Car not found for license plate: ${reminder.license_plate}`);
+                }
+                const subject = `Vehicle Maintenance Reminder: ${reminder.description}`;
+                const markAsDoneUrl = `${process.env.APP_URL}/reminders/complete/${reminder.id}`;
+                const htmlContent = `
+        <h2>Maintenance Reminder</h2>
+        <p>Vehicle: ${car.make} ${car.model} (${reminder.license_plate})</p>
+        <p>Reminder: ${reminder.description}</p>
+        <p>Current Odometer: ${car.odometer} km</p>
+        ${reminder.next_due_km ? `<p>Due at: ${reminder.next_due_km} km</p>` : ''}
+        ${reminder.due_date ? `<p>Due date: ${reminder.due_date.toLocaleDateString()}</p>` : ''}
+        <a href="${markAsDoneUrl}" style="display: inline-block; padding: 10px 15px; font-size: 16px; color: white; background-color: green; text-decoration: none; border-radius: 5px;">
+          Mark as Done
+        </a>
+      `;
+                yield emailService.sendReminder(process.env.NOTIFICATION_EMAIL, subject, htmlContent);
+            }
+            catch (error) {
+                console.error("Error sending reminder notification:", error);
+                throw error;
+            }
+        });
     }
 }
 exports.ReminderService = ReminderService;

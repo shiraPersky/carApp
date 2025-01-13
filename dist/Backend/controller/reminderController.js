@@ -12,20 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initializeReminders = exports.router = void 0;
-// reminderController.ts
+exports.initializeReminders = exports.router = exports.reminderService = void 0;
 const express_1 = __importDefault(require("express"));
 const reminderService_js_1 = require("../services/reminderService.js");
-const reminderService = new reminderService_js_1.ReminderService();
+exports.reminderService = new reminderService_js_1.ReminderService();
 const router = express_1.default.Router();
 exports.router = router;
 // Create a new reminder
 router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = req.body;
-        const reminder = yield reminderService.createReminder(data);
+        const reminder = yield exports.reminderService.createReminder(data);
         // Trigger reminder email scheduling
-        yield reminderService.scheduleReminderEmail(reminder);
+        yield exports.reminderService.scheduleReminderEmail(reminder);
         res.status(201).json(reminder);
     }
     catch (error) {
@@ -36,7 +35,7 @@ router.post('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 // Get all reminders
 router.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const reminders = yield reminderService.getAllReminders();
+        const reminders = yield exports.reminderService.getAllReminders();
         res.json(reminders);
     }
     catch (error) {
@@ -46,7 +45,7 @@ router.get('/', (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
 // Update a reminder
 router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const updatedReminder = yield reminderService.updateReminder(Number(req.params.id), req.body);
+        const updatedReminder = yield exports.reminderService.updateReminder(Number(req.params.id), req.body);
         res.json(updatedReminder);
     }
     catch (error) {
@@ -57,17 +56,28 @@ router.put('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 // Delete a reminder
 router.delete('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield reminderService.deleteReminder(Number(req.params.id));
+        yield exports.reminderService.deleteReminder(Number(req.params.id));
         res.status(200).json({ message: 'Reminder deleted successfully' });
     }
     catch (error) {
         res.status(500).json({ error: 'Failed to delete reminder' });
     }
 }));
+router.post('/reminders/complete/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const updatedReminder = yield exports.reminderService.updateReminder(Number(id), { completed: true });
+        res.status(200).send({ message: 'Reminder marked as completed.', updatedReminder });
+    }
+    catch (error) {
+        console.error("Error marking reminder as completed:", error);
+        res.status(500).send({ error: 'Failed to mark reminder as completed.' });
+    }
+}));
 // Initialize reminders when the application starts
 const initializeReminders = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield reminderService.initializeReminders();
+        yield exports.reminderService.initializeReminders();
         console.log('Reminders initialized successfully');
     }
     catch (error) {

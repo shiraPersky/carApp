@@ -1,10 +1,12 @@
 // reminderController.ts
+import cron from 'node-cron';
 import express, { Request, Response } from 'express';
 import { ReminderService } from '../services/reminderService.js';
 import { ReminderDto } from '../dto/reminderDto.js';
 
-const reminderService = new ReminderService();
+export const reminderService = new ReminderService();
 const router = express.Router();
+
 
 // Create a new reminder
 router.post('/', async (req: Request, res: Response) => {
@@ -49,6 +51,18 @@ router.delete('/:id', async (req: Request, res: Response) => {
     res.status(200).json({ message: 'Reminder deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete reminder' });
+  }
+});
+
+router.post('/reminders/complete/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedReminder = await reminderService.updateReminder(Number(id), { completed: true });
+    res.status(200).send({ message: 'Reminder marked as completed.', updatedReminder });
+  } catch (error) {
+    console.error("Error marking reminder as completed:", error);
+    res.status(500).send({ error: 'Failed to mark reminder as completed.' });
   }
 });
 

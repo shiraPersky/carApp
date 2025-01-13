@@ -1,5 +1,9 @@
+import { PrismaClient } from '@prisma/client';
 import { ReminderDto } from '../dto/reminderDto.js';
-import { CarDto } from '../dto/add_carDto.js';
+import { EmailService } from './emailService';
+
+const prisma = new PrismaClient();
+const emailService = new EmailService();
 
 export class ReminderService {
   // Create a new reminder
@@ -58,13 +62,14 @@ export class ReminderService {
     return ReminderDto.delete(id); // Delete the reminder
   }
 
-  // Initialize reminders (e.g., scheduling email notifications for all active reminders)
-  async initializeReminders() {
+  
+  // Initialize reminders
+  async initializeReminders() {//Schedules notifications for incomplete reminders during initialization.
     try {
       const reminders = await this.getAllReminders();
       for (const reminder of reminders) {
         if (!reminder.completed) {
-          await this.scheduleReminderEmail(reminder); // Schedule email notifications
+          await this.scheduleReminderEmail(reminder);
         }
       }
     } catch (error) {
@@ -76,9 +81,12 @@ export class ReminderService {
   // Schedule email notifications for a reminder
   async scheduleReminderEmail(reminder: ReminderDto) {
     try {
-      // Logic for scheduling email notifications
-      console.log(`Scheduling email for reminder: ${reminder.description}`);
-      // Example: Use a task scheduler like node-cron or Agenda.js here
+      // First check if the reminder needs a notification
+      const needsNotification = await this.checkReminderConditions(reminder);
+      
+      if (needsNotification) {
+        await this.sendReminderNotification(reminder);
+      }
     } catch (error) {
       console.error("Error during email scheduling:", error);
       throw error;
@@ -131,4 +139,99 @@ export class ReminderService {
       }
     }
   }
+
+  async checkDailyReminders() {
+    try {
+      const currentDate = new Date();
+      const reminders = await this.getAllReminders();
+      
+      for (const reminder of reminders) {
+        if (reminder.completed) continue;
+
+        const needsNotification = await this.checkReminderConditions(reminder);
+        
+        if (needsNotification) {
+          await this.sendReminderNotification(reminder);
+        }
+      }
+    } catch (error) {
+      console.error("Error checking daily reminders:", error);
+      throw error;
+    }
+  }
+
+  private async checkReminderConditions(reminder: ReminderDto): Promise<boolean> {
+    try {
+      // Get the associated car's current odometer reading
+      const car = await prisma.car.findUnique({
+        where: { license_plate: reminder.license_plate }
+      });
+
+      if (!car) {
+        throw new Error(`Car not found for license plate: ${reminder.license_plate}`);
+      }
+
+      let needsNotification = false;
+
+      // Check date-based conditions
+      if (reminder.due_date) {
+        const daysUntilDue = Math.ceil((reminder.due_date.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));//Calculates the number of days until the due_date
+        
+        if (daysUntilDue <= 0) {//Checks if the due_date has already passed
+          needsNotification = true;
+        } else if (reminder.notify_before_days && daysUntilDue <= reminder.notify_before_days) {
+          needsNotification = true;
+        }
+      }
+
+      // Check odometer-based conditions
+      if (reminder.next_due_km) {
+        const kmUntilDue = reminder.next_due_km - car.odometer;
+        
+        if (kmUntilDue <= 0) {
+          needsNotification = true;
+        } else if (reminder.notify_before_km && kmUntilDue <= reminder.notify_before_km) {
+          needsNotification = true;
+        }
+      }
+
+      return needsNotification;
+    } catch (error) {
+      console.error("Error checking reminder conditions:", error);
+      throw error;
+    }
+  }
+
+  private async sendReminderNotification(reminder: ReminderDto) {
+    try {
+      const car = await prisma.car.findUnique({
+        where: { license_plate: reminder.license_plate }
+      });
+  
+      if (!car) {
+        throw new Error(`Car not found for license plate: ${reminder.license_plate}`);
+      }
+  
+      const subject = `Vehicle Maintenance Reminder: ${reminder.description}`;
+      const markAsDoneUrl = `${process.env.APP_URL}/reminders/complete/${reminder.id}`;
+  
+      const htmlContent = `
+        <h2>Maintenance Reminder</h2>
+        <p>Vehicle: ${car.make} ${car.model} (${reminder.license_plate})</p>
+        <p>Reminder: ${reminder.description}</p>
+        <p>Current Odometer: ${car.odometer} km</p>
+        ${reminder.next_due_km ? `<p>Due at: ${reminder.next_due_km} km</p>` : ''}
+        ${reminder.due_date ? `<p>Due date: ${reminder.due_date.toLocaleDateString()}</p>` : ''}
+        <a href="${markAsDoneUrl}" style="display: inline-block; padding: 10px 15px; font-size: 16px; color: white; background-color: green; text-decoration: none; border-radius: 5px;">
+          Mark as Done
+        </a>
+      `;
+  
+      await emailService.sendReminder(process.env.NOTIFICATION_EMAIL!, subject, htmlContent);
+    } catch (error) {
+      console.error("Error sending reminder notification:", error);
+      throw error;
+    }
+  }
+  
 }
