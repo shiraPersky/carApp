@@ -73,6 +73,18 @@ class ReminderService {
             return reminderDto_js_1.ReminderDto.delete(id); // Delete the reminder
         });
     }
+    markAsComplete(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const reminder = yield reminderDto_js_1.ReminderDto.update(id, { completed: true });
+                return reminder;
+            }
+            catch (error) {
+                console.error('Error marking reminder as complete:', error);
+                throw error;
+            }
+        });
+    }
     // Initialize reminders
     initializeReminders() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -223,16 +235,29 @@ class ReminderService {
                 const subject = `Vehicle Maintenance Reminder: ${reminder.description}`;
                 const markAsDoneUrl = `${process.env.APP_URL}/reminders/complete/${reminder.id}`;
                 const htmlContent = `
-      <h2>Maintenance Reminder</h2>
-      <p>Vehicle: ${car.make} ${car.model} (${reminder.license_plate})</p>
-      <p>Reminder: ${reminder.description}</p>
-      <p>Current Odometer: ${car.odometer} km</p>
-      ${reminder.next_due_km ? `<p>Due at: ${reminder.next_due_km} km</p>` : ''}
-      ${reminder.due_date ? `<p>Due date: ${reminder.due_date.toLocaleDateString()}</p>` : ''}
-      <a href="${markAsDoneUrl}" style="display: inline-block; padding: 10px 15px; font-size: 16px; color: white; background-color: green; text-decoration: none; border-radius: 5px;">
-        Mark as Done
-      </a>
-    `;
+  <h2>Maintenance Reminder</h2>
+  <p>Vehicle: ${car.make} ${car.model} (${reminder.license_plate})</p>
+  <p>Reminder: ${reminder.description}</p>
+  <p>Current Odometer: ${car.odometer} km</p>
+  ${reminder.next_due_km ? `<p>Due at: ${reminder.next_due_km} km</p>` : ''}
+  ${reminder.due_date ? `<p>Due date: ${reminder.due_date.toLocaleDateString()}</p>` : ''}
+  <table role="presentation" cellspacing="0" cellpadding="0" style="margin-top: 20px;">
+    <tr>
+      <td align="center" style="border-radius: 3px;" bgcolor="#007BFF">
+        <a href="${markAsDoneUrl}" target="_blank" style="
+          font-size: 16px;
+          font-family: Arial, sans-serif;
+          font-weight: bold;
+          color: #ffffff;
+          text-decoration: none;
+          padding: 12px 24px;
+          border-radius: 5px;
+          display: inline-block;
+        ">Mark as Done</a>
+      </td>
+    </tr>
+  </table>
+`;
                 yield emailService.sendReminder(process.env.NOTIFICATION_EMAIL, subject, htmlContent);
             }
             catch (error) {

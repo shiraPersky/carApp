@@ -13,6 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initializeReminders = exports.router = exports.reminderService = void 0;
+// reminderController.ts
+//import cron from 'node-cron';
 const express_1 = __importDefault(require("express"));
 const reminderService_js_1 = require("../services/reminderService.js");
 exports.reminderService = new reminderService_js_1.ReminderService();
@@ -67,11 +69,11 @@ router.post('/reminders/complete/:id', (req, res) => __awaiter(void 0, void 0, v
     const { id } = req.params;
     try {
         const updatedReminder = yield exports.reminderService.updateReminder(Number(id), { completed: true });
-        res.status(200).send({ message: 'Reminder marked as completed.', updatedReminder });
+        res.status(200).json({ message: 'Reminder marked as completed!', updatedReminder });
     }
     catch (error) {
         console.error("Error marking reminder as completed:", error);
-        res.status(500).send({ error: 'Failed to mark reminder as completed.' });
+        res.status(500).json({ error: 'Failed to mark reminder as completed.' });
     }
 }));
 // Initialize reminders when the application starts
@@ -85,3 +87,19 @@ const initializeReminders = () => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.initializeReminders = initializeReminders;
+router.get('/complete/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const reminderId = Number(req.params.id);
+        if (isNaN(reminderId)) {
+            res.status(400).json({ error: 'Invalid reminder ID' });
+            return;
+        }
+        yield exports.reminderService.markAsComplete(reminderId);
+        // Respond with a simple success message
+        res.json({ message: 'Reminder marked as complete!' });
+    }
+    catch (error) {
+        console.error("Error marking reminder as complete:", error);
+        res.status(500).json({ error: error.message || 'Failed to mark reminder as complete' });
+    }
+}));
