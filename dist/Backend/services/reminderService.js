@@ -106,7 +106,6 @@ class ReminderService {
             }
         });
     }
-    // Validation logic for reminder data
     validateReminderData(data, isUpdate = false) {
         if (!isUpdate) {
             if (!data.license_plate) {
@@ -116,35 +115,41 @@ class ReminderService {
                 throw new Error('Description is required');
             }
         }
-        if (data.next_due_km !== undefined) {
-            const nextDueKm = Number(data.next_due_km);
-            if (isNaN(nextDueKm) || nextDueKm <= 0) {
-                throw new Error('Next due km must be a positive number');
+        // Validation for one-time reminders
+        if (!data.repeat_by_days && !data.repeat_by_km) {
+            // One-time by date
+            if (!data.due_date && !data.next_due_km) {
+                throw new Error('Either due date or next due km is required for one-time reminders');
             }
-        }
-        if (data.repeat_by_days !== undefined) {
-            const repeatByDays = Number(data.repeat_by_days);
-            if (isNaN(repeatByDays) || repeatByDays <= 0) {
-                throw new Error('Repeat by days must be a positive number');
+            if (data.due_date && data.notify_before_days !== undefined && data.notify_before_days <= 0) {
+                throw new Error('Notify before days must be a positive number');
             }
-        }
-        if (data.notify_before_km !== undefined) {
-            const notifyBeforeKm = Number(data.notify_before_km);
-            if (isNaN(notifyBeforeKm) || notifyBeforeKm <= 0) {
+            if (data.next_due_km && data.notify_before_km !== undefined && data.notify_before_km <= 0) {
                 throw new Error('Notify before km must be a positive number');
             }
         }
-        if (data.notify_before_days !== undefined) {
-            const notifyBeforeDays = Number(data.notify_before_days);
-            if (isNaN(notifyBeforeDays) || notifyBeforeDays <= 0) {
-                throw new Error('Notify before days must be a positive number');
+        // Validation for repeat reminders
+        if (data.repeat_by_days || data.repeat_by_km) {
+            if (!data.start_date) {
+                throw new Error('Start date is required for repeat reminders');
+            }
+            if (data.repeat_by_km && !data.start_odometer) {
+                throw new Error('Start odometer is required for km-based repeat reminders');
+            }
+            if (data.repeat_by_days !== undefined && data.repeat_by_days <= 0) {
+                throw new Error('Repeat by days must be a positive number');
+            }
+            if (data.repeat_by_km !== undefined && data.repeat_by_km <= 0) {
+                throw new Error('Repeat by km must be a positive number');
             }
         }
+        // Ensure consistency with date format
         if (data.due_date && typeof data.due_date === 'string') {
             const parsedDate = new Date(data.due_date);
             if (isNaN(parsedDate.getTime())) {
                 throw new Error('Due date must be a valid ISO-8601 string');
             }
+            data.due_date = parsedDate; // Store as a Date object
         }
     }
     checkDailyReminders() {
@@ -218,16 +223,16 @@ class ReminderService {
                 const subject = `Vehicle Maintenance Reminder: ${reminder.description}`;
                 const markAsDoneUrl = `${process.env.APP_URL}/reminders/complete/${reminder.id}`;
                 const htmlContent = `
-        <h2>Maintenance Reminder</h2>
-        <p>Vehicle: ${car.make} ${car.model} (${reminder.license_plate})</p>
-        <p>Reminder: ${reminder.description}</p>
-        <p>Current Odometer: ${car.odometer} km</p>
-        ${reminder.next_due_km ? `<p>Due at: ${reminder.next_due_km} km</p>` : ''}
-        ${reminder.due_date ? `<p>Due date: ${reminder.due_date.toLocaleDateString()}</p>` : ''}
-        <a href="${markAsDoneUrl}" style="display: inline-block; padding: 10px 15px; font-size: 16px; color: white; background-color: green; text-decoration: none; border-radius: 5px;">
-          Mark as Done
-        </a>
-      `;
+      <h2>Maintenance Reminder</h2>
+      <p>Vehicle: ${car.make} ${car.model} (${reminder.license_plate})</p>
+      <p>Reminder: ${reminder.description}</p>
+      <p>Current Odometer: ${car.odometer} km</p>
+      ${reminder.next_due_km ? `<p>Due at: ${reminder.next_due_km} km</p>` : ''}
+      ${reminder.due_date ? `<p>Due date: ${reminder.due_date.toLocaleDateString()}</p>` : ''}
+      <a href="${markAsDoneUrl}" style="display: inline-block; padding: 10px 15px; font-size: 16px; color: white; background-color: green; text-decoration: none; border-radius: 5px;">
+        Mark as Done
+      </a>
+    `;
                 yield emailService.sendReminder(process.env.NOTIFICATION_EMAIL, subject, htmlContent);
             }
             catch (error) {

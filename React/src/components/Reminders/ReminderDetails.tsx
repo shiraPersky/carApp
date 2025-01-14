@@ -54,10 +54,11 @@ const ReminderDetails = () => {
       <p>Start Odometer: {reminder.start_odometer}</p>
       <p>Due Date: {new Date(reminder.due_date).toLocaleDateString()}</p>
       <p>Next Due KM: {reminder.next_due_km}</p>
-      <p>Repeat by Days: {reminder.repeat_by_days}</p>
-      <p>Repeat by KM: {reminder.repeat_by_km}</p>
-      <p>Notify Before Days: {reminder.notify_before_days}</p>
-      <p>Notify Before KM: {reminder.notify_before_km}</p>
+      <p>Repeat by Days: {reminder.repeat_by_days ? reminder.repeat_by_days : 'None'}</p>
+      <p>Repeat by KM: {reminder.repeat_by_km ? reminder.repeat_by_km : 'None'}</p>
+      <p>Notify Before Days: {reminder.notify_before_days || 'None'}</p>
+      <p>Notify Before KM: {reminder.notify_before_km || 'None'}</p>
+
       <p>Completed: {reminder.completed ? 'Yes' : 'No'}</p>
 
       <div>

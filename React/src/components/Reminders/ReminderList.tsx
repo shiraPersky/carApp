@@ -31,34 +31,31 @@ const ReminderList = () => {
     <div>
       <h2>Your Reminders</h2>
       <div className="reminder-grid">
-        {/* Grid for reminders */}
-        {reminders.map((reminder) => {
-          console.log(reminder); // Log the reminder object to check if all fields are available
-          return (
-            <div key={reminder.id} className="reminder-card">
-              <Link to={`/reminders/details/${reminder.id}`}>
-                <h3>{reminder.description}</h3>
-                <p>Start Date: {new Date(reminder.start_date).toLocaleDateString()}</p>
-                <p>Due Date: {new Date(reminder.due_date).toLocaleDateString()}</p>
-                <p>Start Odometer: {reminder.start_odometer}</p>
-                <p>Next Due KM: {reminder.next_due_km}</p>
-                <p>Repeat by Days: {reminder.repeat_by_days}</p>
-                <p>Repeat by KM: {reminder.repeat_by_km}</p>
-                <p>Notify Before Days: {reminder.notify_before_days}</p>
-                <p>Notify Before KM: {reminder.notify_before_km}</p>
-                <p>Completed: {reminder.completed ? 'Yes' : 'No'}</p>
-              </Link>
-              <button onClick={() => handleDelete(reminder.id)}>Delete</button>
-            </div>
-          );
-        })}
+      <h2>One-Time Reminders</h2>
+        {reminders.filter(r => !r.repeat_by_days && !r.repeat_by_km).map(reminder => (
+        <div key={reminder.id} className="reminder-card">
+            <h3>{reminder.description}</h3>
+            <p>Due Date: {new Date(reminder.due_date).toLocaleDateString()}</p>
+        </div>
+        ))}
+
+        <h2>Repeating Reminders</h2>
+        {reminders.filter(r => r.repeat_by_days || r.repeat_by_km).map(reminder => (
+        <div key={reminder.id} className="reminder-card">
+            <h3>{reminder.description}</h3>
+            <p>Repeat Every {reminder.repeat_by_days || 0} Days</p>
+            <p>Repeat Every {reminder.repeat_by_km || 0} KM</p>
+        </div>
+        ))}
+
+        </div>
+
 
         {/* Add New Reminder Button */}
         <div className="reminder-card add-button">
           <Link to="/reminders/add">+</Link>
         </div>
       </div>
-    </div>
   );
 };
 
