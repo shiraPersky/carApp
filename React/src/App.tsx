@@ -17,9 +17,13 @@ import EditCarPage from './pages/Cars/EditCarPage'; // Import EditCarPage
 import FuelStatisticsPage from './pages/FuelStatisticsPage';  // Import your FuelStatisticsPage
 import OdometerUpdatePage from './pages/Cars/OdometerUpdatedPage';
 
+import AddReminderPage from './pages/Reminders/AddReminderPage';
+import EditReminderPage from './pages/Reminders/EditReminderPage';
+import ReminderPage from './pages/Reminders/ReminderPage';
 
 import React from 'react';
 import './app.css';
+
 
 function App() {
   return (
@@ -43,6 +47,11 @@ function App() {
 
       {/* Fuel Statistics Page */}
       <Route path="/fuel-statistics" element={<FuelStatisticsPage />} />
+
+      {/* Reminder Routes */}
+      <Route path="/reminders" element={<ReminderPage />} /> {/* List of reminders */}
+      <Route path="/reminders/add" element={<AddReminderPage />} /> 
+      <Route path="/reminders/edit/:id" element={<EditReminderPage />} /> 
 
       {/*default route */}
       <Route path="/" element={<Navigate to="/services" />} /> 

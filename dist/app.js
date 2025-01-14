@@ -65,10 +65,10 @@ node_cron_1.default.schedule('0 0 1 * *', () => __awaiter(void 0, void 0, void 0
     }
 }));
 // Initialize reminders
-(0, reminderController_js_1.initializeReminders)().catch(console.error);
+(0, reminderController_js_1.initializeReminders)().catch(console.error); //when the application starts, all pending reminders are properly loaded and scheduled into memory
 // Schedule daily reminder checks (runs at 8:00 AM every day)
-// cron.schedule('0 8 * * *', async () => {
-node_cron_1.default.schedule('* * * * *', () => __awaiter(void 0, void 0, void 0, function* () {
+node_cron_1.default.schedule('0 8 * * *', () => __awaiter(void 0, void 0, void 0, function* () {
+    //cron.schedule('* * * * *', async () => {  // runs every minute-for testing
     try {
         console.log('Running daily reminder checks...');
         yield reminderController_js_1.reminderService.checkDailyReminders();

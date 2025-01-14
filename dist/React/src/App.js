@@ -18,6 +18,9 @@ const AddCarPage_1 = __importDefault(require("./pages/Cars/AddCarPage")); // Imp
 const EditCarPage_1 = __importDefault(require("./pages/Cars/EditCarPage")); // Import EditCarPage
 const FuelStatisticsPage_1 = __importDefault(require("./pages/FuelStatisticsPage")); // Import your FuelStatisticsPage
 const OdometerUpdatedPage_1 = __importDefault(require("./pages/Cars/OdometerUpdatedPage"));
+const AddReminderPage_1 = __importDefault(require("./pages/Reminders/AddReminderPage"));
+const EditReminderPage_1 = __importDefault(require("./pages/Reminders/EditReminderPage"));
+const ReminderPage_1 = __importDefault(require("./pages/Reminders/ReminderPage"));
 const react_1 = __importDefault(require("react"));
 require("./app.css");
 function App() {
@@ -36,6 +39,10 @@ function App() {
         " ",
         react_1.default.createElement(react_router_dom_1.Route, { path: "/cars/odometer/:licensePlate", element: react_1.default.createElement(OdometerUpdatedPage_1.default, null) }),
         react_1.default.createElement(react_router_dom_1.Route, { path: "/fuel-statistics", element: react_1.default.createElement(FuelStatisticsPage_1.default, null) }),
+        react_1.default.createElement(react_router_dom_1.Route, { path: "/reminders", element: react_1.default.createElement(ReminderPage_1.default, null) }),
+        " ",
+        react_1.default.createElement(react_router_dom_1.Route, { path: "/reminders/add", element: react_1.default.createElement(AddReminderPage_1.default, null) }),
+        react_1.default.createElement(react_router_dom_1.Route, { path: "/reminders/edit/:id", element: react_1.default.createElement(EditReminderPage_1.default, null) }),
         react_1.default.createElement(react_router_dom_1.Route, { path: "/", element: react_1.default.createElement(react_router_dom_1.Navigate, { to: "/services" }) })));
 }
 exports.default = App;

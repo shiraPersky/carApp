@@ -50,20 +50,31 @@ export interface Car {
   odometer: number;
 }
 
-
-// Add new interface for Odometer
 export interface OdometerUpdate {
   licensePlate: string;
   odometer: number;
+}
+
+export interface Reminder {
+  id?: number;
+  license_plate: string;
+  description: string;
+  start_date?: string;
+  start_odometer?: number;
+  due_date?: string;
+  next_due_km?: number;
+  repeat_by_days?: number;
+  repeat_by_km?: number;
+  notify_before_days?: number;
+  notify_before_km?: number;
+  completed: boolean;
 }
 
 const API_URL = 'http://localhost:3000/services';//service API
 const REFUEL_API_URL = 'http://localhost:3000/refuels';//refuel API
 const CAR_API_URL = 'http://localhost:3000/cars'; // Car API
 const FUEL_STATISTICS_API_URL = 'http://localhost:3000/fuel-statistics';  // API URL for fuel statistics
-//const ODOMETER_API_URL = 'http://localhost:3000/api/cars';
-
-
+const REMINDER_API_URL = 'http://localhost:3000/reminders'; // URL for reminder API
 
 
 export const getServices = async () => {
@@ -194,8 +205,6 @@ export const getFuelStatistics = async (timePeriod: string, startDate?: string, 
   }
 };
 
-
-
 // Function to fetch graph data
 export const getGraphData = async (timePeriod: string = 'All Time') => {
   try {
@@ -236,6 +245,43 @@ export const getCarDetails = async (licensePlate: string) => {
     return response.data; // Assuming the API returns the car details in the response
   } catch (error) {
     throw new Error('Failed to fetch car details');
+  }
+};
+
+
+// Reminder API Functions
+export const getReminders = async () => {
+  try {
+    const response = await axios.get(REMINDER_API_URL);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error fetching reminders');
+  }
+};
+
+export const createReminder = async (reminderData: Reminder) => {
+  try {
+    const response = await axios.post(REMINDER_API_URL, reminderData);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error creating reminder');
+  }
+};
+
+export const updateReminder = async (id: number, reminderData: Reminder) => {
+  try {
+    const response = await axios.put(`${REMINDER_API_URL}/${id}`, reminderData);
+    return response.data;
+  } catch (error) {
+    throw new Error('Error updating reminder');
+  }
+};
+
+export const deleteReminder = async (id: number) => {
+  try {
+    await axios.delete(`${REMINDER_API_URL}/${id}`);
+  } catch (error) {
+    throw new Error('Error deleting reminder');
   }
 };
 
