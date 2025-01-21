@@ -1,9 +1,9 @@
-Car Maintenance App
+# Car Maintenance App
 
-Project Description:
+# Project Description:
 This web application allows users to track all aspects of vehicle maintenance, including refueling, garage visits, and more. It provides reminders, fuel statistics, serviceS and odometer updates to help manage car health efficiently.
 
-Features:
+# Features:
 *Refueling Tracking: Log and view refueling events with price and fuel quantity.
 *Garage Visits: Track car maintenance visits to the garage for services and repairs.
 *Reminders: Set custom reminders based on odometer readings or specific dates (e.g., oil changes, tire rotations).
@@ -11,13 +11,13 @@ Features:
 *Odometer Updates: Update odometer readings and track usage over time.
 *Email Notifications: Get reminders for upcoming maintenance tasks via email.
 
-Technologies Used:
+# Technologies Used:
 *Backend: Node.js, Express.js, TypeScript, Prisma, PostgreSQL
 *Frontend: React, TypeScript, Vite
 *Database: PostgreSQL (managed via Prisma)
 *Email Service: Nodemailer for sending email notifications
 
-Folder Structure:
+#  Folder Structure:
 *Backend
     controllers/: Contains files that define the API endpoints and handle HTTP requests. Each controller manages specific functionality for car maintenance.
         add_carController.ts: Handles the logic for adding a new car.
@@ -85,7 +85,7 @@ Other Files:
     .gitignore: Specifies which files and folders to ignore in version control.
     app.ts: The main entry point for the backend server.
     
-Setup Instructions:
+#  Setup Instructions:
 1. Clone the repository
 git clone https://github.com/shiraPersky/carApp.git
 2. Install dependencies
@@ -122,9 +122,9 @@ Frontend:
     *POST /reminder: Set a reminder.
 
 
-Contributing:
+#  Contributing:
 Feel free to fork this repository and submit pull requests for improvements or new features. Please follow the standard GitHub workflow for creating branches, making changes, and submitting pull requests.
 
 
-Contact:
+#  Contact:
 For any questions or issues, feel free to reach out to shira.persky@gmail.com.
