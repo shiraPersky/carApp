@@ -193,23 +193,211 @@
 //try2
 
 
+// import React, { useEffect, useState } from 'react';
+// import { getFuelStatistics } from '../services/serviceApi';
+// import DropdownMenu from '../components/fuelStatistics/DropdownMenu';
+// import FuelStatisticItem from '../components/fuelStatistics/FuelStatisticItem';
+// import GraphComponent, { GraphComponentProps } from '../components/fuelStatistics/GraphComponent';
+// import PieChart from '../components/fuelStatistics/PieChart';
+// import { Container, Grid, Typography, Paper, Box } from '@mui/material';
+
+// const FuelStatisticsPage = () => {
+//   const [statistics, setStatistics] = useState<any>(null);
+//   const [timePeriod, setTimePeriod] = useState('allTime');
+//   const [startDate, setStartDate] = useState<string>('');
+//   const [endDate, setEndDate] = useState<string>('');
+//   const [graphData, setGraphData] = useState<GraphComponentProps>({});
+
+//   useEffect(() => {
+//     async function fetchStatistics() {
+//       try {
+//         const queryTimePeriod = normalizeTimePeriod(timePeriod);
+//         const response = await getFuelStatistics(queryTimePeriod, startDate, endDate);
+//         const currentDate = new Date().toISOString();
+        
+//         const enhancedResponse = {
+//           ...response,
+//           efficiencyGraph: [{ date: currentDate, efficiency: response.averageFuelEfficiency }],
+//           distanceGraph: [{ date: currentDate, distance: response.averageDistanceBetweenFillups }],
+//           distancePerDayGraph: [{ date: currentDate, distancePerDay: response.averageDistancePerDay }],
+//           litersGraph: [{ date: currentDate, liters: response.averageLitersPerFillup }],
+//           costGraph: [{ date: currentDate, cost: response.averageTotalCostPerFillup }],
+//           priceGraph: [{ date: currentDate, price: response.averagePricePerLiter }],
+//         };
+//         setStatistics(enhancedResponse);
+//       } catch (error) {
+//         console.error("Error fetching statistics:", error);
+//       }
+//     }
+//     fetchStatistics();
+//   }, [timePeriod, startDate, endDate]);
+
+//   useEffect(() => {
+//     const fetchGraphData = async () => {
+//       try {
+//         const response = await fetch(`http://localhost:3000/fuel-statistics/graph-data?timePeriod=${normalizeTimePeriod(timePeriod)}`);
+//         const data = await response.json();
+//         const mappedGraphData = {
+//           efficiencyGraph: mapGraphData(data.efficiencyGraph),
+//           distanceGraph: mapGraphData(data.distanceGraph),
+//           distancePerDayGraph: mapGraphData(data.distancePerDayGraph),
+//           litersGraph: mapGraphData(data.litersGraph),
+//           costGraph: mapGraphData(data.costGraph),
+//           priceGraph: mapGraphData(data.priceGraph),
+//         };
+//         setGraphData(mappedGraphData);
+//       } catch (error) {
+//         console.error("Error fetching graph data:", error);
+//       }
+//     };
+
+//     fetchGraphData();
+//   }, [timePeriod, startDate, endDate]);
+
+//   const handleApplyDateRange = () => {
+//     if (startDate && endDate) {
+//       setTimePeriod('customDates');
+//     }
+//   };
+
+//   const normalizeTimePeriod = (timePeriod: string) => {
+//     switch (timePeriod) {
+//       case 'allTime': return 'All Time';
+//       case 'thisMonth': return 'This Month';
+//       case 'lastMonth': return 'Last Month';
+//       case 'thisYear': return 'This Year';
+//       case 'lastYear': return 'Last Year';
+//       case 'customDates':
+//         if (startDate && endDate) {
+//           return `Custom Dates|${startDate}|${endDate}`;
+//         }
+//         return 'All Time';
+//       default: return timePeriod.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, str => str.toUpperCase());
+//     }
+//   };
+
+//   const formatNumber = (num: number) => {
+//     if (num === undefined || num === null) return '-';
+//     return num.toFixed(2);
+//   };
+
+//   const mapGraphData = (graphData: any[]) => {
+//     if (!graphData || !Array.isArray(graphData)) {
+//       console.log("Invalid graph data:", graphData);
+//       return { labels: ['Current'], values: [0] };
+//     }
+
+//     const labels = graphData.map(item => {
+//       const date = new Date(item.date);
+//       return date.toLocaleDateString();
+//     });
+
+//     const values = graphData.map(item =>
+//       Number(item.efficiency ?? item.distance ?? item.distancePerDay ?? item.liters ?? item.cost ?? item.price ?? 0)
+//     );
+
+//     return { labels, values };
+//   };
+
+//   const statisticsWithMappedGraphs = statistics ? {
+//     efficiencyGraph: mapGraphData(statistics.efficiencyGraph),
+//     distanceGraph: mapGraphData(statistics.distanceGraph),
+//     distancePerDayGraph: mapGraphData(statistics.distancePerDayGraph),
+//     litersGraph: mapGraphData(statistics.litersGraph),
+//     costGraph: mapGraphData(statistics.costGraph),
+//     priceGraph: mapGraphData(statistics.priceGraph)
+//   } : {};
+
+//   const handleTimePeriodChange = (newTimePeriod: string, start?: string, end?: string) => {
+//     setTimePeriod(newTimePeriod);
+//     if (start && end) {
+//       setStartDate(start);
+//       setEndDate(end);
+//     } else {
+//       setStartDate('');
+//       setEndDate('');
+//     }
+//   };
+
+//   return (
+//     <Container maxWidth="lg">
+//       <Typography variant="h4" gutterBottom>Fuel Statistics</Typography>
+//       <DropdownMenu onTimePeriodChange={handleTimePeriodChange} />
+//       <Box my={4}>
+//         {statistics && (
+//           <>
+//             <Grid container spacing={4}>
+//               <Grid item xs={12} md={6}>
+//                 <Paper elevation={3} sx={{ padding: 2 }}>
+//                   <Typography variant="h5">Statistics Overview</Typography>
+//                   <FuelStatisticItem title="Average Fuel Efficiency (km/L)" value={formatNumber(statistics.averageFuelEfficiency)} />
+//                   <FuelStatisticItem title="Average Distance Between Fill-ups (km)" value={formatNumber(statistics.averageDistanceBetweenFillups)} />
+//                   <FuelStatisticItem title="Average Distance per Day (km)" value={formatNumber(statistics.averageDistancePerDay)} />
+//                   <FuelStatisticItem title="Average Liters per Fill-up (liters)" value={formatNumber(statistics.averageLitersPerFillup)} />
+//                   <FuelStatisticItem title="Average Cost per Fill-up (NIS)" value={formatNumber(statistics.averageTotalCostPerFillup)} />
+//                   <FuelStatisticItem title="Average Price per Liter (NIS)" value={formatNumber(statistics.averagePricePerLiter)} />
+//                   <FuelStatisticItem title="Total Fuel Cost (NIS)" value={formatNumber(statistics.totalFuelCost)} />
+//                   <FuelStatisticItem title="Total Distance (km)" value={formatNumber(statistics.totalDistance)} />
+//                   <FuelStatisticItem title="Total Liters" value={formatNumber(statistics.totalLiters)} />
+//                   <FuelStatisticItem title="Average Time Between Refuels" value={statistics.averageTimeBetweenRefuels} />
+//                 </Paper>
+//               </Grid>
+//               <Grid item xs={12} md={6}>
+//                 <Paper elevation={3} sx={{ padding: 2 }}>
+//                   <Typography variant="h5">Graphs</Typography>
+//                   <GraphComponent {...graphData} />
+//                 </Paper>
+//               </Grid>
+//             </Grid>
+//             <Box my={4} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+//               <Typography variant="h5" gutterBottom>Frequent Refueling Stations</Typography>
+//               <PieChart data={statistics.frequentRefuelingStations} />
+//             </Box>
+//           </>
+//         )}
+//       </Box>
+//     </Container>
+//   );
+// };
+
+// export default FuelStatisticsPage;
+
+//try3
+
 import React, { useEffect, useState } from 'react';
 import { getFuelStatistics } from '../services/serviceApi';
 import DropdownMenu from '../components/fuelStatistics/DropdownMenu';
 import FuelStatisticItem from '../components/fuelStatistics/FuelStatisticItem';
 import GraphComponent, { GraphComponentProps } from '../components/fuelStatistics/GraphComponent';
 import PieChart from '../components/fuelStatistics/PieChart';
-import { Container, Grid, Typography, Paper, Box } from '@mui/material';
+import {
+  Container,
+  Grid,
+  Typography,
+  Paper,
+  Box,
+  Card,
+  CardContent,
+  CircularProgress,
+  Divider,
+  useTheme,
+  Alert
+} from '@mui/material';
 
 const FuelStatisticsPage = () => {
+  const theme = useTheme();
   const [statistics, setStatistics] = useState<any>(null);
   const [timePeriod, setTimePeriod] = useState('allTime');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [graphData, setGraphData] = useState<GraphComponentProps>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchStatistics() {
+      setLoading(true);
+      setError(null);
       try {
         const queryTimePeriod = normalizeTimePeriod(timePeriod);
         const response = await getFuelStatistics(queryTimePeriod, startDate, endDate);
@@ -226,7 +414,10 @@ const FuelStatisticsPage = () => {
         };
         setStatistics(enhancedResponse);
       } catch (error) {
+        setError("Error fetching statistics. Please try again later.");
         console.error("Error fetching statistics:", error);
+      } finally {
+        setLoading(false);
       }
     }
     fetchStatistics();
@@ -253,12 +444,6 @@ const FuelStatisticsPage = () => {
 
     fetchGraphData();
   }, [timePeriod, startDate, endDate]);
-
-  const handleApplyDateRange = () => {
-    if (startDate && endDate) {
-      setTimePeriod('customDates');
-    }
-  };
 
   const normalizeTimePeriod = (timePeriod: string) => {
     switch (timePeriod) {
@@ -299,15 +484,6 @@ const FuelStatisticsPage = () => {
     return { labels, values };
   };
 
-  const statisticsWithMappedGraphs = statistics ? {
-    efficiencyGraph: mapGraphData(statistics.efficiencyGraph),
-    distanceGraph: mapGraphData(statistics.distanceGraph),
-    distancePerDayGraph: mapGraphData(statistics.distancePerDayGraph),
-    litersGraph: mapGraphData(statistics.litersGraph),
-    costGraph: mapGraphData(statistics.costGraph),
-    priceGraph: mapGraphData(statistics.priceGraph)
-  } : {};
-
   const handleTimePeriodChange = (newTimePeriod: string, start?: string, end?: string) => {
     setTimePeriod(newTimePeriod);
     if (start && end) {
@@ -319,43 +495,108 @@ const FuelStatisticsPage = () => {
     }
   };
 
-  return (
-    <Container maxWidth="lg">
-      <Typography variant="h4" gutterBottom>Fuel Statistics</Typography>
-      <DropdownMenu onTimePeriodChange={handleTimePeriodChange} />
-      <Box my={4}>
-        {statistics && (
-          <>
-            <Grid container spacing={4}>
-              <Grid item xs={12} md={6}>
-                <Paper elevation={3} sx={{ padding: 2 }}>
-                  <Typography variant="h5">Statistics Overview</Typography>
-                  <FuelStatisticItem title="Average Fuel Efficiency (km/L)" value={formatNumber(statistics.averageFuelEfficiency)} />
-                  <FuelStatisticItem title="Average Distance Between Fill-ups (km)" value={formatNumber(statistics.averageDistanceBetweenFillups)} />
-                  <FuelStatisticItem title="Average Distance per Day (km)" value={formatNumber(statistics.averageDistancePerDay)} />
-                  <FuelStatisticItem title="Average Liters per Fill-up (liters)" value={formatNumber(statistics.averageLitersPerFillup)} />
-                  <FuelStatisticItem title="Average Cost per Fill-up (NIS)" value={formatNumber(statistics.averageTotalCostPerFillup)} />
-                  <FuelStatisticItem title="Average Price per Liter (NIS)" value={formatNumber(statistics.averagePricePerLiter)} />
-                  <FuelStatisticItem title="Total Fuel Cost (NIS)" value={formatNumber(statistics.totalFuelCost)} />
-                  <FuelStatisticItem title="Total Distance (km)" value={formatNumber(statistics.totalDistance)} />
-                  <FuelStatisticItem title="Total Liters" value={formatNumber(statistics.totalLiters)} />
-                  <FuelStatisticItem title="Average Time Between Refuels" value={statistics.averageTimeBetweenRefuels} />
-                </Paper>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Paper elevation={3} sx={{ padding: 2 }}>
-                  <Typography variant="h5">Graphs</Typography>
-                  <GraphComponent {...graphData} />
-                </Paper>
-              </Grid>
-            </Grid>
-            <Box my={4} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-              <Typography variant="h5" gutterBottom>Frequent Refueling Stations</Typography>
-              <PieChart data={statistics.frequentRefuelingStations} />
-            </Box>
-          </>
-        )}
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+        <CircularProgress />
       </Box>
+    );
+  }
+
+  return (
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Typography variant="h4" component="h1" gutterBottom sx={{ 
+        fontWeight: 'bold',
+        color: theme.palette.primary.main,
+        mb: 3
+      }}>
+        Fuel Statistics
+      </Typography>
+
+      <Paper elevation={3} sx={{ p: 2, mb: 4 }}>
+        <DropdownMenu onTimePeriodChange={handleTimePeriodChange} />
+      </Paper>
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 4 }}>
+          {error}
+        </Alert>
+      )}
+
+      {statistics && (
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={6}>
+            <Card elevation={3}>
+              <CardContent>
+                <Typography variant="h5" gutterBottom sx={{ 
+                  fontWeight: 'medium',
+                  color: theme.palette.secondary.main,
+                  mb: 2
+                }}>
+                  Statistics Overview
+                </Typography>
+                <Divider sx={{ mb: 2 }} />
+                <Box sx={{ '& > *': { mb: 2 } }}>
+                  <FuelStatisticItem title="Average Fuel Efficiency (km/L)" 
+                    value={formatNumber(statistics.averageFuelEfficiency)} />
+                  <FuelStatisticItem title="Average Distance Between Fill-ups (km)" 
+                    value={formatNumber(statistics.averageDistanceBetweenFillups)} />
+                  <FuelStatisticItem title="Average Distance per Day (km)" 
+                    value={formatNumber(statistics.averageDistancePerDay)} />
+                  <FuelStatisticItem title="Average Liters per Fill-up (liters)" 
+                    value={formatNumber(statistics.averageLitersPerFillup)} />
+                  <FuelStatisticItem title="Average Cost per Fill-up (NIS)" 
+                    value={formatNumber(statistics.averageTotalCostPerFillup)} />
+                  <FuelStatisticItem title="Average Price per Liter (NIS)" 
+                    value={formatNumber(statistics.averagePricePerLiter)} />
+                  <FuelStatisticItem title="Total Fuel Cost (NIS)" 
+                    value={formatNumber(statistics.totalFuelCost)} />
+                  <FuelStatisticItem title="Total Distance (km)" 
+                    value={formatNumber(statistics.totalDistance)} />
+                  <FuelStatisticItem title="Total Liters" 
+                    value={formatNumber(statistics.totalLiters)} />
+                  <FuelStatisticItem title="Average Time Between Refuels" 
+                    value={statistics.averageTimeBetweenRefuels} />
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Card elevation={3}>
+              <CardContent>
+                <Typography variant="h5" gutterBottom sx={{ 
+                  fontWeight: 'medium',
+                  color: theme.palette.secondary.main,
+                  mb: 2
+                }}>
+                  Graphs
+                </Typography>
+                <Divider sx={{ mb: 2 }} />
+                <GraphComponent {...graphData} />
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Card elevation={3}>
+              <CardContent>
+                <Typography variant="h5" align="center" gutterBottom sx={{ 
+                  fontWeight: 'medium',
+                  color: theme.palette.secondary.main,
+                  mb: 2
+                }}>
+                  Frequent Refueling Stations
+                </Typography>
+                <Divider sx={{ mb: 3 }} />
+                <Box display="flex" justifyContent="center">
+                  <PieChart data={statistics.frequentRefuelingStations} />
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      )}
     </Container>
   );
 };
