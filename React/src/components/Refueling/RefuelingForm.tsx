@@ -137,7 +137,7 @@ const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
         variant="outlined"
         {...register("license_plate", { required: "License plate is required" })}
         error={!!errors.license_plate}
-        helperText={errors.license_plate?.message}
+        helperText={errors.license_plate?.message?.toString()} 
         fullWidth
       />
 
@@ -148,7 +148,7 @@ const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
         InputLabelProps={{ shrink: true }}
         {...register("date", { required: "Date is required" })}
         error={!!errors.date}
-        helperText={errors.date?.message}
+        helperText={errors.date?.message?.toString()} 
         fullWidth
       />
 
@@ -159,7 +159,7 @@ const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
         InputLabelProps={{ shrink: true }}
         {...register("time", { required: "Time is required" })}
         error={!!errors.time}
-        helperText={errors.time?.message}
+        helperText={errors.time?.message?.toString()} 
         fullWidth
       />
 
@@ -169,7 +169,7 @@ const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
         type="number"
         {...register("odometer", { required: "Odometer is required" })}
         error={!!errors.odometer}
-        helperText={errors.odometer?.message}
+        helperText={errors.odometer?.message?.toString()} 
         fullWidth
       />
 
@@ -189,7 +189,7 @@ const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
         </Select>
         {errors.kindOfFuel && (
           <Typography variant="caption" color="error">
-            {errors.kindOfFuel.message}
+            {errors.kindOfFuel.message?.toString()}
           </Typography>
         )}
       </FormControl>
@@ -201,7 +201,7 @@ const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
         inputProps={{ step: "0.01" }}
         {...register("pricePerLiter", { required: "Price per liter is required" })}
         error={!!errors.pricePerLiter}
-        helperText={errors.pricePerLiter?.message}
+        helperText={errors.pricePerLiter?.message?.toString()}
         fullWidth
       />
 
@@ -212,7 +212,7 @@ const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
         inputProps={{ step: "0.01" }}
         {...register("totalCost", { required: "Total cost is required" })}
         error={!!errors.totalCost}
-        helperText={errors.totalCost?.message}
+        helperText={errors.totalCost?.message?.toString()} 
         fullWidth
       />
 
@@ -223,7 +223,7 @@ const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
         inputProps={{ step: "0.01" }}
         {...register("liters", { required: "Liters is required" })}
         error={!!errors.liters}
-        helperText={errors.liters?.message}
+        helperText={errors.liters?.message?.toString()}
         fullWidth
       />
 
