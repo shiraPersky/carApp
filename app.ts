@@ -16,6 +16,7 @@ import emailController from './Backend/controller/emailController.js'; // Import
 import odometerRouter from './Backend/controller/odometerController.js';  // Import the odometer controller router
 import { router as reminderRouter, initializeReminders, reminderService } from './Backend/controller/reminderController.js'; 
 
+import refuelingScanController from './Backend/controller/refuelingScanController.js';
 
 const app = express();
 
@@ -29,6 +30,13 @@ app.use('/cars', carController);
 app.use('/csv', csvImportController);
 app.use('/api/cars', odometerRouter);
 app.use('/reminders', reminderRouter); 
+console.log('Loading refuelingScanController...');
+//app.use('/api/refueling-scan', refuelingScanController);
+//app.use('/api/refueling-scan', upload.single('receipt'), refuelingScanController);
+app.use('/api/refueling-scan', refuelingScanController);
+
+
+
 
 app.get('/fuel-statistics', fuelStatisticsController.getStatistics);
 app.get('/fuel-statistics/graph-data', fuelStatisticsController.getGraphData);
