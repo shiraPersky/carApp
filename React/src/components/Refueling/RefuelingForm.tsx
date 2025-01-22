@@ -91,7 +91,434 @@
 
 // export default RefuelingForm;
 
-import React from "react";
+//work before scanreciept
+// import React from "react";
+// import { useForm } from "react-hook-form";
+// import {
+//   TextField,
+//   MenuItem,
+//   Select,
+//   FormControl,
+//   InputLabel,
+//   Button,
+//   Typography,
+//   Box,
+// } from "@mui/material";
+
+// const fuelTypes = [
+//   "95 Octane (Regular Gasoline)",
+//   "98 Octane (Premium Gasoline)",
+//   "Electric",
+//   "Hybrid",
+//   "Diesel",
+// ];
+
+// const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
+//   const {
+//     register,
+//     handleSubmit,
+//     formState: { errors },
+//   } = useForm({
+//     defaultValues: existingRefuel || {},
+//   });
+
+//   return (
+//     <Box
+//       component="form"
+//       onSubmit={handleSubmit(onSubmit)}
+//       sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%", maxWidth: 600, margin: "0 auto" }}
+//     >
+//       <Typography variant="h5" gutterBottom>
+//         Refueling Form
+//       </Typography>
+
+//       {/* License Plate */}
+//       <TextField
+//         label="License Plate"
+//         variant="outlined"
+//         {...register("license_plate", { required: "License plate is required" })}
+//         error={!!errors.license_plate}
+//         helperText={errors.license_plate?.message?.toString()} 
+//         fullWidth
+//       />
+
+//       {/* Date */}
+//       <TextField
+//         label="Date"
+//         type="date"
+//         InputLabelProps={{ shrink: true }}
+//         {...register("date", { required: "Date is required" })}
+//         error={!!errors.date}
+//         helperText={errors.date?.message?.toString()} 
+//         fullWidth
+//       />
+
+//       {/* Time */}
+//       <TextField
+//         label="Time"
+//         type="time"
+//         InputLabelProps={{ shrink: true }}
+//         {...register("time", { required: "Time is required" })}
+//         error={!!errors.time}
+//         helperText={errors.time?.message?.toString()} 
+//         fullWidth
+//       />
+
+//       {/* Odometer */}
+//       <TextField
+//         label="Odometer"
+//         type="number"
+//         {...register("odometer", { required: "Odometer is required" })}
+//         error={!!errors.odometer}
+//         helperText={errors.odometer?.message?.toString()} 
+//         fullWidth
+//       />
+
+//       {/* Kind of Fuel */}
+//       <FormControl fullWidth error={!!errors.kindOfFuel}>
+//         <InputLabel>Kind of Fuel</InputLabel>
+//         <Select
+//           {...register("kindOfFuel", { required: "Kind of fuel is required" })}
+//           defaultValue=""
+//         >
+//           <MenuItem value="">Select a fuel type</MenuItem>
+//           {fuelTypes.map((fuel, index) => (
+//             <MenuItem key={index} value={fuel}>
+//               {fuel}
+//             </MenuItem>
+//           ))}
+//         </Select>
+//         {errors.kindOfFuel && (
+//           <Typography variant="caption" color="error">
+//             {errors.kindOfFuel.message?.toString()}
+//           </Typography>
+//         )}
+//       </FormControl>
+
+//       {/* Price per Liter */}
+//       <TextField
+//         label="Price per Liter"
+//         type="number"
+//         inputProps={{ step: "0.01" }}
+//         {...register("pricePerLiter", { required: "Price per liter is required" })}
+//         error={!!errors.pricePerLiter}
+//         helperText={errors.pricePerLiter?.message?.toString()}
+//         fullWidth
+//       />
+
+//       {/* Total Cost */}
+//       <TextField
+//         label="Total Cost"
+//         type="number"
+//         inputProps={{ step: "0.01" }}
+//         {...register("totalCost", { required: "Total cost is required" })}
+//         error={!!errors.totalCost}
+//         helperText={errors.totalCost?.message?.toString()} 
+//         fullWidth
+//       />
+
+//       {/* Liters */}
+//       <TextField
+//         label="Liters"
+//         type="number"
+//         inputProps={{ step: "0.01" }}
+//         {...register("liters", { required: "Liters is required" })}
+//         error={!!errors.liters}
+//         helperText={errors.liters?.message?.toString()}
+//         fullWidth
+//       />
+
+//       {/* Gas Station */}
+//       <TextField
+//         label="Gas Station"
+//         variant="outlined"
+//         {...register("gasStation")}
+//         fullWidth
+//       />
+
+//       {/* Driver */}
+//       <TextField
+//         label="Driver"
+//         variant="outlined"
+//         {...register("driver")}
+//         fullWidth
+//       />
+
+//       {/* Notes */}
+//       <TextField
+//         label="Notes"
+//         variant="outlined"
+//         multiline
+//         rows={3}
+//         {...register("notes")}
+//         fullWidth
+//       />
+
+//       {/* Submit Button */}
+//       <Button type="submit" variant="contained" color="primary">
+//         Save
+//       </Button>
+//     </Box>
+//   );
+// };
+
+// export default RefuelingForm;
+
+//all work except when fiiling automatically the name of the field remain
+// import React, { useState } from "react";
+// import { useForm } from "react-hook-form";
+// import {
+//     TextField,
+//     MenuItem,
+//     Select,
+//     FormControl,
+//     InputLabel,
+//     Button,
+//     Typography,
+//     Box,
+//     CircularProgress,
+//   } from "@mui/material";
+  
+
+// const fuelTypes = [
+//   "95 Octane (Regular Gasoline)",
+//   "98 Octane (Premium Gasoline)",
+//   "Electric",
+//   "Hybrid",
+//   "Diesel",
+// ];
+
+// // const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
+// //   const {
+// //     register,
+// //     handleSubmit,
+// //     formState: { errors },
+// //   } = useForm({
+// //     defaultValues: existingRefuel || {},
+// //   });
+
+// const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
+//   const [loading, setLoading] = useState(false);
+//   const {
+//     register,
+//     handleSubmit,
+//     setValue,
+//     formState: { errors },
+//   } = useForm({
+//     defaultValues: existingRefuel || {},
+//   });
+
+//   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+//     const file = event.target.files?.[0];
+//     if (!file) return;
+
+//     setLoading(true);
+//     const formData = new FormData();
+//     formData.append('receipt', file);
+
+//     try {
+//       const response = await fetch('http://localhost:3000/api/refueling-scan/scan', {
+//         method: 'POST',
+//         body: formData,
+//       });
+
+//       if (!response.ok) {
+//         throw new Error('Failed to process receipt');
+//       }
+
+//       const data = await response.json();
+//       console.log('Extracted data:', data);
+
+//       // Update form fields with extracted data
+//       setValue('pricePerLiter', parseFloat(data.extractedData.ils.pricePerLiter));
+//       setValue('totalCost', parseFloat(data.extractedData.ils.totalCost));
+//       setValue('liters', parseFloat(data.extractedData.ils.liters));
+      
+//       // You can set other fields if they're available in the response
+//       if (data.savedRecord) {
+//         setValue('date', data.savedRecord.date?.split('T')[0]);
+//         setValue('time', data.savedRecord.time);
+//         setValue('gasStation', data.savedRecord.gasStation);
+//       }
+//     } catch (error) {
+//       console.error('Error processing receipt:', error);
+//       alert('Failed to process receipt. Please try again or fill the form manually.');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+
+//   return (
+//     <Box
+//       component="form"
+//       onSubmit={handleSubmit(onSubmit)}
+//       sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%", maxWidth: 600, margin: "0 auto" }}
+//     >
+//       <Typography variant="h5" gutterBottom>
+//         Refueling Form
+//       </Typography>
+
+//        {/* Image Upload Button */}
+//        <Box sx={{ mb: 2 }}>
+//         <input
+//           accept="image/*"
+//           style={{ display: 'none' }}
+//           id="receipt-upload"
+//           type="file"
+//           onChange={handleImageUpload}
+//         />
+//         <label htmlFor="receipt-upload">
+//           <Button
+//             variant="contained"
+//             component="span"
+//             fullWidth
+//             disabled={loading}
+//           >
+//             {loading ? <CircularProgress size={24} /> : 'Upload Receipt Image'}
+//           </Button>
+//         </label>
+//         {loading && (
+//           <Typography variant="body2" sx={{ mt: 1, textAlign: 'center' }}>
+//             Processing receipt...
+//           </Typography>
+//         )}
+//       </Box>
+
+//       {/* License Plate */}
+//       <TextField
+//         label="License Plate"
+//         variant="outlined"
+//         {...register("license_plate", { required: "License plate is required" })}
+//         error={!!errors.license_plate}
+//         helperText={errors.license_plate?.message?.toString()} 
+//         fullWidth
+//       />
+
+//       {/* Date */}
+//       <TextField
+//         label="Date"
+//         type="date"
+//         InputLabelProps={{ shrink: true }}
+//         {...register("date", { required: "Date is required" })}
+//         error={!!errors.date}
+//         helperText={errors.date?.message?.toString()} 
+//         fullWidth
+//       />
+
+//       {/* Time */}
+//       <TextField
+//         label="Time"
+//         type="time"
+//         InputLabelProps={{ shrink: true }}
+//         {...register("time", { required: "Time is required" })}
+//         error={!!errors.time}
+//         helperText={errors.time?.message?.toString()} 
+//         fullWidth
+//       />
+
+//       {/* Odometer */}
+//       <TextField
+//         label="Odometer"
+//         type="number"
+//         {...register("odometer", { required: "Odometer is required" })}
+//         error={!!errors.odometer}
+//         helperText={errors.odometer?.message?.toString()} 
+//         fullWidth
+//       />
+
+//       {/* Kind of Fuel */}
+//       <FormControl fullWidth error={!!errors.kindOfFuel}>
+//         <InputLabel>Kind of Fuel</InputLabel>
+//         <Select
+//           {...register("kindOfFuel", { required: "Kind of fuel is required" })}
+//           defaultValue=""
+//         >
+//           <MenuItem value="">Select a fuel type</MenuItem>
+//           {fuelTypes.map((fuel, index) => (
+//             <MenuItem key={index} value={fuel}>
+//               {fuel}
+//             </MenuItem>
+//           ))}
+//         </Select>
+//         {errors.kindOfFuel && (
+//           <Typography variant="caption" color="error">
+//             {errors.kindOfFuel.message?.toString()}
+//           </Typography>
+//         )}
+//       </FormControl>
+
+//       {/* Price per Liter */}
+//       <TextField
+//         label="Price per Liter"
+//         type="number"
+//         inputProps={{ step: "0.01" }}
+//         {...register("pricePerLiter", { required: "Price per liter is required" })}
+//         error={!!errors.pricePerLiter}
+//         helperText={errors.pricePerLiter?.message?.toString()}
+//         fullWidth
+//       />
+
+//       {/* Total Cost */}
+//       <TextField
+//         label="Total Cost"
+//         type="number"
+//         inputProps={{ step: "0.01" }}
+//         {...register("totalCost", { required: "Total cost is required" })}
+//         error={!!errors.totalCost}
+//         helperText={errors.totalCost?.message?.toString()} 
+//         fullWidth
+//       />
+
+//       {/* Liters */}
+//       <TextField
+//         label="Liters"
+//         type="number"
+//         inputProps={{ step: "0.01" }}
+//         {...register("liters", { required: "Liters is required" })}
+//         error={!!errors.liters}
+//         helperText={errors.liters?.message?.toString()}
+//         fullWidth
+//       />
+
+//       {/* Gas Station */}
+//       <TextField
+//         label="Gas Station"
+//         variant="outlined"
+//         {...register("gasStation")}
+//         fullWidth
+//       />
+
+//       {/* Driver */}
+//       <TextField
+//         label="Driver"
+//         variant="outlined"
+//         {...register("driver")}
+//         fullWidth
+//       />
+
+//       {/* Notes */}
+//       <TextField
+//         label="Notes"
+//         variant="outlined"
+//         multiline
+//         rows={3}
+//         {...register("notes")}
+//         fullWidth
+//       />
+
+//       {/* Submit Button */}
+//       <Button type="submit" variant="contained" color="primary">
+//         Save
+//       </Button>
+//     </Box>
+//   );
+// };
+
+// export default RefuelingForm;
+
+
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   TextField,
@@ -102,6 +529,7 @@ import {
   Button,
   Typography,
   Box,
+  CircularProgress,
 } from "@mui/material";
 
 const fuelTypes = [
@@ -113,13 +541,52 @@ const fuelTypes = [
 ];
 
 const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: existingRefuel || {},
   });
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("receipt", file);
+
+    try {
+      const response = await fetch("http://localhost:3000/api/refueling-scan/scan", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to process receipt");
+      }
+
+      const data = await response.json();
+
+      // Update form fields with extracted data
+      setValue("pricePerLiter", parseFloat(data.extractedData.ils.pricePerLiter));
+      setValue("totalCost", parseFloat(data.extractedData.ils.totalCost));
+      setValue("liters", parseFloat(data.extractedData.ils.liters));
+
+      if (data.savedRecord) {
+        setValue("date", data.savedRecord.date?.split("T")[0]);
+        setValue("time", data.savedRecord.time);
+        setValue("gasStation", data.savedRecord.gasStation);
+      }
+    } catch (error) {
+      alert("Failed to process receipt. Please try again or fill the form manually.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Box
@@ -131,49 +598,55 @@ const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
         Refueling Form
       </Typography>
 
-      {/* License Plate */}
-      <TextField
-        label="License Plate"
-        variant="outlined"
-        {...register("license_plate", { required: "License plate is required" })}
-        error={!!errors.license_plate}
-        helperText={errors.license_plate?.message?.toString()} 
-        fullWidth
-      />
+      <Box sx={{ mb: 2 }}>
+        <input
+          accept="image/*"
+          style={{ display: "none" }}
+          id="receipt-upload"
+          type="file"
+          onChange={handleImageUpload}
+        />
+        <label htmlFor="receipt-upload">
+          <Button variant="contained" component="span" fullWidth disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : "Upload Receipt Image"}
+          </Button>
+        </label>
+      </Box>
 
-      {/* Date */}
-      <TextField
-        label="Date"
-        type="date"
-        InputLabelProps={{ shrink: true }}
-        {...register("date", { required: "Date is required" })}
-        error={!!errors.date}
-        helperText={errors.date?.message?.toString()} 
-        fullWidth
-      />
+      {[
+        { label: "License Plate", name: "license_plate" },
+        { label: "Date", name: "date", type: "date" },
+        { label: "Time", name: "time", type: "time" },
+        { label: "Odometer", name: "odometer", type: "number" },
+        { 
+          label: "Price per Liter", 
+          name: "pricePerLiter", 
+          type: "number", 
+          step: "0.01", 
+          validate: (value) => /^[0-9]*\.?[0-9]{0,2}$/.test(value) || "Up to 2 decimal places only" 
+        },
+        { label: "Total Cost", name: "totalCost", type: "number", step: "0.01" },
+        { label: "Liters", name: "liters", type: "number", step: "0.01" },
+        { label: "Gas Station", name: "gasStation" },
+        { label: "Driver", name: "driver" },
+        { label: "Notes", name: "notes", multiline: true, rows: 3 },
+      ].map(({ label, name, validate, ...rest }) => (
+        <TextField
+          key={name}
+          label={label}
+          variant="outlined"
+          {...register(name, { 
+            required: `${label} is required`,
+            ...(validate ? { validate } : {}) // Add validation if provided
+          })}
+          error={!!errors[name]}
+          helperText={errors[name]?.message?.toString()}
+          InputLabelProps={{ shrink: true }}
+          fullWidth
+          {...rest}
+        />
+      ))}
 
-      {/* Time */}
-      <TextField
-        label="Time"
-        type="time"
-        InputLabelProps={{ shrink: true }}
-        {...register("time", { required: "Time is required" })}
-        error={!!errors.time}
-        helperText={errors.time?.message?.toString()} 
-        fullWidth
-      />
-
-      {/* Odometer */}
-      <TextField
-        label="Odometer"
-        type="number"
-        {...register("odometer", { required: "Odometer is required" })}
-        error={!!errors.odometer}
-        helperText={errors.odometer?.message?.toString()} 
-        fullWidth
-      />
-
-      {/* Kind of Fuel */}
       <FormControl fullWidth error={!!errors.kindOfFuel}>
         <InputLabel>Kind of Fuel</InputLabel>
         <Select
@@ -187,73 +660,8 @@ const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
             </MenuItem>
           ))}
         </Select>
-        {errors.kindOfFuel && (
-          <Typography variant="caption" color="error">
-            {errors.kindOfFuel.message?.toString()}
-          </Typography>
-        )}
       </FormControl>
 
-      {/* Price per Liter */}
-      <TextField
-        label="Price per Liter"
-        type="number"
-        inputProps={{ step: "0.01" }}
-        {...register("pricePerLiter", { required: "Price per liter is required" })}
-        error={!!errors.pricePerLiter}
-        helperText={errors.pricePerLiter?.message?.toString()}
-        fullWidth
-      />
-
-      {/* Total Cost */}
-      <TextField
-        label="Total Cost"
-        type="number"
-        inputProps={{ step: "0.01" }}
-        {...register("totalCost", { required: "Total cost is required" })}
-        error={!!errors.totalCost}
-        helperText={errors.totalCost?.message?.toString()} 
-        fullWidth
-      />
-
-      {/* Liters */}
-      <TextField
-        label="Liters"
-        type="number"
-        inputProps={{ step: "0.01" }}
-        {...register("liters", { required: "Liters is required" })}
-        error={!!errors.liters}
-        helperText={errors.liters?.message?.toString()}
-        fullWidth
-      />
-
-      {/* Gas Station */}
-      <TextField
-        label="Gas Station"
-        variant="outlined"
-        {...register("gasStation")}
-        fullWidth
-      />
-
-      {/* Driver */}
-      <TextField
-        label="Driver"
-        variant="outlined"
-        {...register("driver")}
-        fullWidth
-      />
-
-      {/* Notes */}
-      <TextField
-        label="Notes"
-        variant="outlined"
-        multiline
-        rows={3}
-        {...register("notes")}
-        fullWidth
-      />
-
-      {/* Submit Button */}
       <Button type="submit" variant="contained" color="primary">
         Save
       </Button>
