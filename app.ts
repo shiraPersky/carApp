@@ -31,8 +31,7 @@ app.use('/csv', csvImportController);
 app.use('/api/cars', odometerRouter);
 app.use('/reminders', reminderRouter); 
 console.log('Loading refuelingScanController...');
-//app.use('/api/refueling-scan', refuelingScanController);
-//app.use('/api/refueling-scan', upload.single('receipt'), refuelingScanController);
+
 app.use('/api/refueling-scan', refuelingScanController);
 
 
