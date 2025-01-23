@@ -517,6 +517,159 @@
 
 // export default RefuelingForm;
 
+//work without fetch autumatically time and date
+// import React, { useState } from "react";
+// import { useForm } from "react-hook-form";
+// import {
+//   TextField,
+//   MenuItem,
+//   Select,
+//   FormControl,
+//   InputLabel,
+//   Button,
+//   Typography,
+//   Box,
+//   CircularProgress,
+// } from "@mui/material";
+
+// const fuelTypes = [
+//   "95 Octane (Regular Gasoline)",
+//   "98 Octane (Premium Gasoline)",
+//   "Electric",
+//   "Hybrid",
+//   "Diesel",
+// ];
+
+// const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
+//   const [loading, setLoading] = useState(false);
+//   const {
+//     register,
+//     handleSubmit,
+//     setValue,
+//     formState: { errors },
+//   } = useForm({
+//     defaultValues: existingRefuel || {},
+//   });
+
+//   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+//     const file = event.target.files?.[0];
+//     if (!file) return;
+
+//     setLoading(true);
+//     const formData = new FormData();
+//     formData.append("receipt", file);
+
+//     try {
+//       const response = await fetch("http://localhost:3000/api/refueling-scan/scan", {
+//         method: "POST",
+//         body: formData,
+//       });
+
+//       if (!response.ok) {
+//         throw new Error("Failed to process receipt");
+//       }
+
+//       const data = await response.json();
+
+//       // Update form fields with extracted data
+//       setValue("pricePerLiter", parseFloat(data.extractedData.ils.pricePerLiter));
+//       setValue("totalCost", parseFloat(data.extractedData.ils.totalCost));
+//       setValue("liters", parseFloat(data.extractedData.ils.liters));
+
+//       if (data.savedRecord) {
+//         setValue("date", data.savedRecord.date?.split("T")[0]);
+//         setValue("time", data.savedRecord.time);
+//         setValue("gasStation", data.savedRecord.gasStation);
+//       }
+//     } catch (error) {
+//       alert("Failed to process receipt. Please try again or fill the form manually.");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return (
+//     <Box
+//       component="form"
+//       onSubmit={handleSubmit(onSubmit)}
+//       sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%", maxWidth: 600, margin: "0 auto" }}
+//     >
+//       <Typography variant="h5" gutterBottom>
+//         Refueling Form
+//       </Typography>
+
+//       <Box sx={{ mb: 2 }}>
+//         <input
+//           accept="image/*"
+//           style={{ display: "none" }}
+//           id="receipt-upload"
+//           type="file"
+//           onChange={handleImageUpload}
+//         />
+//         <label htmlFor="receipt-upload">
+//           <Button variant="contained" component="span" fullWidth disabled={loading}>
+//             {loading ? <CircularProgress size={24} /> : "Upload Receipt Image"}
+//           </Button>
+//         </label>
+//       </Box>
+
+//       {[
+//         { label: "License Plate", name: "license_plate" },
+//         { label: "Date", name: "date", type: "date" },
+//         { label: "Time", name: "time", type: "time" },
+//         { label: "Odometer", name: "odometer", type: "number" },
+//         { 
+//           label: "Price per Liter", 
+//           name: "pricePerLiter", 
+//           type: "number", 
+//           step: "0.01", 
+//           validate: (value) => /^[0-9]*\.?[0-9]{0,2}$/.test(value) || "Up to 2 decimal places only" 
+//         },
+//         { label: "Total Cost", name: "totalCost", type: "number", step: "0.01" },
+//         { label: "Liters", name: "liters", type: "number", step: "0.01" },
+//         { label: "Gas Station", name: "gasStation" },
+//         { label: "Driver", name: "driver" },
+//         { label: "Notes", name: "notes", multiline: true, rows: 3 },
+//       ].map(({ label, name, validate, ...rest }) => (
+//         <TextField
+//           key={name}
+//           label={label}
+//           variant="outlined"
+//           {...register(name, { 
+//             required: `${label} is required`,
+//             ...(validate ? { validate } : {}) // Add validation if provided
+//           })}
+//           error={!!errors[name]}
+//           helperText={errors[name]?.message?.toString()}
+//           InputLabelProps={{ shrink: true }}
+//           fullWidth
+//           {...rest}
+//         />
+//       ))}
+
+//       <FormControl fullWidth error={!!errors.kindOfFuel}>
+//         <InputLabel>Kind of Fuel</InputLabel>
+//         <Select
+//           {...register("kindOfFuel", { required: "Kind of fuel is required" })}
+//           defaultValue=""
+//         >
+//           <MenuItem value="">Select a fuel type</MenuItem>
+//           {fuelTypes.map((fuel, index) => (
+//             <MenuItem key={index} value={fuel}>
+//               {fuel}
+//             </MenuItem>
+//           ))}
+//         </Select>
+//       </FormControl>
+
+//       <Button type="submit" variant="contained" color="primary">
+//         Save
+//       </Button>
+//     </Box>
+//   );
+// };
+
+// export default RefuelingForm;
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -570,17 +723,39 @@ const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
       }
 
       const data = await response.json();
+      const originalValues = data.extractedData.originalValues;
 
-      // Update form fields with extracted data
+      // Convert date from MM/DD/YYYY to YYYY-MM-DD
+      if (originalValues.date) {
+        const [month, day, year] = originalValues.date.split('/');
+        const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+        setValue("date", formattedDate);
+      }
+
+      // Convert time from 12-hour to 24-hour format
+      if (originalValues.time) {
+        const [time, meridiem] = originalValues.time.split(' ');
+        let [hours, minutes] = time.split(':');
+        
+        if (meridiem === 'PM' && hours !== '12') {
+          hours = (parseInt(hours) + 12).toString();
+        } else if (meridiem === 'AM' && hours === '12') {
+          hours = '00';
+        }
+        
+        setValue("time", `${hours.padStart(2, '0')}:${minutes}`);
+      }
+
+      // Update other form fields from ILS data
       setValue("pricePerLiter", parseFloat(data.extractedData.ils.pricePerLiter));
       setValue("totalCost", parseFloat(data.extractedData.ils.totalCost));
       setValue("liters", parseFloat(data.extractedData.ils.liters));
 
-      if (data.savedRecord) {
-        setValue("date", data.savedRecord.date?.split("T")[0]);
-        setValue("time", data.savedRecord.time);
+      // Optional: Set additional fields if available
+      if (data.savedRecord?.gasStation) {
         setValue("gasStation", data.savedRecord.gasStation);
       }
+
     } catch (error) {
       alert("Failed to process receipt. Please try again or fill the form manually.");
     } finally {
@@ -637,7 +812,7 @@ const RefuelingForm = ({ existingRefuel, onSubmit }: any) => {
           variant="outlined"
           {...register(name, { 
             required: `${label} is required`,
-            ...(validate ? { validate } : {}) // Add validation if provided
+            ...(validate ? { validate } : {}) 
           })}
           error={!!errors[name]}
           helperText={errors[name]?.message?.toString()}
