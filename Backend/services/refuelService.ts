@@ -82,7 +82,7 @@ export class RefuelingService {
       const odometerValue = Number(data.odometer);  // Convert to a number
 
       // Ensure odometer is a positive number
-      if (typeof odometerValue !== 'number' || isNaN(odometerValue) || odometerValue <= 0) {
+      if (typeof odometerValue !== 'number' || isNaN(odometerValue) || odometerValue < 0) {
         throw new Error('Odometer must be a positive number');
       }
 

@@ -701,16 +701,183 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //     });
 // });
 // export default router;
+//all works but not split
+// import express, { Request, Response, RequestHandler } from 'express';
+// import multer from 'multer';
+// import Tesseract from 'tesseract.js';
+// import { GoogleGenerativeAI } from '@google/generative-ai';
+// import { PrismaClient } from '@prisma/client';
+// import fs from 'fs';
+// import path from 'path';
+// const prisma = new PrismaClient();
+// const router = express.Router();
+// // Initialize Gemini
+// const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+// // Multer setup
+// const uploadDir = 'uploads';
+// if (!fs.existsSync(uploadDir)) {
+//     fs.mkdirSync(uploadDir, { recursive: true });
+// }
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => {
+//         cb(null, uploadDir);
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, Date.now() + '-' + file.originalname);
+//     },
+// });
+// const upload = multer({
+//     storage,
+//     limits: { fileSize: 10 * 1024 * 1024 },
+//     fileFilter: (req: Express.Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+//         if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+//             const error: Error = new Error('Only image files are allowed!');
+//             error.name = 'LIMIT_FILE_TYPES';
+//             cb(error);
+//             return;
+//         }
+//         cb(null, true);
+//     },
+// });
+// interface MulterRequest extends Request {
+//     file?: Express.Multer.File;
+// }
+// const scanReceipt: RequestHandler = async (req: MulterRequest, res: Response): Promise<void> => {
+//     try {
+//         if (!req.file) {
+//             res.status(400).json({ error: 'Receipt image is required' });
+//             return;
+//         }
+//         const imagePath = req.file.path;
+//         // OCR processing
+//         console.log('Starting OCR processing...');
+//         const ocrResult = await Tesseract.recognize(imagePath, 'eng');
+//         const extractedText = ocrResult.data.text;
+//         try {
+//             console.log('Processing with Gemini...');
+//             const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+//             const prompt = `
+//                 Extract the following information from this gas receipt:
+//                 1. Price per unit (look for numbers near "price", "rate", or "$").
+//                 2. Quantity (look for numbers near "gallons", "liters", "L", or "gal").
+//                 3. Total cost (look for numbers near "total" or final amount).
+//                 4. Date of transaction (e.g., "MM/DD/YYYY" or similar formats).
+//                 5. Time of transaction (e.g., "HH:MM AM/PM" or similar formats).
+//                 Format the response EXACTLY as a JSON object with these exact keys, and nothing else:
+//                 {
+//                     "unitPrice": (number),
+//                     "quantity": (number),
+//                     "isGallons": (boolean),
+//                     "totalCost": (number),
+//                     "date": (string),
+//                     "time": (string)
+//                 }
+//                 Receipt text:
+//                 ${extractedText}
+//             `;
+//             const result = await model.generateContent(prompt);
+//             const responseText = (await result.response).text();
+//             let extractedData;
+//             try {
+//                 const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+//                 if (jsonMatch) {
+//                     extractedData = JSON.parse(jsonMatch[0]);
+//                 } else {
+//                     throw new Error('No JSON found in response');
+//                 }
+//             } catch (parseError) {
+//                 console.error('Failed to parse Gemini response:', responseText);
+//                 throw new Error('Failed to parse receipt data');
+//             }
+//             // Conversion constants
+//             const SHEKEL_RATE = 3.6; // 1 USD = 3.6 ILS
+//             const LITERS_PER_GALLON = 3.78541;
+//             let gallons, liters, pricePerGallon, pricePerLiter, totalCostUSD, totalCostILS;
+//             if (extractedData.isGallons) {
+//                 gallons = extractedData.quantity;
+//                 liters = gallons * LITERS_PER_GALLON;
+//                 pricePerGallon = extractedData.unitPrice;
+//                 pricePerLiter = pricePerGallon / LITERS_PER_GALLON;
+//                 totalCostUSD = extractedData.totalCost;
+//             } else {
+//                 liters = extractedData.quantity;
+//                 gallons = liters / LITERS_PER_GALLON;
+//                 pricePerLiter = extractedData.unitPrice;
+//                 pricePerGallon = pricePerLiter * LITERS_PER_GALLON;
+//                 totalCostUSD = extractedData.totalCost;
+//             }
+//             totalCostILS = totalCostUSD * SHEKEL_RATE;
+//             const pricePerLiterILS = pricePerLiter * SHEKEL_RATE;
+//             // Save to the database, including date and time from the receipt
+//             const refuelingData = await prisma.refueling.create({
+//                 data: {
+//                     date: extractedData.date ? new Date(extractedData.date) : new Date(),
+//                     time: extractedData.time || new Date().toLocaleTimeString(),
+//                     odometer: parseInt(req.body.odometer) || 0,
+//                     kindOfFuel: req.body.kindOfFuel || 'Regular',
+//                     pricePerLiter: parseFloat(pricePerLiterILS.toFixed(2)),
+//                     totalCost: parseFloat(totalCostILS.toFixed(2)),
+//                     liters: parseFloat(liters.toFixed(2)),
+//                     gasStation: req.body.gasStation || 'Unknown',
+//                     driver: req.body.driver || 'Unknown',
+//                     fileAttachment: imagePath,
+//                     notes: req.body.notes || '',
+//                     license_plate: req.body.license_plate || '',
+//                 },
+//             });
+//             res.status(201).json({
+//                 message: 'Receipt processed successfully',
+//                 extractedData: {
+//                     usd: {
+//                         pricePerGallon: pricePerGallon.toFixed(2),
+//                         totalCost: totalCostUSD.toFixed(2),
+//                         gallons: gallons.toFixed(2),
+//                     },
+//                     ils: {
+//                         pricePerLiter: pricePerLiterILS.toFixed(2),
+//                         totalCost: totalCostILS.toFixed(2),
+//                         liters: liters.toFixed(2),
+//                     },
+//                     originalValues: extractedData,
+//                 },
+//                 savedRecord: refuelingData,
+//             });
+//         } catch (geminiError) {
+//             console.error('Gemini processing failed:', geminiError);
+//             res.status(500).json({
+//                 error: 'AI processing failed',
+//                 details: geminiError.message,
+//                 extractedText,
+//             });
+//         }
+//     } catch (error) {
+//         console.error('Error during receipt scan:', error);
+//         res.status(500).json({
+//             error: 'Failed to process the receipt',
+//             details: error.message,
+//         });
+//     }
+// };
+// router.post('/scan', (req, res, next) => {
+//     upload.single('receipt')(req, res, (err) => {
+//         if (err) {
+//             if (err.name === 'LIMIT_FILE_TYPES') {
+//                 return res.status(400).json({ error: 'Only image files are allowed!' });
+//             }
+//             if (err instanceof multer.MulterError) {
+//                 return res.status(400).json({ error: err.message });
+//             }
+//             return res.status(500).json({ error: 'File upload error' });
+//         }
+//         scanReceipt(req, res, next);
+//     });
+// });
+// export default router;
 const express_1 = __importDefault(require("express"));
 const multer_1 = __importDefault(require("multer"));
-const tesseract_js_1 = __importDefault(require("tesseract.js"));
-const generative_ai_1 = require("@google/generative-ai");
-const client_1 = require("@prisma/client");
+const refuelingScanService_1 = require("../services/refuelingScanService");
 const fs_1 = __importDefault(require("fs"));
-const prisma = new client_1.PrismaClient();
 const router = express_1.default.Router();
-// Initialize Gemini
-const genAI = new generative_ai_1.GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // Multer setup
 const uploadDir = 'uploads';
 if (!fs_1.default.existsSync(uploadDir)) {
@@ -744,113 +911,12 @@ const scanReceipt = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             return;
         }
         const imagePath = req.file.path;
-        // OCR processing
-        console.log('Starting OCR processing...');
-        const ocrResult = yield tesseract_js_1.default.recognize(imagePath, 'eng');
-        const extractedText = ocrResult.data.text;
-        try {
-            console.log('Processing with Gemini...');
-            const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-            const prompt = `
-                Extract the following information from this gas receipt:
-                1. Price per unit (look for numbers near "price", "rate", or "$").
-                2. Quantity (look for numbers near "gallons", "liters", "L", or "gal").
-                3. Total cost (look for numbers near "total" or final amount).
-                4. Date of transaction (e.g., "MM/DD/YYYY" or similar formats).
-                5. Time of transaction (e.g., "HH:MM AM/PM" or similar formats).
-
-                Format the response EXACTLY as a JSON object with these exact keys, and nothing else:
-                {
-                    "unitPrice": (number),
-                    "quantity": (number),
-                    "isGallons": (boolean),
-                    "totalCost": (number),
-                    "date": (string),
-                    "time": (string)
-                }
-
-                Receipt text:
-                ${extractedText}
-            `;
-            const result = yield model.generateContent(prompt);
-            const responseText = (yield result.response).text();
-            let extractedData;
-            try {
-                const jsonMatch = responseText.match(/\{[\s\S]*\}/);
-                if (jsonMatch) {
-                    extractedData = JSON.parse(jsonMatch[0]);
-                }
-                else {
-                    throw new Error('No JSON found in response');
-                }
-            }
-            catch (parseError) {
-                console.error('Failed to parse Gemini response:', responseText);
-                throw new Error('Failed to parse receipt data');
-            }
-            // Conversion constants
-            const SHEKEL_RATE = 3.6; // 1 USD = 3.6 ILS
-            const LITERS_PER_GALLON = 3.78541;
-            let gallons, liters, pricePerGallon, pricePerLiter, totalCostUSD, totalCostILS;
-            if (extractedData.isGallons) {
-                gallons = extractedData.quantity;
-                liters = gallons * LITERS_PER_GALLON;
-                pricePerGallon = extractedData.unitPrice;
-                pricePerLiter = pricePerGallon / LITERS_PER_GALLON;
-                totalCostUSD = extractedData.totalCost;
-            }
-            else {
-                liters = extractedData.quantity;
-                gallons = liters / LITERS_PER_GALLON;
-                pricePerLiter = extractedData.unitPrice;
-                pricePerGallon = pricePerLiter * LITERS_PER_GALLON;
-                totalCostUSD = extractedData.totalCost;
-            }
-            totalCostILS = totalCostUSD * SHEKEL_RATE;
-            const pricePerLiterILS = pricePerLiter * SHEKEL_RATE;
-            // Save to the database, including date and time from the receipt
-            const refuelingData = yield prisma.refueling.create({
-                data: {
-                    date: extractedData.date ? new Date(extractedData.date) : new Date(),
-                    time: extractedData.time || new Date().toLocaleTimeString(),
-                    odometer: parseInt(req.body.odometer) || 0,
-                    kindOfFuel: req.body.kindOfFuel || 'Regular',
-                    pricePerLiter: parseFloat(pricePerLiterILS.toFixed(2)),
-                    totalCost: parseFloat(totalCostILS.toFixed(2)),
-                    liters: parseFloat(liters.toFixed(2)),
-                    gasStation: req.body.gasStation || 'Unknown',
-                    driver: req.body.driver || 'Unknown',
-                    fileAttachment: imagePath,
-                    notes: req.body.notes || '',
-                    license_plate: req.body.license_plate || '',
-                },
-            });
-            res.status(201).json({
-                message: 'Receipt processed successfully',
-                extractedData: {
-                    usd: {
-                        pricePerGallon: pricePerGallon.toFixed(2),
-                        totalCost: totalCostUSD.toFixed(2),
-                        gallons: gallons.toFixed(2),
-                    },
-                    ils: {
-                        pricePerLiter: pricePerLiterILS.toFixed(2),
-                        totalCost: totalCostILS.toFixed(2),
-                        liters: liters.toFixed(2),
-                    },
-                    originalValues: extractedData,
-                },
-                savedRecord: refuelingData,
-            });
-        }
-        catch (geminiError) {
-            console.error('Gemini processing failed:', geminiError);
-            res.status(500).json({
-                error: 'AI processing failed',
-                details: geminiError.message,
-                extractedText,
-            });
-        }
+        // Call the service to process the receipt
+        const result = yield (0, refuelingScanService_1.processReceipt)(imagePath, parseInt(req.body.odometer) || 0, req.body.kindOfFuel || 'Regular', req.body.gasStation || 'Unknown', req.body.driver || 'Unknown', req.body.notes || '', req.body.license_plate || '');
+        res.status(201).json({
+            message: 'Receipt processed successfully',
+            extractedData: result,
+        });
     }
     catch (error) {
         console.error('Error during receipt scan:', error);
