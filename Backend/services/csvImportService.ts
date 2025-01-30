@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Define types for the API response
+// Define types for the API response-those are the data I want to extract as they appear on the csv from gov.il(Hebrew-English attribute names)
 interface VehicleRecord {
   mispar_rechev: string;
   tozeret_nm: string;
