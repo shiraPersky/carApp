@@ -235,29 +235,29 @@ class ReminderService {
                 const subject = `Vehicle Maintenance Reminder: ${reminder.description}`;
                 const markAsDoneUrl = `${process.env.APP_URL}/reminders/complete/${reminder.id}`;
                 const htmlContent = `
-  <h2>Maintenance Reminder</h2>
-  <p>Vehicle: ${car.make} ${car.model} (${reminder.license_plate})</p>
-  <p>Reminder: ${reminder.description}</p>
-  <p>Current Odometer: ${car.odometer} km</p>
-  ${reminder.next_due_km ? `<p>Due at: ${reminder.next_due_km} km</p>` : ''}
-  ${reminder.due_date ? `<p>Due date: ${reminder.due_date.toLocaleDateString()}</p>` : ''}
-  <table role="presentation" cellspacing="0" cellpadding="0" style="margin-top: 20px;">
-    <tr>
-      <td align="center" style="border-radius: 3px;" bgcolor="#007BFF">
-        <a href="${markAsDoneUrl}" target="_blank" style="
-          font-size: 16px;
-          font-family: Arial, sans-serif;
-          font-weight: bold;
-          color: #ffffff;
-          text-decoration: none;
-          padding: 12px 24px;
-          border-radius: 5px;
-          display: inline-block;
-        ">Mark as Done</a>
-      </td>
-    </tr>
-  </table>
-`;
+    <h2>Maintenance Reminder</h2>
+    <p>Vehicle: ${car.make} ${car.model} (${reminder.license_plate})</p>
+    <p>Reminder: ${reminder.description}</p>
+    <p>Current Odometer: ${car.odometer} km</p>
+    ${reminder.next_due_km ? `<p>Due at: ${reminder.next_due_km} km</p>` : ''}
+    ${reminder.due_date ? `<p>Due date: ${reminder.due_date.toLocaleDateString()}</p>` : ''}
+    <table role="presentation" cellspacing="0" cellpadding="0" style="margin-top: 20px;">
+      <tr>
+        <td align="center" style="border-radius: 3px;" bgcolor="#007BFF">
+          <a href="${markAsDoneUrl}" target="_blank" style="
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            display: inline-block;
+          ">Mark as Done</a>
+        </td>
+      </tr>
+    </table>
+  `;
                 yield emailService.sendReminder(process.env.NOTIFICATION_EMAIL, subject, htmlContent);
             }
             catch (error) {
