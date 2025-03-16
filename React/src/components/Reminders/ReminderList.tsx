@@ -36,8 +36,8 @@ const ReminderList = () => {
         {reminders.filter(r => !r.repeat_by_days && !r.repeat_by_km).map(reminder => (
         <div key={reminder.id} className="reminder-card">
             <h3>{reminder.description}</h3>
-            <p>Due Date: {new Date(reminder.due_date).toLocaleDateString()}</p>
-        </div>
+            <p>Due Date: {reminder.due_date ? new Date(reminder.due_date).toLocaleDateString() : 'No due date'}</p>
+            </div>
         ))}
 
         <h2>Repeating Reminders</h2>

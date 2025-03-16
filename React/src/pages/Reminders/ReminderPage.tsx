@@ -64,7 +64,9 @@ const ReminderPage = () => {
               <td>{reminder.completed ? 'Yes' : 'No'}</td>
               <td>
                 <Link to={`/reminders/edit/${reminder.id}`}>Edit</Link>
-                <button onClick={() => handleDelete(reminder.id)}>Delete</button>
+                <button onClick={() => reminder.id !== undefined && handleDelete(reminder.id)}>
+                  Delete
+                </button>
               </td>
             </tr>
           ))}

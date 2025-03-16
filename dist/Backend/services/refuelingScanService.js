@@ -54,7 +54,14 @@ const processReceipt = (imagePath, odometer, kindOfFuel, gasStation, driver, not
         const responseText = (yield result.response).text();
         let extractedData;
         try {
-            const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+            /*explanation of the regex on the next line:
+            /.../-start and end of the regular expression
+            \{ -Start with {
+            [\s\S] - ensures all characters are matched,even new lines(\s → Matches any whitespace character,\S- Matches any non-whitespace character.)
+            *- captures everything inside
+
+            */
+            const jsonMatch = responseText.match(/\{[\s\S]*\}/); //extracts the first object
             if (jsonMatch) {
                 extractedData = JSON.parse(jsonMatch[0]);
             }
