@@ -91,3 +91,27 @@ model Reminder {
 
   @@map("reminders") // Optional: Map this model to a database table named 'reminders'
 }
+
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  password      String?  // Optional for SSO users
+  name          String?
+  is_sso_user   Boolean  @default(false)
+  last_login    DateTime?
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  
+  @@map("users")
+}
+
+model Session {
+  id           String   @id
+  user_id      Int
+  expires      DateTime
+  data         String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  
+  @@map("sessions")
+}

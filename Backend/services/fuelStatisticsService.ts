@@ -221,7 +221,10 @@ export class FuelStatisticsService {
       return acc;
     }, {} as Record<string, number>);
 
-    const sortedStations = Object.entries(stationMap).sort((a, b) => b[1] - a[1]);
+    //const sortedStations = Object.entries(stationMap).sort((a, b) => b[1] - a[1]);
+    const sortedStations = Object.entries(stationMap)
+      .sort(([stationA, countA]: [string, number], [stationB, countB]: [string, number]) => countB - countA);
+
 
     return sortedStations.map(([station, count]) => ({ station, count }));
   }

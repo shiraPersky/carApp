@@ -18,11 +18,37 @@ import { router as reminderRouter, initializeReminders, reminderService } from '
 
 import refuelingScanController from './Backend/controller/refuelingScanController.js';
 
+// Import authentication related modules
+import authRoutes from './Backend/Routes/authRoutes.js';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
+import passport from './Backend/Config/passportConfig.js';
+
 const app = express();
 
 app.use(cors());  // This allows requests from any origin
 
 app.use(express.json());// Middleware to parse incoming JSON requests
+
+// Add middleware for authentication
+app.use(cookieParser()); // Parse cookies
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
+
+// Initialize passport for SSO
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Use authentication routes
+app.use('/auth', authRoutes);
 
 app.use('/services', serviceController);// Use serviceController for any requests to /services
 app.use('/refuels', refuelingController); // Use refuelingController for any requests to /refuels
