@@ -14,18 +14,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MailService = void 0;
 // Backend/service/mailService.ts
-const nodemailer_1 = __importDefault(require("nodemailer"));
+const nodemailer_1 = __importDefault(require("nodemailer")); //nodemailer - for sending emails
 let transporter;
 class MailService {
     constructor() {
-        if (!transporter) {
+        if (!transporter) { //if it is not initialized yet
             transporter = nodemailer_1.default.createTransport({
-                host: process.env.MAIL_HOST || 'smtp.example.com',
-                port: parseInt(process.env.MAIL_PORT || '587'),
+                host: process.env.MAIL_HOST,
+                port: parseInt(process.env.MAIL_PORT),
                 secure: process.env.MAIL_SECURE === 'true',
                 auth: {
-                    user: process.env.MAIL_USER || 'user@example.com',
-                    pass: process.env.MAIL_PASSWORD || 'password'
+                    user: process.env.MAIL_USER,
+                    pass: process.env.MAIL_PASSWORD
                 }
             });
         }
@@ -33,7 +33,7 @@ class MailService {
     sendSSOEmail(to, loginLink) {
         return __awaiter(this, void 0, void 0, function* () {
             const mailOptions = {
-                from: process.env.MAIL_FROM || 'CarApp <noreply@carapp.example.com>',
+                from: process.env.MAIL_FROM,
                 to,
                 subject: 'CarApp - Login Link',
                 text: `Click the following link to log in to your CarApp account: ${loginLink}`,

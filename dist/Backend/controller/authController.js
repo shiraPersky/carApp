@@ -27,7 +27,7 @@ class AuthController {
                     secure: process.env.NODE_ENV === 'production',
                     maxAge: 24 * 60 * 60 * 1000 // 24 hours
                 });
-                res.status(201).json(user);
+                res.status(201).json(user); //Created
             }
             catch (error) {
                 console.error('Registration error:', error);

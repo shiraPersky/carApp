@@ -1,12 +1,9 @@
-console.log("Server is starting...")
-console.log("Before dotenv config...");
+
 
 import dotenv from 'dotenv';
 dotenv.config();  // This will load the environment variables from the .env file
 
-console.log("Before express initialization...");
 import express from 'express';
-console.log("After express initialization...");
 
 import cors from 'cors';
 import cron from 'node-cron'; // Import node-cron for scheduling tasks
@@ -33,7 +30,13 @@ import passport from './Backend/Config/passportConfig';
 
 const app = express();
 
-app.use(cors());  // This allows requests from any origin
+// app.use(cors());  // This allows requests from any origin
+app.use(cors({
+  origin: 'http://localhost:5173', // Your frontend origin
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json());// Middleware to parse incoming JSON requests
 

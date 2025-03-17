@@ -56,8 +56,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 // backend/service/auth.service.ts
 const client_1 = require("@prisma/client");
-const bcrypt = __importStar(require("bcrypt"));
-const crypto = __importStar(require("crypto"));
+const bcrypt = __importStar(require("bcrypt")); //compare passwords securely
+const crypto = __importStar(require("crypto")); //generate secure random tokens
 const mailService_1 = require("./mailService");
 const prisma = new client_1.PrismaClient();
 class AuthService {

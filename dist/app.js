@@ -3,13 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-console.log("Server is starting...");
-console.log("Before dotenv config...");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config(); // This will load the environment variables from the .env file
-console.log("Before express initialization...");
 const express_1 = __importDefault(require("express"));
-console.log("After express initialization...");
 const cors_1 = __importDefault(require("cors"));
 const serviceController_1 = __importDefault(require("./Backend/controller/serviceController")); // Import the controller
 const refuelController_1 = __importDefault(require("./Backend/controller/refuelController"));
@@ -26,7 +22,13 @@ const express_session_1 = __importDefault(require("express-session"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const passportConfig_1 = __importDefault(require("./Backend/Config/passportConfig"));
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)()); // This allows requests from any origin
+// app.use(cors());  // This allows requests from any origin
+app.use((0, cors_1.default)({
+    origin: 'http://localhost:5173', // Your frontend origin
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express_1.default.json()); // Middleware to parse incoming JSON requests
 // Add middleware for authentication
 app.use((0, cookie_parser_1.default)()); // Parse cookies

@@ -1,73 +1,17 @@
-// //BrowserRouter-component that provides the routing functionality
-// //Route - Defines a single route in the application. It specifies which component should be rendered when the URL matches a specific path.
-// //Routes - A container for all the Route components. It manages the routing logic and renders the correct Route based on the current path.
-// import { Route, Routes ,Navigate } from 'react-router-dom'; // No need to import Router here
-// import ServicesPage from './pages/Service/ServicePage';
-// import AddServicePage from './pages/Service/AddServicePage';
-// import EditServicePage from './pages/Service/EditServicePage';
-
-// import RefuelingPage from './pages/Refueling/RefuelingPage';  // Import RefuelingPage
-// import AddRefuelingPage from './pages/Refueling/AddRefuelingPage';  // Import AddRefuelingPage
-// import EditRefuelingPage from './pages/Refueling/EditRefuelingPage';  // Import EditRefuelingPage
-
-// import CarPage from './pages/Cars/CarsPage'; // Import CarsPage
-// import AddCarPage from './pages/Cars/AddCarPage'; // Import AddCarPage
-// import EditCarPage from './pages/Cars/EditCarPage'; // Import EditCarPage
-
-// import FuelStatisticsPage from './pages/FuelStatisticsPage';  // Import your FuelStatisticsPage
-// import OdometerUpdatePage from './pages/Cars/OdometerUpdatedPage';
-
-// import AddReminderPage from './pages/Reminders/AddReminderPage';
-// import EditReminderPage from './pages/Reminders/EditReminderPage';
-// import ReminderPage from './pages/Reminders/ReminderPage';
-
-// import React from 'react';
-// import './app.css';
-
-
-// function App() {
-//   return (
-//     <Routes>
-//       {/* Service Routes */}
-//       <Route path="/services" element={<ServicesPage />} />
-//       <Route path="/services/add" element={<AddServicePage />} />
-//       <Route path="/services/edit/:id" element={<EditServicePage />} />
-
-//       {/* Refueling Routes */}
-//       <Route path="/refuels" element={<RefuelingPage />} />
-//       <Route path="/refuels/add" element={<AddRefuelingPage />} />
-//       <Route path="/refuels/edit/:id" element={<EditRefuelingPage />} />
-
-//       {/* Car Routes */}
-//       <Route path="/cars" element={<CarPage />} /> {/* List of cars */}
-//       <Route path="/cars/add" element={<AddCarPage />} /> {/* Add new car */}
-//       <Route path="/cars/edit/:id" element={<EditCarPage />} /> {/* Edit car by ID */}
-//       <Route path="/cars/odometer/:licensePlate" element={<OdometerUpdatePage />} />
-
-
-//       {/* Fuel Statistics Page */}
-//       <Route path="/fuel-statistics" element={<FuelStatisticsPage />} />
-
-//       {/* Reminder Routes */}
-//       <Route path="/reminders" element={<ReminderPage />} /> {/* List of reminders */}
-//       <Route path="/reminders/add" element={<AddReminderPage />} /> 
-//       <Route path="/reminders/edit/:id" element={<EditReminderPage />} /> 
-
-//       {/*default route */}
-//       <Route path="/" element={<Navigate to="/services" />} /> 
-
-//     </Routes>
-//   );
-// }
-
-// export default App;
-
-
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { theme } from './theme';
+import React from 'react';
+import './app.css';
+import './styles/auth.css'; // Import the auth styles
 
+// Auth imports
+import { AuthProvider, useAuth } from './Context/AuthContext';
+import Login from './pages/Login/Login';
+import Register from './pages/Login/Register';
+import ForgotPassword from './pages/Login/ForgotPassword';
+import ResetPassword from './pages/Login/ResetPassword';
 
 // Service imports
 import ServicesPage from './pages/Service/ServicePage';
@@ -93,43 +37,126 @@ import AddReminderPage from './pages/Reminders/AddReminderPage';
 import EditReminderPage from './pages/Reminders/EditReminderPage';
 import ReminderPage from './pages/Reminders/ReminderPage';
 
-import React from 'react';
-import './app.css';
+// Protected route component
+const ProtectedRoute: React.FC<{children: React.ReactNode}> = ({ children }) => {
+  const { user, loading } = useAuth();
+  
+  if (loading) {
+    return <div className="loading-screen">Loading...</div>;
+  }
+  
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return <>{children}</>;
+};
+
+function AppRoutes() {
+  return (
+    <div className="app-container">
+      <Routes>
+        {/* Auth Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+
+        {/* Protected Routes */}
+        {/* Service Routes */}
+        <Route path="/services" element={
+          <ProtectedRoute>
+            <ServicesPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/services/add" element={
+          <ProtectedRoute>
+            <AddServicePage />
+          </ProtectedRoute>
+        } />
+        <Route path="/services/edit/:id" element={
+          <ProtectedRoute>
+            <EditServicePage />
+          </ProtectedRoute>
+        } />
+
+        {/* Refueling Routes */}
+        <Route path="/refuels" element={
+          <ProtectedRoute>
+            <RefuelingPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/refuels/add" element={
+          <ProtectedRoute>
+            <AddRefuelingPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/refuels/edit/:id" element={
+          <ProtectedRoute>
+            <EditRefuelingPage />
+          </ProtectedRoute>
+        } />
+
+        {/* Car Routes */}
+        <Route path="/cars" element={
+          <ProtectedRoute>
+            <CarPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/cars/add" element={
+          <ProtectedRoute>
+            <AddCarPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/cars/edit/:id" element={
+          <ProtectedRoute>
+            <EditCarPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/cars/odometer/:licensePlate" element={
+          <ProtectedRoute>
+            <OdometerUpdatePage />
+          </ProtectedRoute>
+        } />
+
+        {/* Fuel Statistics Page */}
+        <Route path="/fuel-statistics" element={
+          <ProtectedRoute>
+            <FuelStatisticsPage />
+          </ProtectedRoute>
+        } />
+
+        {/* Reminder Routes */}
+        <Route path="/reminders" element={
+          <ProtectedRoute>
+            <ReminderPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/reminders/add" element={
+          <ProtectedRoute>
+            <AddReminderPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/reminders/edit/:id" element={
+          <ProtectedRoute>
+            <EditReminderPage />
+          </ProtectedRoute>
+        } />
+
+        {/* Default route - redirect to login if not authenticated, services if authenticated */}
+        <Route path="/" element={<Navigate to="/services" />} />
+      </Routes>
+    </div>
+  );
+}
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <div className="app-container">
-        <Routes>
-          {/* Service Routes */}
-          <Route path="/services" element={<ServicesPage />} />
-          <Route path="/services/add" element={<AddServicePage />} />
-          <Route path="/services/edit/:id" element={<EditServicePage />} />
-
-          {/* Refueling Routes */}
-          <Route path="/refuels" element={<RefuelingPage />} />
-          <Route path="/refuels/add" element={<AddRefuelingPage />} />
-          <Route path="/refuels/edit/:id" element={<EditRefuelingPage />} />
-
-          {/* Car Routes */}
-          <Route path="/cars" element={<CarPage />} />
-          <Route path="/cars/add" element={<AddCarPage />} />
-          <Route path="/cars/edit/:id" element={<EditCarPage />} />
-          <Route path="/cars/odometer/:licensePlate" element={<OdometerUpdatePage />} />
-
-          {/* Fuel Statistics Page */}
-          <Route path="/fuel-statistics" element={<FuelStatisticsPage />} />
-
-          {/* Reminder Routes */}
-          <Route path="/reminders" element={<ReminderPage />} />
-          <Route path="/reminders/add" element={<AddReminderPage />} />
-          <Route path="/reminders/edit/:id" element={<EditReminderPage />} />
-
-          {/* Default route */}
-          <Route path="/" element={<Navigate to="/services" />} />
-        </Routes>
-      </div>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </ThemeProvider>
   );
 }
