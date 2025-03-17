@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { FuelStatisticsService } from '../services/fuelStatisticsService.js';
+import { FuelStatisticsService } from '../services/fuelStatisticsService';
 import { FuelStatisticsDto } from '../dto/fuelStatisticsDto.js';
 
 const fuelStatisticsService = new FuelStatisticsService();
@@ -30,9 +30,15 @@ const fuelStatisticsController = {
         averageTimeBetweenRefuels: statistics.averageTimeBetweenRefuels, // This could be computed from the data
       };
 
+      // Get frequent stations with correct typing
       const frequentStations = await fuelStatisticsService.getFrequentStations();
-      dto.frequentRefuelingStations = frequentStations;
-
+      
+      // Ensure that the data returned is of the correct shape (e.g., { station: string, count: number })
+      dto.frequentRefuelingStations = frequentStations.map((station: { station: string; count: unknown }) => ({
+        station: station.station,
+        count: typeof station.count === 'number' ? station.count : Number(station.count), // Cast to number if necessary
+      }));
+      
       // Send the DTO as the response
       res.json(dto);
     } catch (error) {

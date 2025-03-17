@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fuelStatisticsService_js_1 = require("../services/fuelStatisticsService.js");
-const emailService_js_1 = require("../services/emailService.js"); // Import the EmailService
-const fuelStatisticsService = new fuelStatisticsService_js_1.FuelStatisticsService();
-const emailService = new emailService_js_1.EmailService(); // Create an instance of EmailService
+const fuelStatisticsService_1 = require("../services/fuelStatisticsService");
+const emailService_1 = require("../services/emailService"); // Import the EmailService
+const fuelStatisticsService = new fuelStatisticsService_1.FuelStatisticsService();
+const emailService = new emailService_1.EmailService(); // Create an instance of EmailService
 const emailController = {
     sendMonthlyStatistics: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {

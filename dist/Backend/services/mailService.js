@@ -12,51 +12,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendSSOEmail = sendSSOEmail;
-// Backend/service/mailService.js
+exports.MailService = void 0;
+// Backend/service/mailService.ts
 const nodemailer_1 = __importDefault(require("nodemailer"));
 let transporter;
-// Initialize the transporter
-function initializeTransporter() {
-    if (!transporter) {
-        transporter = nodemailer_1.default.createTransport({
-            host: process.env.MAIL_HOST || 'smtp.example.com',
-            port: parseInt(process.env.MAIL_PORT || '587'),
-            secure: process.env.MAIL_SECURE === 'true',
-            auth: {
-                user: process.env.MAIL_USER || 'user@example.com',
-                pass: process.env.MAIL_PASSWORD || 'password'
-            }
+class MailService {
+    constructor() {
+        if (!transporter) {
+            transporter = nodemailer_1.default.createTransport({
+                host: process.env.MAIL_HOST || 'smtp.example.com',
+                port: parseInt(process.env.MAIL_PORT || '587'),
+                secure: process.env.MAIL_SECURE === 'true',
+                auth: {
+                    user: process.env.MAIL_USER || 'user@example.com',
+                    pass: process.env.MAIL_PASSWORD || 'password'
+                }
+            });
+        }
+    }
+    sendSSOEmail(to, loginLink) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const mailOptions = {
+                from: process.env.MAIL_FROM || 'CarApp <noreply@carapp.example.com>',
+                to,
+                subject: 'CarApp - Login Link',
+                text: `Click the following link to log in to your CarApp account: ${loginLink}`,
+                html: `...` // Your HTML content here
+            };
+            yield transporter.sendMail(mailOptions);
         });
     }
-    return transporter;
 }
-function sendSSOEmail(to, loginLink) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const transport = initializeTransporter();
-        const mailOptions = {
-            from: process.env.MAIL_FROM || 'CarApp <noreply@carapp.example.com>',
-            to,
-            subject: 'CarApp - Login Link',
-            text: `Click the following link to log in to your CarApp account: ${loginLink}`,
-            html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2>CarApp Login</h2>
-        <p>Hello,</p>
-        <p>Click the button below to log in to your CarApp account:</p>
-        <p style="text-align: center;">
-          <a href="${loginLink}" 
-             style="background-color: #4CAF50; color: white; padding: 10px 20px; 
-                    text-decoration: none; border-radius: 5px; display: inline-block;">
-            Log In
-          </a>
-        </p>
-        <p>If you didn't request this email, please ignore it.</p>
-        <p>This link will expire in 15 minutes for security reasons.</p>
-        <p>Best regards,<br/>CarApp Team</p>
-      </div>
-    `
-        };
-        yield transport.sendMail(mailOptions);
-    });
-}
+exports.MailService = MailService;

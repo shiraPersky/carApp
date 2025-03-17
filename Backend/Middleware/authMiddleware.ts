@@ -5,11 +5,7 @@ import { AuthService } from '../services/authService';
 declare global {
   namespace Express {
     interface Request {
-      user?: {
-        id: number;
-        email: string;
-        name?: string;
-      };
+        user?: User;
     }
   }
 }

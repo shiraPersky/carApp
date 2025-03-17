@@ -25,7 +25,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
 const passport_local_1 = require("passport-local");
-const client_1 = require("@prisma/client"); // Ensure we are importing 'User' type correctly
+const client_1 = require("@prisma/client"); // Correct import
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const prisma = new client_1.PrismaClient();
 // Local strategy for email/password authentication
@@ -56,7 +56,7 @@ passport_1.default.use(new passport_local_1.Strategy({
 })));
 // Serialize user to session
 passport_1.default.serializeUser((user, done) => {
-    done(null, user.id); // Ensure that 'user' is of type 'User'
+    done(null, user.id);
 });
 // Deserialize user from session
 passport_1.default.deserializeUser((id, done) => __awaiter(void 0, void 0, void 0, function* () {

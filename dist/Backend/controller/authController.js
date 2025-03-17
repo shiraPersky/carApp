@@ -38,8 +38,14 @@ class AuthController {
     login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                // Log the request body to ensure it contains the correct data
+                console.log('Login request received with data:', req.body);
                 const data = req.body;
+                // Debugging: Check if the data is correctly parsed
+                console.log('Parsed login data:', data);
                 const user = yield this.authService.login(data);
+                // Log user details after login
+                console.log('User after login:', user);
                 // Create session
                 const sessionId = req.sessionID;
                 res.cookie('sessionId', sessionId, {

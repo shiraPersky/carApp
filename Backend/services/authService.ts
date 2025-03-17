@@ -1,7 +1,7 @@
 // backend/service/auth.service.ts
 import { PrismaClient } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
-import * as crypto from 'crypto';
+import * as bcrypt from 'bcrypt';//compare passwords securely
+import * as crypto from 'crypto';//generate secure random tokens
 import { LoginDto, RegisterDto, SSOLoginDto } from '../dto/authDto';
 import { MailService } from './mailService';
 

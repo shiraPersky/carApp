@@ -23,7 +23,7 @@ export class AuthController {
         maxAge: 24 * 60 * 60 * 1000 // 24 hours
       });
       
-      res.status(201).json(user);
+      res.status(201).json(user);//Created
     } catch (error) {
       console.error('Registration error:', error);
       res.status(400).json({ message: error.message || 'Registration failed' });
@@ -32,9 +32,15 @@ export class AuthController {
 
   async login(req: Request, res: Response) {
     try {
+      // Log the request body to ensure it contains the correct data
+      console.log('Login request received with data:', req.body);
       const data: LoginDto = req.body;
+      // Debugging: Check if the data is correctly parsed
+      console.log('Parsed login data:', data);
       const user = await this.authService.login(data);
-      
+      // Log user details after login
+      console.log('User after login:', user);
+
       // Create session
       const sessionId = req.sessionID;
       res.cookie('sessionId', sessionId, {

@@ -206,7 +206,9 @@ class FuelStatisticsService {
                 acc[ref.gasStation] = (acc[ref.gasStation] || 0) + 1;
                 return acc;
             }, {});
-            const sortedStations = Object.entries(stationMap).sort((a, b) => b[1] - a[1]);
+            //const sortedStations = Object.entries(stationMap).sort((a, b) => b[1] - a[1]);
+            const sortedStations = Object.entries(stationMap)
+                .sort(([stationA, countA], [stationB, countB]) => countB - countA);
             return sortedStations.map(([station, count]) => ({ station, count }));
         });
     }

@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fuelStatisticsService_js_1 = require("../services/fuelStatisticsService.js");
-const fuelStatisticsService = new fuelStatisticsService_js_1.FuelStatisticsService();
+const fuelStatisticsService_1 = require("../services/fuelStatisticsService");
+const fuelStatisticsService = new fuelStatisticsService_1.FuelStatisticsService();
 const fuelStatisticsController = {
     getStatistics: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -32,8 +32,13 @@ const fuelStatisticsController = {
                 frequentRefuelingStations: [], // This will be populated later in the service layer
                 averageTimeBetweenRefuels: statistics.averageTimeBetweenRefuels, // This could be computed from the data
             };
+            // Get frequent stations with correct typing
             const frequentStations = yield fuelStatisticsService.getFrequentStations();
-            dto.frequentRefuelingStations = frequentStations;
+            // Ensure that the data returned is of the correct shape (e.g., { station: string, count: number })
+            dto.frequentRefuelingStations = frequentStations.map((station) => ({
+                station: station.station,
+                count: typeof station.count === 'number' ? station.count : Number(station.count), // Cast to number if necessary
+            }));
             // Send the DTO as the response
             res.json(dto);
         }

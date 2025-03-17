@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { FuelStatisticsService } from '../services/fuelStatisticsService.js';
-import { EmailService } from '../services/emailService.js'; // Import the EmailService
+import { FuelStatisticsService } from '../services/fuelStatisticsService';
+import { EmailService } from '../services/emailService'; // Import the EmailService
 
 const fuelStatisticsService = new FuelStatisticsService();
 const emailService = new EmailService(); // Create an instance of EmailService
