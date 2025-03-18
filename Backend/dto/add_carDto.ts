@@ -1,5 +1,4 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-//as
 const prisma = new PrismaClient();
 
 export class CarDto {

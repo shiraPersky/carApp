@@ -65,8 +65,6 @@ export class FuelStatisticsService {
 
   private getDateRangeForFilter(filter: string) {
     const now = new Date();
-    //console.log('Calculating date range for filter:', filter); // Log the filter value
-    // Handle custom date range format: "Custom Dates|startDate|endDate"
     if (filter.startsWith('Custom Dates|')) {
       const [_, startDateStr, endDateStr] = filter.split('|');
       

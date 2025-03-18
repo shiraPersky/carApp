@@ -1,0 +1,166 @@
+/* RefuelingPage.css */
+
+.refueling-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .page-title {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+  }
+  
+  .add-button {
+    background-color: #ffc107;
+    color: #333;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+  }
+  
+  .add-button:hover {
+    background-color: #e6ac00;
+  }
+  
+  .plus-icon {
+    margin-right: 5px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .refueling-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+  }
+  
+  .refueling-table th,
+  .refueling-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .refueling-table thead tr {
+    background-color: #f9f9f9;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .refueling-table th {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .refueling-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .refueling-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .actions-cell {
+    white-space: nowrap;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .edit-button,
+  .delete-button,
+  .info-button,
+  .receipt-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s;
+  }
+  
+  .edit-button {
+    background-color: #f0f8ff;
+    color: #4169e1;
+  }
+  
+  .delete-button {
+    background-color: #fff0f0;
+    color: #dc3545;
+  }
+  
+  .info-button {
+    background-color: #f0f8ff;
+    color: #17a2b8;
+  }
+  
+  .receipt-button {
+    background-color: #f0fff0;
+    color: #28a745;
+  }
+  
+  .edit-button:hover,
+  .delete-button:hover,
+  .info-button:hover,
+  .receipt-button:hover {
+    opacity: 0.8;
+  }
+  
+  .icon {
+    font-size: 16px;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 992px) {
+    .refueling-table th,
+    .refueling-table td {
+      padding: 10px 12px;
+    }
+    
+    .action-buttons {
+      gap: 5px;
+    }
+    
+    .edit-button,
+    .delete-button,
+    .info-button,
+    .receipt-button {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .header-container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    .add-button {
+      align-self: flex-start;
+    }
+  }
