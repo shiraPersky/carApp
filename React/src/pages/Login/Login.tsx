@@ -25,7 +25,7 @@ const LoginPage: React.FC = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate('/dashboard');
+      navigate('/cars');
     }
   }, [user, navigate]);
 
