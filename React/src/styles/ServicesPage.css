@@ -1,0 +1,122 @@
+/* ServicesPage.css */
+
+.services-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .page-title {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  .add-button {
+    background-color: #ffc107;
+    color: #333;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+  }
+  
+  .add-button:hover {
+    background-color: #e6ac00;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .services-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+  }
+  
+  .services-table th {
+    background-color: #0275d8;
+    color: white;
+    padding: 10px 15px;
+    text-align: left;
+    font-weight: normal;
+  }
+  
+  .services-table td {
+    padding: 10px 15px;
+    text-align: left;
+    border-bottom: 1px solid #f2f2f2;
+  }
+  
+  .services-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .services-table tr:hover {
+    background-color: #f2f2f2;
+  }
+  
+  .actions-cell {
+    white-space: nowrap;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .edit-button,
+  .delete-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .edit-button {
+    color: #fd7e14;
+  }
+  
+  .delete-button {
+    color: #dc3545;
+  }
+  
+  .icon {
+    font-size: 18px;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 992px) {
+    .services-table th,
+    .services-table td {
+      padding: 8px 10px;
+    }
+    
+    .icon {
+      font-size: 16px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .header-container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    .add-button {
+      align-self: flex-start;
+    }
+  }

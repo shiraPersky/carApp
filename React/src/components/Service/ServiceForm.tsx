@@ -432,12 +432,265 @@
 // export default ServiceForm;
 
 
+// import React from 'react';
+// import { useForm, Controller } from 'react-hook-form';
+// import { TextField, MenuItem, Button, Grid } from '@mui/material';
+// import '../../styles/ServiceForm.css';
+
+
+// const ServiceForm = ({ existingService, onSubmit }: any) => {
+//   const { register, handleSubmit, setValue, control, formState: { errors } } = useForm({
+//     defaultValues: existingService || {},
+//   });
+
+//   const serviceTypes = [
+//     "Air conditioning", "Air filter", "Battery", "Belts", "Brake fluid", "Brake pad", 
+//     "Car wash", "Fuel filter", "Inspection", "Labor cost", "Lights", "New tires", 
+//     "Oil change", "Oil filter", "Rotate tires", "Suspension system", "Tire pressure", 
+//     "Wheel alignment", "Engine oil", "Spark plugs", "Change Tires", "Coolant", 
+//     "Turn signals", "Parking lights", "Windshields wipers"
+//   ];
+
+//   return (
+//     <form onSubmit={handleSubmit(onSubmit)} noValidate>
+//       <Grid container spacing={2}>
+//         {/* Car ID */}
+//         <Grid item xs={12} sm={6}>
+//           <Controller
+//             name="car_id"
+//             control={control}
+//             defaultValue={existingService?.car_id || ''}
+//             rules={{ required: 'Car ID is required' }}
+//             render={({ field }) => (
+//               <TextField
+//                 {...field}
+//                 fullWidth
+//                 type="number"
+//                 label="Car ID"
+//                 error={!!errors.car_id}
+//                 helperText={errors.car_id?.message as string}
+//               />
+//             )}
+//           />
+//         </Grid>
+
+//         {/* License Plate */}
+//         <Grid item xs={12} sm={6}>
+//           <Controller
+//             name="license_plate"
+//             control={control}
+//             defaultValue={existingService?.license_plate || ''}
+//             rules={{ required: 'License plate is required' }}
+//             render={({ field }) => (
+//               <TextField
+//                 {...field}
+//                 fullWidth
+//                 label="License Plate"
+//                 error={!!errors.license_plate}
+//                 helperText={errors.license_plate?.message as string}
+//               />
+//             )}
+//           />
+//         </Grid>
+
+//         {/* Date */}
+//         <Grid item xs={12} sm={6}>
+//           <Controller
+//             name="date"
+//             control={control}
+//             defaultValue={existingService?.date || ''}
+//             rules={{ required: 'Date is required' }}
+//             render={({ field }) => (
+//               <TextField
+//                 {...field}
+//                 fullWidth
+//                 type="date"
+//                 label="Date"
+//                 InputLabelProps={{ shrink: true }}
+//                 error={!!errors.date}
+//                 helperText={errors.date?.message as string}
+//               />
+//             )}
+//           />
+//         </Grid>
+
+//         {/* Time */}
+//         <Grid item xs={12} sm={6}>
+//           <Controller
+//             name="time"
+//             control={control}
+//             defaultValue={existingService?.time || ''}
+//             rules={{ required: 'Time is required' }}
+//             render={({ field }) => (
+//               <TextField
+//                 {...field}
+//                 fullWidth
+//                 type="time"
+//                 label="Time"
+//                 InputLabelProps={{ shrink: true }}
+//                 error={!!errors.time}
+//                 helperText={errors.time?.message as string}
+//               />
+//             )}
+//           />
+//         </Grid>
+
+//         {/* Odometer */}
+//         <Grid item xs={12} sm={6}>
+//           <Controller
+//             name="odometer"
+//             control={control}
+//             defaultValue={existingService?.odometer || ''}
+//             rules={{ required: 'Odometer is required' }}
+//             render={({ field }) => (
+//               <TextField
+//                 {...field}
+//                 fullWidth
+//                 type="number"
+//                 label="Odometer"
+//                 error={!!errors.odometer}
+//                 helperText={errors.odometer?.message as string}
+//               />
+//             )}
+//           />
+//         </Grid>
+
+//         {/* Service Type */}
+//         <Grid item xs={12} sm={6}>
+//           <Controller
+//             name="service_type"
+//             control={control}
+//             defaultValue={existingService?.service_type || ''}
+//             rules={{ required: 'Service type is required' }}
+//             render={({ field }) => (
+//               <TextField
+//                 {...field}
+//                 fullWidth
+//                 select
+//                 label="Service Type"
+//                 error={!!errors.service_type}
+//                 helperText={errors.service_type?.message as string}
+//                 InputLabelProps={{ shrink: true }}
+//               >
+//                 {serviceTypes.map((service, index) => (
+//                   <MenuItem key={index} value={service}>
+//                     {service}
+//                   </MenuItem>
+//                 ))}
+//               </TextField>
+//             )}
+//           />
+//         </Grid>
+
+//         {/* Place */}
+//         <Grid item xs={12} sm={6}>
+//           <Controller
+//             name="place"
+//             control={control}
+//             defaultValue={existingService?.place || ''}
+//             render={({ field }) => (
+//               <TextField
+//                 {...field}
+//                 fullWidth
+//                 label="Place"
+//               />
+//             )}
+//           />
+//         </Grid>
+
+//         {/* Driver */}
+//         <Grid item xs={12} sm={6}>
+//           <Controller
+//             name="driver"
+//             control={control}
+//             defaultValue={existingService?.driver || ''}
+//             render={({ field }) => (
+//               <TextField
+//                 {...field}
+//                 fullWidth
+//                 label="Driver"
+//               />
+//             )}
+//           />
+//         </Grid>
+
+//         {/* Payment Method */}
+//         <Grid item xs={12} sm={6}>
+//           <Controller
+//             name="paymentMethod"
+//             control={control}
+//             defaultValue={existingService?.paymentMethod || ''}
+//             rules={{ required: 'Payment method is required' }}
+//             render={({ field }) => (
+//               <TextField
+//                 {...field}
+//                 fullWidth
+//                 label="Payment Method"
+//                 error={!!errors.paymentMethod}
+//                 helperText={errors.paymentMethod?.message as string}
+//               />
+//             )}
+//           />
+//         </Grid>
+
+//         {/* Cost */}
+//         <Grid item xs={12} sm={6}>
+//           <Controller
+//             name="cost"
+//             control={control}
+//             defaultValue={existingService?.cost || ''}
+//             rules={{ required: 'Cost is required' }}
+//             render={({ field }) => (
+//               <TextField
+//                 {...field}
+//                 fullWidth
+//                 type="number"
+//                 label="Cost"
+//                 error={!!errors.cost}
+//                 helperText={errors.cost?.message as string}
+//               />
+//             )}
+//           />
+//         </Grid>
+
+//         {/* Notes */}
+//         <Grid item xs={12}>
+//           <Controller
+//             name="notes"
+//             control={control}
+//             defaultValue={existingService?.notes || ''}
+//             render={({ field }) => (
+//               <TextField
+//                 {...field}
+//                 fullWidth
+//                 label="Notes"
+//                 multiline
+//                 rows={4}
+//               />
+//             )}
+//           />
+//         </Grid>
+
+//         {/* Submit Button */}
+//         <Grid item xs={12}>
+//           <Button type="submit" variant="contained" color="primary" fullWidth>
+//             Save
+//           </Button>
+//         </Grid>
+//       </Grid>
+//     </form>
+//   );
+// };
+
+// export default ServiceForm;
+
+
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { TextField, MenuItem, Button, Grid } from '@mui/material';
+import '../../styles/ServiceForm.css';
 
-const ServiceForm = ({ existingService, onSubmit }: any) => {
-  const { register, handleSubmit, setValue, control, formState: { errors } } = useForm({
+const ServiceForm = ({ existingService, onSubmit }) => {
+  const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: existingService || {},
   });
 
@@ -450,233 +703,222 @@ const ServiceForm = ({ existingService, onSubmit }: any) => {
   ];
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <Grid container spacing={2}>
-        {/* Car ID */}
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="car_id"
-            control={control}
-            defaultValue={existingService?.car_id || ''}
-            rules={{ required: 'Car ID is required' }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                type="number"
-                label="Car ID"
-                error={!!errors.car_id}
-                helperText={errors.car_id?.message as string}
+    <div className="service-form-container">
+      <div className="service-form-card">
+        <h3 className="service-form-section-title">Service Details</h3>
+        
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <div className="form-row">
+            <div className="form-field">
+              <label className="form-label">License Plate</label>
+              <Controller
+                name="license_plate"
+                control={control}
+                defaultValue={existingService?.license_plate || ''}
+                rules={{ required: 'License plate is required' }}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="text"
+                    className={`form-input ${errors.license_plate ? 'error-input' : ''}`}
+                  />
+                )}
               />
-            )}
-          />
-        </Grid>
+              {errors.license_plate && <span className="error-message">{errors.license_plate.message?.toString()}</span>}
+            </div>
+          </div>
 
-        {/* License Plate */}
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="license_plate"
-            control={control}
-            defaultValue={existingService?.license_plate || ''}
-            rules={{ required: 'License plate is required' }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                label="License Plate"
-                error={!!errors.license_plate}
-                helperText={errors.license_plate?.message as string}
+          <div className="form-row">
+            <div className="form-field">
+              <label className="form-label">Date</label>
+              <Controller
+                name="date"
+                control={control}
+                defaultValue={existingService?.date || ''}
+                rules={{ required: 'Date is required' }}
+                render={({ field }) => (
+                  <div className="date-input-container">
+                    <input
+                      {...field}
+                      type="date"
+                      className={`form-input ${errors.date ? 'error-input' : ''}`}
+                    />
+                    <span className="input-hint">dd/mm/yyyy</span>
+                  </div>
+                )}
               />
-            )}
-          />
-        </Grid>
-
-        {/* Date */}
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="date"
-            control={control}
-            defaultValue={existingService?.date || ''}
-            rules={{ required: 'Date is required' }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                type="date"
-                label="Date"
-                InputLabelProps={{ shrink: true }}
-                error={!!errors.date}
-                helperText={errors.date?.message as string}
+              {errors.date && <span className="error-message">{errors.date.message?.toString()}</span>}
+            </div>
+            
+            <div className="form-field">
+              <label className="form-label">Time</label>
+              <Controller
+                name="time"
+                control={control}
+                defaultValue={existingService?.time || ''}
+                rules={{ required: 'Time is required' }}
+                render={({ field }) => (
+                  <div className="time-input-container">
+                    <input
+                      {...field}
+                      type="time"
+                      className={`form-input ${errors.time ? 'error-input' : ''}`}
+                    />
+                    <span className="input-hint">--:--</span>
+                  </div>
+                )}
               />
-            )}
-          />
-        </Grid>
+              {errors.time && <span className="error-message">{errors.time.message?.toString()}</span>}
+            </div>
+          </div>
 
-        {/* Time */}
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="time"
-            control={control}
-            defaultValue={existingService?.time || ''}
-            rules={{ required: 'Time is required' }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                type="time"
-                label="Time"
-                InputLabelProps={{ shrink: true }}
-                error={!!errors.time}
-                helperText={errors.time?.message as string}
+          <div className="form-row">
+            <div className="form-field">
+              <label className="form-label">Odometer</label>
+              <Controller
+                name="odometer"
+                control={control}
+                defaultValue={existingService?.odometer || ''}
+                rules={{ required: 'Odometer is required' }}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="number"
+                    className={`form-input ${errors.odometer ? 'error-input' : ''}`}
+                  />
+                )}
               />
-            )}
-          />
-        </Grid>
-
-        {/* Odometer */}
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="odometer"
-            control={control}
-            defaultValue={existingService?.odometer || ''}
-            rules={{ required: 'Odometer is required' }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                type="number"
-                label="Odometer"
-                error={!!errors.odometer}
-                helperText={errors.odometer?.message as string}
+              {errors.odometer && <span className="error-message">{errors.odometer.message?.toString()}</span>}
+            </div>
+            
+            <div className="form-field">
+              <label className="form-label">Service Type</label>
+              <Controller
+                name="service_type"
+                control={control}
+                defaultValue={existingService?.service_type || ''}
+                rules={{ required: 'Service type is required' }}
+                render={({ field }) => (
+                  <select
+                    {...field}
+                    className={`form-select ${errors.service_type ? 'error-input' : ''}`}
+                  >
+                    <option value="">Select a service type</option>
+                    {serviceTypes.map((service, index) => (
+                      <option key={index} value={service}>
+                        {service}
+                      </option>
+                    ))}
+                  </select>
+                )}
               />
-            )}
-          />
-        </Grid>
+              {errors.service_type && <span className="error-message">{errors.service_type.message?.toString()}</span>}
+            </div>
+          </div>
 
-        {/* Service Type */}
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="service_type"
-            control={control}
-            defaultValue={existingService?.service_type || ''}
-            rules={{ required: 'Service type is required' }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                select
-                label="Service Type"
-                error={!!errors.service_type}
-                helperText={errors.service_type?.message as string}
-                InputLabelProps={{ shrink: true }}
-              >
-                {serviceTypes.map((service, index) => (
-                  <MenuItem key={index} value={service}>
-                    {service}
-                  </MenuItem>
-                ))}
-              </TextField>
-            )}
-          />
-        </Grid>
-
-        {/* Place */}
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="place"
-            control={control}
-            defaultValue={existingService?.place || ''}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                label="Place"
+          <div className="form-row">
+            <div className="form-field">
+              <label className="form-label">Cost</label>
+              <Controller
+                name="cost"
+                control={control}
+                defaultValue={existingService?.cost || ''}
+                rules={{ required: 'Cost is required' }}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="number"
+                    step="0.01"
+                    className={`form-input ${errors.cost ? 'error-input' : ''}`}
+                  />
+                )}
               />
-            )}
-          />
-        </Grid>
-
-        {/* Driver */}
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="driver"
-            control={control}
-            defaultValue={existingService?.driver || ''}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                label="Driver"
+              {errors.cost && <span className="error-message">{errors.cost.message?.toString()}</span>}
+            </div>
+            
+            <div className="form-field">
+              <label className="form-label">Payment Method</label>
+              <Controller
+                name="paymentMethod"
+                control={control}
+                defaultValue={existingService?.paymentMethod || ''}
+                rules={{ required: 'Payment method is required' }}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="text"
+                    className={`form-input ${errors.paymentMethod ? 'error-input' : ''}`}
+                  />
+                )}
               />
-            )}
-          />
-        </Grid>
+              {errors.paymentMethod && <span className="error-message">{errors.paymentMethod.message?.toString()}</span>}
+            </div>
+          </div>
 
-        {/* Payment Method */}
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="paymentMethod"
-            control={control}
-            defaultValue={existingService?.paymentMethod || ''}
-            rules={{ required: 'Payment method is required' }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                label="Payment Method"
-                error={!!errors.paymentMethod}
-                helperText={errors.paymentMethod?.message as string}
+          <div className="form-row">
+            <div className="form-field">
+              <label className="form-label">Place</label>
+              <Controller
+                name="place"
+                control={control}
+                defaultValue={existingService?.place || ''}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="text"
+                    className="form-input"
+                  />
+                )}
               />
-            )}
-          />
-        </Grid>
-
-        {/* Cost */}
-        <Grid item xs={12} sm={6}>
-          <Controller
-            name="cost"
-            control={control}
-            defaultValue={existingService?.cost || ''}
-            rules={{ required: 'Cost is required' }}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                type="number"
-                label="Cost"
-                error={!!errors.cost}
-                helperText={errors.cost?.message as string}
+            </div>
+            
+            <div className="form-field">
+              <label className="form-label">Driver</label>
+              <Controller
+                name="driver"
+                control={control}
+                defaultValue={existingService?.driver || ''}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="text"
+                    className="form-input"
+                  />
+                )}
               />
-            )}
-          />
-        </Grid>
+            </div>
+          </div>
 
-        {/* Notes */}
-        <Grid item xs={12}>
-          <Controller
-            name="notes"
-            control={control}
-            defaultValue={existingService?.notes || ''}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                label="Notes"
-                multiline
-                rows={4}
+          <div className="form-row">
+            <div className="form-field">
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-field full-width">
+              <label className="form-label">Notes</label>
+              <Controller
+                name="notes"
+                control={control}
+                defaultValue={existingService?.notes || ''}
+                render={({ field }) => (
+                  <textarea
+                    {...field}
+                    className="form-textarea"
+                    rows={4}
+                  />
+                )}
               />
-            )}
-          />
-        </Grid>
+            </div>
+          </div>
 
-        {/* Submit Button */}
-        <Grid item xs={12}>
-          <Button type="submit" variant="contained" color="primary" fullWidth>
-            Save
-          </Button>
-        </Grid>
-      </Grid>
-    </form>
+          <div className="form-buttons">
+            <button type="button" className="cancel-button">Cancel</button>
+            <button type="submit" className="save-button">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 

@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CarDto = void 0;
 const client_1 = require("@prisma/client");
-//as
 const prisma = new client_1.PrismaClient();
 class CarDto {
     // Static method to create a new car record

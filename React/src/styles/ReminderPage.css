@@ -1,0 +1,111 @@
+/* ReminderPage.css */
+
+.reminders-container {
+    max-width: 95%;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  .reminders-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .reminders-header h2 {
+    font-size: 24px;
+    color: #333;
+    margin: 0;
+  }
+  
+  .add-reminder-btn {
+    background-color: #FFD700;
+    color: #000;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .add-reminder-btn:hover {
+    background-color: #FFC200;
+  }
+  
+  .reminders-table-container {
+    overflow-x: auto;
+  }
+  
+  .reminders-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .reminders-table th {
+    background-color: #0078D7;
+    color: white;
+    padding: 10px;
+    text-align: left;
+    font-weight: normal;
+  }
+  
+  .reminders-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .reminders-table tr:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .edit-button, .delete-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .delete-button:hover {
+    color: #FF4D4D;
+  }
+  
+  .edit-button:hover {
+    color: #FFA500;
+  }
+  
+  .status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  
+  .status-badge.completed {
+    background-color: #DFF0D8;
+    color: #3C763D;
+  }
+  
+  .status-badge.pending {
+    background-color: #FCF8E3;
+    color: #8A6D3B;
+  }
+  
+  .no-reminders {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+    .reminders-table {
+      min-width: 900px;
+    }
+  }

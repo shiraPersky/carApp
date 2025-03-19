@@ -206,7 +206,7 @@ class AuthService {
             if (!session) {
                 return null;
             }
-            if (new Date() > session.expires) {
+            if (new Date() > session.expires) { //If the token has expired, it is deleted from the session table
                 // Delete expired session
                 yield prisma.session.delete({
                     where: { id: sessionId }
