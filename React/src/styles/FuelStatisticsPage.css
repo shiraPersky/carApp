@@ -1,0 +1,412 @@
+/*FuelStatisticsPage.css
+
+.fuel-statistics-container {
+    padding-top: 2rem;
+    padding-bottom: 5rem; 
+  }
+  
+  .page-title {
+    font-weight: bold;
+    color: #1976d2;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  /* Summary Cards */
+ /* .summary-cards {
+    margin-bottom: 2rem;
+  }
+  
+  .summary-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    height: 100%;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  .summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-content {
+    text-align: center;
+    padding: 1.5rem 1rem;
+  }
+  
+  .card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .fuel-icon {
+    color: #F6BE00;
+  }
+  
+  .distance-icon {
+    color: #4CAF50;
+  }
+  
+  .efficiency-icon {
+    color: #2196F3;
+  }
+  
+  .card-subtitle {
+    color: #757575;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-value {
+    font-weight: bold;
+  }
+  
+  .fuel-value {
+    color: #F6BE00;
+  }
+  
+  .distance-value {
+    color: #4CAF50;
+  }
+  
+  .efficiency-value {
+    color: #2196F3;
+  }
+  
+  /* Period Selectors *//*
+  .period-selectors {
+    margin-bottom: 2rem;
+  }
+  
+  .period-selector {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  /* Error Alert */
+  /* .error-alert {
+    margin-bottom: 2rem;
+  } */
+  
+  /* Charts */
+  /* .chart-card {
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  } */
+  
+  /* .chart-title {
+    font-weight: 500;
+    color: #673ab7;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .section-divider {
+    margin-bottom: 1.5rem;
+  }
+  
+  .chart-container {
+    display: flex;
+    justify-content: center;
+    min-height: 300px;
+  }
+   */
+  /* Statistics Overview */
+  /* .statistics-overview-card {
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .stat-card {
+    height: 100%;
+    background-color: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .stat-content {
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  .stat-icon-container {
+    margin-bottom: 0.5rem;
+  }
+  
+  .stat-icon {
+    font-size: 1.5rem;
+  } */
+  
+  /* .stat-title {
+    color: #757575;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+  
+  .stat-value {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
+  .cost-icon {
+    color: #9C27B0;
+  }
+  
+  .price-icon {
+    color: #E91E63;
+  }
+  
+  .total-cost-icon {
+    color: #F6BE00;
+  }
+  
+  .total-distance-icon {
+    color: #4CAF50;
+  }
+  
+  .total-liters-icon {
+    color: #2196F3;
+  }
+  
+  .refuel-time-icon {
+    color: #795548;
+  } */
+  
+  /* Loading Container */
+  /* .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+  } */
+
+  /* Navigation Bar *//*
+  .navigation-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid #e0e0e0;
+    padding: 0.75rem 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+  }
+  
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .nav-item:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .nav-icon {
+    font-size: 1.5rem;
+    color: #757575;
+    margin-bottom: 0.25rem;
+  }
+  
+  .nav-item.active .nav-icon,
+  .nav-item.active .active {
+    color: #1976d2;
+    font-weight: bold;
+  }*/
+  
+  /* Responsive Adjustments *//*
+  @media (max-width: 600px) {
+    .card-icon {
+      font-size: 2rem;
+    }
+    
+    .page-title {
+      font-size: 1.5rem;
+    }
+    
+    .chart-title {
+      font-size: 1.25rem;
+    }
+  }*/
+
+  /* Main container styles */
+.fuel-statistics-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  /* Page title */
+  .page-title {
+    font-weight: 700;
+    color: #1976d2; /* Primary color */
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  /* Loading state */
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+  }
+  
+  /* Summary cards section */
+  .summary-cards {
+    margin-bottom: 2rem;
+  }
+  
+  .summary-card {
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    height: 100%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .fuel-cost {
+    border-top: 4px solid #FF6B6B; /* Red border */
+  }
+  
+  .total-distance {
+    border-top: 4px solid #3498db; /* Blue border */
+  }
+  
+  .efficiency-savings {
+    border-top: 4px solid #FFBB28; /* Yellow border */
+  }
+  
+  .card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-icon {
+    margin-right: 0.5rem;
+  }
+  
+  .card-subtitle {
+    color: #666;
+  }
+  
+  .card-value {
+    font-weight: 700;
+  }
+  
+  .fuel-cost-value {
+    color: #FF6B6B;
+  }
+  
+  .total-distance-value {
+    color: #3498db;
+  }
+  
+  .efficiency-savings-value {
+    color: #FFBB28;
+  }
+  
+  /* Filter section */
+  .filter-section {
+    margin-bottom: 2rem;
+  }
+  
+  .filter-card {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .filter-title {
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  
+  /* Error message */
+  .error-message {
+    padding: 1rem;
+    margin-bottom: 2rem;
+    background-color: #ffebee;
+    color: #d32f2f;
+    border-radius: 0.5rem;
+  }
+  
+  /* Chart cards */
+  .chart-card {
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    height: 100%;
+  }
+  
+  .chart-title {
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  
+  .chart-divider {
+    margin-bottom: 1.5rem;
+  }
+  
+  .chart-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* Statistics overview */
+  .overview-card {
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .overview-title {
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  
+  .overview-divider {
+    margin-bottom: 1.5rem;
+  }
+  
+  .statistics-list > div {
+    margin-bottom: 1rem;
+  }
+  
+  /* Detailed analytics */
+  .detailed-analytics-card {
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .detailed-analytics-title {
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  
+  .detailed-analytics-divider {
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 960px) {
+    .summary-card {
+      margin-bottom: 1rem;
+    }
+    
+    .filter-card {
+      margin-bottom: 1rem;
+    }
+  }

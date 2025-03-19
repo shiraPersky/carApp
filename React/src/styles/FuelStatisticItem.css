@@ -1,0 +1,17 @@
+.statistic-item {
+    padding: 1rem;
+    border-radius: 0.25rem;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  
+  .statistic-title {
+    color: #666;
+  }
+  
+  .statistic-value {
+    font-weight: 500;
+  }
