@@ -33,6 +33,68 @@
 
 // export default AddRefuelingPage;
 
+
+
+// import React from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import RefuelingForm from '../../components/Refueling/RefuelingForm';
+// import { createRefuel } from '../../services/serviceApi';
+// import '../../styles/AddRefuelingPage.css';
+
+// // Define interface for refueling data
+// interface RefuelingFormData {
+//   license_plate: string;
+//   date: string;
+//   time: string;
+//   odometer: number;
+//   kindOfFuel: string;
+//   pricePerLiter: number;
+//   totalCost: number;
+//   liters: number;
+//   gasStation: string;
+//   driver: string;
+//   notes?: string;
+// }
+
+// const AddRefuelingPage: React.FC = () => {
+//   const navigate = useNavigate();
+
+//   // Handle form submission
+//   const handleSubmit = async (data: RefuelingFormData) => {
+//     console.log('Form data being sent:', data);
+//     try {
+//       await createRefuel(data);
+//       navigate('/refuels');
+//     } catch (error) {
+//       console.error('Error adding new refuel:', error);
+//     }
+//   };
+
+//   const handleCancel = () => {
+//     navigate('/refuels');
+//   };
+
+//   return (
+//     <div className="page-container">
+//       <div className="page-header">
+//         <h2>Add New Refueling</h2>
+//         <button 
+//           className="back-button" 
+//           onClick={() => navigate('/refuels')}
+//         >
+//           ← Back to Refuelings
+//         </button>
+//       </div>
+//       <div className="form-card">
+//         <RefuelingForm onSubmit={handleSubmit} />
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default AddRefuelingPage;
+
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import RefuelingForm from '../../components/Refueling/RefuelingForm';
@@ -52,6 +114,13 @@ interface RefuelingFormData {
   gasStation: string;
   driver: string;
   notes?: string;
+}
+
+// Add this interface if it's not exported from RefuelingForm
+interface RefuelingFormComponentProps {
+  existingRefuel?: Partial<RefuelingFormData>;
+  onSubmit?: (data: RefuelingFormData) => void;
+  onCancel?: () => void;
 }
 
 const AddRefuelingPage: React.FC = () => {
@@ -76,15 +145,12 @@ const AddRefuelingPage: React.FC = () => {
     <div className="page-container">
       <div className="page-header">
         <h2>Add New Refueling</h2>
-        <button 
-          className="back-button" 
-          onClick={() => navigate('/refuels')}
-        >
-          ← Back to Refuelings
-        </button>
       </div>
       <div className="form-card">
-        <RefuelingForm onSubmit={handleSubmit} />
+        <RefuelingForm 
+          onSubmit={handleSubmit} 
+          onCancel={handleCancel} 
+        />
       </div>
     </div>
   );
