@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@google-cloud/storage": "^7.15.0",
-    "@google/generative-ai": "^0.21.0",
+    "@google/generative-ai": "^0.24.0",
     "@huggingface/inference": "^3.0.0",
     "@prisma/client": "^6.5.0",
     "axios": "^1.7.9",
