@@ -163,14 +163,24 @@ export const deleteRefuel = async (id: number) => {
 };
 
 // Car API Functions
-export const getCars = async () => {
+// export const getCars = async () => {
+//   try {
+//     const response = await axios.get(CAR_API_URL); // GET request for cars
+//     return response.data; // Return the actual data
+//   } catch (error) {
+//     throw new Error('Error fetching cars');
+//   }
+// };
+export const getCars = async (): Promise<Car[]> => {
   try {
-    const response = await axios.get(CAR_API_URL); // GET request for cars
-    return response.data; // Return the actual data
+    const response = await axios.get(CAR_API_URL);
+    return response.data as Car[]; // Type assertion to explicitly tell TypeScript the data is of type Car[]
   } catch (error) {
     throw new Error('Error fetching cars');
   }
 };
+
+
 
 export const createCar = async (carData: Car) => {
   try {
