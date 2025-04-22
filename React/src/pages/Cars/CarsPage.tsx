@@ -628,8 +628,9 @@
 
 // export default CarPage;
 
+
 import { useState, useEffect } from 'react';
-import { Car, getCars, updateOdometer } from '../../services/serviceApi';
+import { Car, deleteCar, getCars, updateOdometer } from '../../services/serviceApi';
 import { Link, useNavigate } from 'react-router-dom';
 import React from 'react';
 import '../../styles/Cars.css';
@@ -679,6 +680,17 @@ const CarPage = () => {
     return new Date(dateString).toLocaleDateString();
   };
 
+   const handleDelete = async (id: number) => {
+      if (window.confirm("Are you sure you want to delete this refueling record?")) {
+        try {
+          await deleteCar(id);
+          setCars(cars.filter((car) => car.id !== id));
+        } catch (error) {
+          console.error('Error deleting refuel:', error);
+        }
+      }
+    };
+
   return (
     <div className="cars-container">
       <div className="cars-header">
@@ -703,6 +715,7 @@ const CarPage = () => {
             <th>Color</th>
             <th>Valid Until</th>
             <th>Last Test</th>
+            <th>Actions</th> 
           </tr>
         </thead>
         <tbody>
@@ -719,6 +732,26 @@ const CarPage = () => {
               <td>{car.color}</td>
               <td>{formatDate(car.valid_until)}</td>
               <td>{formatDate(car.last_test)}</td>
+              <td>
+                <div className="action-buttons">
+                  <Link
+                    to={`/cars/edit/${car.id}`}
+                    className="edit-button"
+                    onClick={(e) => e.stopPropagation()} // <== Prevent click from bubbling up
+                  >
+                    ✏️ 
+                  </Link>
+                  <button onClick={(e) => {
+                      e.stopPropagation(); // prevent triggering the row click
+                      handleDelete(car.id);
+                    }}
+                    className="delete-button"
+                    title="Delete"
+                    >
+                        <span className="icon">🗑️</span>
+                      </button>
+                </div>
+            </td>
             </tr>
           ))}
         </tbody>

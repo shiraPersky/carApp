@@ -29,9 +29,12 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
 
-  // Hide footer on specific routes
-  const hideFooterRoutes = ['/cars'];
-  const shouldShowFooter = !hideFooterRoutes.includes(location.pathname);
+  // Define routes where the footer should be hidden
+  const hideFooterPrefixes = ['/cars']; // this will match /cars and /cars/add, /cars/edit
+
+  const shouldShowFooter = !hideFooterPrefixes.some((prefix) =>
+    location.pathname.startsWith(prefix)
+  );
 
   return (
     <div className="layout">
