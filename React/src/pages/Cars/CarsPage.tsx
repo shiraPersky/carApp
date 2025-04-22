@@ -634,6 +634,7 @@ import { Car, deleteCar, getCars, updateOdometer } from '../../services/serviceA
 import { Link, useNavigate } from 'react-router-dom';
 import React from 'react';
 import '../../styles/Cars.css';
+import { FaTachometerAlt } from 'react-icons/fa';
 
 import { FaPlus, FaSignOutAlt } from 'react-icons/fa';
 
@@ -749,7 +750,19 @@ const CarPage = () => {
                     title="Delete"
                     >
                         <span className="icon">🗑️</span>
-                      </button>
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedCar(car);
+                      setNewOdometer(car.odometer);
+                      setIsModalOpen(true);
+                    }}
+                    className="odometer-button"
+                    title="Update Odometer"
+                  >
+                  <FaTachometerAlt color="#3182ce" /> 
+                  </button>
                 </div>
             </td>
             </tr>

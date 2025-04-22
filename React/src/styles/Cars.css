@@ -521,11 +521,18 @@
 }
 
 
-
 .odometer-button {
-  color: #50b83c;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-left: 5px;
+  font-size: 18px;
 }
 
+.odometer-button:hover {
+  color: #3182ce;
+}
 /* Modal styles */
 .modal-overlay {
   position: fixed;
