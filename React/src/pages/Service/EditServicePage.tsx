@@ -132,8 +132,9 @@ const EditServicePage = () => {
     }
   };
   
-  
-  
+  const handleCancel = () => {
+    navigate('/services');
+  };
 
   if (loading) return <div>Loading...</div>; // Show loading while fetching data
 
@@ -141,8 +142,8 @@ const EditServicePage = () => {
     <div>
       <h2>Edit Service</h2>
       {error && <div style={{ color: 'red' }}>{error}</div>} {/* Display error */}
-      <ServiceForm existingService={service} onSubmit={handleSubmit} />
-    </div>
+      <ServiceForm existingService={service} onSubmit={handleSubmit} onCancel={handleCancel} />
+      </div>
   );
   
   

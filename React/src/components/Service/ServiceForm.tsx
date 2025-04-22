@@ -685,11 +685,255 @@
 // export default ServiceForm;
 
 
+
+
+
+
+
+// import React from 'react';
+// import { useForm, Controller } from 'react-hook-form';
+// import '../../styles/ServiceForm.css';
+
+// const ServiceForm = ({ existingService, onSubmit }) => {
+//   const { control, handleSubmit, formState: { errors } } = useForm({
+//     defaultValues: existingService || {},
+//   });
+
+//   const serviceTypes = [
+//     "Air conditioning", "Air filter", "Battery", "Belts", "Brake fluid", "Brake pad", 
+//     "Car wash", "Fuel filter", "Inspection", "Labor cost", "Lights", "New tires", 
+//     "Oil change", "Oil filter", "Rotate tires", "Suspension system", "Tire pressure", 
+//     "Wheel alignment", "Engine oil", "Spark plugs", "Change Tires", "Coolant", 
+//     "Turn signals", "Parking lights", "Windshields wipers"
+//   ];
+
+//   return (
+//     <div className="service-form-container">
+//       <div className="service-form-card">
+//         <h3 className="service-form-section-title">Service Details</h3>
+        
+//         <form onSubmit={handleSubmit(onSubmit)} noValidate>
+//           <div className="form-row">
+//             <div className="form-field">
+//               <label className="form-label">License Plate</label>
+//               <Controller
+//                 name="license_plate"
+//                 control={control}
+//                 defaultValue={existingService?.license_plate || ''}
+//                 rules={{ required: 'License plate is required' }}
+//                 render={({ field }) => (
+//                   <input
+//                     {...field}
+//                     type="text"
+//                     className={`form-input ${errors.license_plate ? 'error-input' : ''}`}
+//                   />
+//                 )}
+//               />
+//               {errors.license_plate && <span className="error-message">{errors.license_plate.message?.toString()}</span>}
+//             </div>
+//           </div>
+
+//           <div className="form-row">
+//             <div className="form-field">
+//               <label className="form-label">Date</label>
+//               <Controller
+//                 name="date"
+//                 control={control}
+//                 defaultValue={existingService?.date || ''}
+//                 rules={{ required: 'Date is required' }}
+//                 render={({ field }) => (
+//                   <div className="date-input-container">
+//                     <input
+//                       {...field}
+//                       type="date"
+//                       className={`form-input ${errors.date ? 'error-input' : ''}`}
+//                     />
+//                     <span className="input-hint">dd/mm/yyyy</span>
+//                   </div>
+//                 )}
+//               />
+//               {errors.date && <span className="error-message">{errors.date.message?.toString()}</span>}
+//             </div>
+            
+//             <div className="form-field">
+//               <label className="form-label">Time</label>
+//               <Controller
+//                 name="time"
+//                 control={control}
+//                 defaultValue={existingService?.time || ''}
+//                 rules={{ required: 'Time is required' }}
+//                 render={({ field }) => (
+//                   <div className="time-input-container">
+//                     <input
+//                       {...field}
+//                       type="time"
+//                       className={`form-input ${errors.time ? 'error-input' : ''}`}
+//                     />
+//                     <span className="input-hint">--:--</span>
+//                   </div>
+//                 )}
+//               />
+//               {errors.time && <span className="error-message">{errors.time.message?.toString()}</span>}
+//             </div>
+//           </div>
+
+//           <div className="form-row">
+//             <div className="form-field">
+//               <label className="form-label">Odometer</label>
+//               <Controller
+//                 name="odometer"
+//                 control={control}
+//                 defaultValue={existingService?.odometer || ''}
+//                 rules={{ required: 'Odometer is required' }}
+//                 render={({ field }) => (
+//                   <input
+//                     {...field}
+//                     type="number"
+//                     className={`form-input ${errors.odometer ? 'error-input' : ''}`}
+//                   />
+//                 )}
+//               />
+//               {errors.odometer && <span className="error-message">{errors.odometer.message?.toString()}</span>}
+//             </div>
+            
+//             <div className="form-field">
+//               <label className="form-label">Service Type</label>
+//               <Controller
+//                 name="service_type"
+//                 control={control}
+//                 defaultValue={existingService?.service_type || ''}
+//                 rules={{ required: 'Service type is required' }}
+//                 render={({ field }) => (
+//                   <select
+//                     {...field}
+//                     className={`form-select ${errors.service_type ? 'error-input' : ''}`}
+//                   >
+//                     <option value="">Select a service type</option>
+//                     {serviceTypes.map((service, index) => (
+//                       <option key={index} value={service}>
+//                         {service}
+//                       </option>
+//                     ))}
+//                   </select>
+//                 )}
+//               />
+//               {errors.service_type && <span className="error-message">{errors.service_type.message?.toString()}</span>}
+//             </div>
+//           </div>
+
+//           <div className="form-row">
+//             <div className="form-field">
+//               <label className="form-label">Cost</label>
+//               <Controller
+//                 name="cost"
+//                 control={control}
+//                 defaultValue={existingService?.cost || ''}
+//                 rules={{ required: 'Cost is required' }}
+//                 render={({ field }) => (
+//                   <input
+//                     {...field}
+//                     type="number"
+//                     step="0.01"
+//                     className={`form-input ${errors.cost ? 'error-input' : ''}`}
+//                   />
+//                 )}
+//               />
+//               {errors.cost && <span className="error-message">{errors.cost.message?.toString()}</span>}
+//             </div>
+            
+//             <div className="form-field">
+//               <label className="form-label">Payment Method</label>
+//               <Controller
+//                 name="paymentMethod"
+//                 control={control}
+//                 defaultValue={existingService?.paymentMethod || ''}
+//                 rules={{ required: 'Payment method is required' }}
+//                 render={({ field }) => (
+//                   <input
+//                     {...field}
+//                     type="text"
+//                     className={`form-input ${errors.paymentMethod ? 'error-input' : ''}`}
+//                   />
+//                 )}
+//               />
+//               {errors.paymentMethod && <span className="error-message">{errors.paymentMethod.message?.toString()}</span>}
+//             </div>
+//           </div>
+
+//           <div className="form-row">
+//             <div className="form-field">
+//               <label className="form-label">Place</label>
+//               <Controller
+//                 name="place"
+//                 control={control}
+//                 defaultValue={existingService?.place || ''}
+//                 render={({ field }) => (
+//                   <input
+//                     {...field}
+//                     type="text"
+//                     className="form-input"
+//                   />
+//                 )}
+//               />
+//             </div>
+            
+//             <div className="form-field">
+//               <label className="form-label">Driver</label>
+//               <Controller
+//                 name="driver"
+//                 control={control}
+//                 defaultValue={existingService?.driver || ''}
+//                 render={({ field }) => (
+//                   <input
+//                     {...field}
+//                     type="text"
+//                     className="form-input"
+//                   />
+//                 )}
+//               />
+//             </div>
+//           </div>
+
+//           <div className="form-row">
+//             <div className="form-field">
+//             </div>
+//           </div>
+
+//           <div className="form-row">
+//             <div className="form-field full-width">
+//               <label className="form-label">Notes</label>
+//               <Controller
+//                 name="notes"
+//                 control={control}
+//                 defaultValue={existingService?.notes || ''}
+//                 render={({ field }) => (
+//                   <textarea
+//                     {...field}
+//                     className="form-textarea"
+//                     rows={4}
+//                   />
+//                 )}
+//               />
+//             </div>
+//           </div>
+
+//           <div className="form-buttons">
+//             <button type="button" className="cancel-button">Cancel</button>
+//             <button type="submit" className="save-button">Save</button>
+//           </div>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ServiceForm;
+
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import '../../styles/ServiceForm.css';
 
-const ServiceForm = ({ existingService, onSubmit }) => {
+const ServiceForm = ({ existingService, onSubmit, onCancel }) => {
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: existingService || {},
   });
@@ -890,11 +1134,6 @@ const ServiceForm = ({ existingService, onSubmit }) => {
           </div>
 
           <div className="form-row">
-            <div className="form-field">
-            </div>
-          </div>
-
-          <div className="form-row">
             <div className="form-field full-width">
               <label className="form-label">Notes</label>
               <Controller
@@ -913,7 +1152,9 @@ const ServiceForm = ({ existingService, onSubmit }) => {
           </div>
 
           <div className="form-buttons">
-            <button type="button" className="cancel-button">Cancel</button>
+            <button type="button" className="cancel-button" onClick={onCancel}>
+              Cancel
+            </button>
             <button type="submit" className="save-button">Save</button>
           </div>
         </form>

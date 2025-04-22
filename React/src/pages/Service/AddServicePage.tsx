@@ -201,8 +201,8 @@ const AddServicePage = () => {
     <div className="add-service-container">
       <h2 className="page-title">Add New Service</h2>
       {error && <div style={{ color: 'red', marginBottom: '1rem' }}>{error}</div>}
-      <ServiceForm onSubmit={handleSubmit} existingService={undefined} />
-    </div>
+      <ServiceForm onSubmit={handleSubmit} onCancel={handleCancel} existingService={undefined} />
+      </div>
   );
 };
 
