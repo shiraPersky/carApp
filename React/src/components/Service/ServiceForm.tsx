@@ -987,7 +987,6 @@ const ServiceForm = ({ existingService, onSubmit, onCancel }) => {
                       type="date"
                       className={`form-input ${errors.date ? 'error-input' : ''}`}
                     />
-                    <span className="input-hint">dd/mm/yyyy</span>
                   </div>
                 )}
               />
@@ -1008,7 +1007,6 @@ const ServiceForm = ({ existingService, onSubmit, onCancel }) => {
                       type="time"
                       className={`form-input ${errors.time ? 'error-input' : ''}`}
                     />
-                    <span className="input-hint">--:--</span>
                   </div>
                 )}
               />
