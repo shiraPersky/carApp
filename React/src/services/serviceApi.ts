@@ -96,14 +96,27 @@ export const createService = async (serviceData: any) => {
   }
 };
 
+// export const updateService = async (id: number, serviceData: any) => {
+//   try {
+//     const response = await axios.put(`${API_URL}/${id}`, serviceData);
+//     return response.data;
+//   } catch (error) {
+//     throw new Error('Error updating service');
+//   }
+// };
 export const updateService = async (id: number, serviceData: any) => {
   try {
     const response = await axios.put(`${API_URL}/${id}`, serviceData);
     return response.data;
   } catch (error) {
+    // Ensure the error message from the backend is passed along
+    if (error.response && error.response.data) {
+      throw new Error(error.response.data.message || 'Error updating service');
+    }
     throw new Error('Error updating service');
   }
 };
+
 
 export const deleteService = async (id: number) => {
   try {

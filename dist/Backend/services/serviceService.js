@@ -51,6 +51,30 @@ class ServiceService {
         });
     }
     // Update a service with validation
+    // async updateService(id: number, data: Partial<ServiceDto>) {
+    //   try {
+    //     // Perform type casting before creating the service
+    //     data.car_id = parseInt(data.car_id as unknown as string, 10); // Ensure car_id is an integer
+    //     data.odometer = parseInt(data.odometer as unknown as string, 10); // Ensure odometer is an integer
+    //     data.cost = parseFloat(data.cost as unknown as string); // Ensure cost is a float
+    //     data.license_plate = data.license_plate || "";  // Set a default or validate
+    //     // Ensure the date is in ISO-8601 format if it's a string
+    //     if (data.date && typeof data.date === 'string') {
+    //       data.date = new Date(data.date).toISOString(); // Format date to ISO-8601 string
+    //     }
+    //     // Validate data before updating
+    //     this.validateServiceData(data, true); // Validation
+    //     // Update car's odometer after refueling
+    //     await CarDto.updateOdometer(data.license_plate, data.odometer);
+    //     // Update service in the database
+    //     const updatedService = await ServiceDto.update(id, data); // Call DTO method
+    //     return updatedService;
+    //   } catch (error) {
+    //     console.error("Error in updateService:", error); // Log the error
+    //     throw error; // Re-throw for the controller to catch
+    //   }
+    // }
+    // Update the updateService method in ServiceService
     updateService(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -65,6 +89,11 @@ class ServiceService {
                 }
                 // Validate data before updating
                 this.validateServiceData(data, true); // Validation
+                // Check if car with the given license plate exists using findUnique
+                const car = yield add_carDto_js_1.CarDto.findByLicensePlate(data.license_plate);
+                if (!car) {
+                    throw new Error(`Car with license plate ${data.license_plate} does not exist`);
+                }
                 // Update car's odometer after refueling
                 yield add_carDto_js_1.CarDto.updateOdometer(data.license_plate, data.odometer);
                 // Update service in the database
@@ -72,8 +101,17 @@ class ServiceService {
                 return updatedService;
             }
             catch (error) {
-                console.error("Error in updateService:", error); // Log the error
-                throw error; // Re-throw for the controller to catch
+                console.error("Error in updateService:", error);
+                if (error instanceof Error) {
+                    // Forward specific known errors to the frontend
+                    if (error.message.includes("does not exist")) {
+                        throw error; // Don't wrap it, just rethrow it
+                    }
+                    // Optional: Forward all error messages for easier debugging (only in dev)
+                    throw new Error(error.message);
+                }
+                // Generic fallback for unknown error types
+                throw new Error("An unexpected error occurred while updating the service.");
             }
         });
     }

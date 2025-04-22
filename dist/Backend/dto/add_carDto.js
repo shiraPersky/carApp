@@ -28,6 +28,13 @@ class CarDto {
             return yield prisma.car.findMany();
         });
     }
+    static findByLicensePlate(licensePlate) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield prisma.car.findUnique({
+                where: { license_plate: licensePlate },
+            });
+        });
+    }
     // Static method to update a specific car record
     static update(id, data) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -59,14 +66,31 @@ class CarDto {
             });
         });
     }
-    // Static method to update the car's odometer
+    //  // Static method to update the car's odometer
+    //  static async updateOdometer(licensePlate: string, odometer: number) {
+    //   return await prisma.car.update({
+    //     where: { license_plate: licensePlate },
+    //     data: {
+    //       odometer: odometer,  
+    //     } as Prisma.CarUpdateInput,  // Explicitly cast to Prisma.CarUpdateInput
+    //   });
+    // }
     static updateOdometer(licensePlate, odometer) {
         return __awaiter(this, void 0, void 0, function* () {
+            // Check if a car with the given license plate exists
+            const car = yield prisma.car.findUnique({
+                where: { license_plate: licensePlate },
+            });
+            if (!car) {
+                // Throw an error with a message that can be caught on the frontend
+                throw new Error(`Car with license plate "${licensePlate}" does not exist`);
+            }
+            // Proceed with the odometer update
             return yield prisma.car.update({
                 where: { license_plate: licensePlate },
                 data: {
                     odometer: odometer,
-                }, // Explicitly cast to Prisma.CarUpdateInput
+                },
             });
         });
     }

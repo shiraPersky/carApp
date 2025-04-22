@@ -28,18 +28,29 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
-
-
 // Update a service
+// router.put('/:id', async (req: Request, res: Response) => {
+//   try {
+//     const updatedService = await serviceService.updateService(Number(req.params.id), req.body);
+//     res.json(updatedService);
+//   } catch (error) {
+//     console.error("Error updating service:", error); // Log the error
+//     res.status(500).json({ error: error.message || 'Failed to update service' }); // Send actual error message
+//   }
+// });
 router.put('/:id', async (req: Request, res: Response) => {
   try {
     const updatedService = await serviceService.updateService(Number(req.params.id), req.body);
     res.json(updatedService);
   } catch (error) {
-    console.error("Error updating service:", error); // Log the error
-    res.status(500).json({ error: error.message || 'Failed to update service' }); // Send actual error message
-  }
+    console.error("Error updating service:", error);
+    const message = error instanceof Error ? error.message : 'Failed to update service';
+
+    // 👇 Return 400 if it's the license plate error
+    const status = message === 'License plate does not exist' ? 400 : 500;
+    res.status(status).json({ message });  }
 });
+
 
 
 // Delete a service
