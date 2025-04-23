@@ -1348,6 +1348,8 @@ import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import SavingsIcon from '@mui/icons-material/Savings';
 import { Typography, Box, Paper, Grid, Card, CardContent, Divider, CircularProgress, Button } from '@mui/material';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+
 
 type FuelStatistics = {
   totalLiters: number;
@@ -1571,7 +1573,7 @@ const FuelStatisticsPage = () => {
               <Grid item xs={12} md={4}>
                 <Paper className="summary-card efficiency-savings">
                   <Box className="card-header">
-                    <SavingsIcon className="card-icon" />
+                    <MonetizationOnIcon  className="card-icon" />
                     <Typography variant="subtitle1" className="card-subtitle">
                       Efficiency Savings
                     </Typography>
