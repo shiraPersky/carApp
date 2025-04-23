@@ -530,3 +530,49 @@
     width: 100%;
   }
 }
+
+/* Add these styles to your existing HomePage.css file */
+
+.home-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.back-to-cars-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #4a69bd;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.back-to-cars-btn:hover {
+  background-color: #3955a3;
+}
+
+/* Responsive styles for the header */
+@media (max-width: 600px) {
+  .home-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .car-selection {
+    width: 100%;
+  }
+  
+  .back-to-cars-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
