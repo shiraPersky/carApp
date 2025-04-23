@@ -1494,20 +1494,6 @@ const FuelStatisticsPage = () => {
           Back to Home
         </Button>
         
-        <div className="car-selection">
-          <label htmlFor="car-select">Select Car:</label>
-          <select 
-            id="car-select" 
-            value={selectedCar?.id || ''} 
-            onChange={handleCarChange}
-          >
-            {cars.map(car => (
-              <option key={car.id} value={car.id}>
-                {car.license_plate} - {car.make} {car.model}
-              </option>
-            ))}
-          </select>
-        </div>
       </div>
 
       {/* Page title */}
