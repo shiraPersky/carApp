@@ -30,7 +30,7 @@ const Layout = ({ children }: LayoutProps) => {
   const location = useLocation();
 
   // Define routes where the footer should be hidden
-  const hideFooterPrefixes = ['/cars']; // this will match /cars and /cars/add, /cars/edit
+  const hideFooterPrefixes = ['/cars', '/home']; // this will match /cars and /cars/add, /cars/edit
 
   const shouldShowFooter = !hideFooterPrefixes.some((prefix) =>
     location.pathname.startsWith(prefix)
