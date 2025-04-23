@@ -1339,7 +1339,7 @@ import { useState, useEffect } from 'react';
 import { Car, getCars, getFuelStatistics } from '../services/serviceApi';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
-import '../styles/HomePage.css';
+import '../styles/FuelStatisticsPage.css';
 import React from 'react';
 import PieChart from '../components/fuelStatistics/PieChart';
 import GraphComponent from '../components/fuelStatistics/GraphComponent';
