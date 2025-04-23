@@ -73,7 +73,7 @@
 .card-value {
   font-weight: 600;
 }
-
+/* 
 .chart-card, .overview-card {
   height: 100%;
   margin-bottom: 24px;
@@ -92,6 +92,52 @@
   display: flex;
   align-items: center;
   justify-content: center;
+} */
+
+/* Add these styles to your FuelStatisticsPage.css file */
+.chart-card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.chart-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+}
+
+.chart-title {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  text-align: center;
+  color: #333;
+  padding: 8px 0;
+  margin-bottom: 12px !important;
+}
+
+.chart-divider {
+  margin-bottom: 16px !important;
+}
+
+.chart-container {
+  height: 320px;
+}
+
+/* Make axis labels smaller */
+.chart-card .MuiCardContent-root canvas {
+  font-size: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .chart-title {
+    font-size: 18px !important;
+  }
+  
+  .chart-container {
+    height: 280px;
+  }
 }
 
 .statistics-list {
