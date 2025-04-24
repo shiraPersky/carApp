@@ -67,6 +67,95 @@ export class AuthService {
     return userWithoutPassword;
   }
 
+  // Add these methods to your AuthService class in backend/service/auth.service.ts
+
+  async requestPasswordReset(email: string) {
+    const user = await prisma.user.findUnique({
+      where: { email }
+    });
+  
+    if (!user) {
+      // For security reasons, don't reveal that the email doesn't exist
+      return { message: 'If your email exists in our system, you will receive a password reset link' };
+    }
+  
+    // Generate reset token
+    const token = crypto.randomBytes(32).toString('hex');
+    const expires = new Date();
+    expires.setHours(expires.getHours() + 1); // 1 hour expiration
+    
+    // Check if a password reset record already exists for this email
+    const existingReset = await prisma.passwordReset.findUnique({
+      where: { email: user.email }
+    });
+  
+    if (existingReset) {
+      // Update existing record instead of creating a new one
+      await prisma.passwordReset.update({
+        where: { email: user.email },
+        data: {
+          token,
+          expires
+        }
+      });
+    } else {
+      // Create new record if none exists
+      await prisma.passwordReset.create({
+        data: {
+          email: user.email,
+          token,
+          expires
+        }
+      });
+    }
+  
+    // Send email with reset link
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+    const emailSent = await this.mailService.sendPasswordResetEmail(user.email, resetLink);
+    
+    if (!emailSent) {
+      console.warn(`Password reset email could not be sent to ${user.email}`);
+    }
+    
+    // Return success even if the email fails, to avoid revealing information
+    return { message: 'If your email exists in our system, you will receive a password reset link' };
+  }
+
+async resetPassword(token: string, newPassword: string) {
+  // Find valid token
+  const resetRecord = await prisma.passwordReset.findUnique({
+      where: { token }
+  });
+
+  if (!resetRecord) {
+      throw new Error('Invalid or expired token');
+  }
+
+  if (new Date() > resetRecord.expires) {
+      // Delete expired token
+      await prisma.passwordReset.delete({
+          where: { token }
+      });
+      throw new Error('Token expired');
+  }
+
+  // Hash new password
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  // Update user password
+  await prisma.user.update({
+      where: { email: resetRecord.email },
+      data: { password: hashedPassword }
+  });
+
+  // Delete used token
+  await prisma.passwordReset.delete({
+      where: { token }
+  });
+
+  return { message: 'Password reset successful' };
+  }
+  
   async initiateSSO(data: SSOLoginDto) {
     // Find or create user
     let user = await prisma.user.findUnique({

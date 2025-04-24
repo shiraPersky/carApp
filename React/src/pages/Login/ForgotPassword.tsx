@@ -32,6 +32,7 @@ const ForgotPassword: React.FC = () => {
         text: error.message || "Failed to send reset link. Please try again.", 
         isError: true 
       });
+      console.error('Error in form submission:', error);
     } finally {
       setIsLoading(false);
     }

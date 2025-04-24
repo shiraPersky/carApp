@@ -115,3 +115,11 @@ model Session {
   
   @@map("sessions")
 }
+
+model PasswordReset {
+  email   String   @unique
+  token   String   @id @unique
+  expires DateTime
+
+  @@map("password_resets")
+}

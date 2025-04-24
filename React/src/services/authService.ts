@@ -93,12 +93,25 @@ export const getCurrentUser = async (): Promise<User> => {
   }
 };
 
+// export const requestPasswordReset = async (email: string): Promise<MessageResponse> => {
+//   try {
+//     const response: AxiosResponse<MessageResponse> = await axios.post(`${API_URL}/auth/forgot-password`, { email });
+//     return response.data;
+//   } catch (error: any) {
+//     throw new Error(error.response?.data?.message || 'Failed to request password reset');
+//   }
+// };
 export const requestPasswordReset = async (email: string): Promise<MessageResponse> => {
   try {
     const response: AxiosResponse<MessageResponse> = await axios.post(`${API_URL}/auth/forgot-password`, { email });
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || 'Failed to request password reset');
+    console.error('Password reset error:', error);
+    if (error.response && error.response.data && error.response.data.message) {
+      throw new Error(error.response.data.message);
+    } else {
+      throw new Error('Failed to request password reset. Please try again later.');
+    }
   }
 };
 

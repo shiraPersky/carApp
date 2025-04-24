@@ -19,6 +19,9 @@ router.post('/login', (req, res) => {
 router.post('/sso', authController.initiateSSO.bind(authController));
 router.get('/sso/validate', authController.validateSSOToken.bind(authController));
 router.post('/logout', authController.logout.bind(authController));
+// Password reset routes
+router.post('/forgot-password', authController.requestPasswordReset.bind(authController));
+router.post('/reset-password', authController.resetPassword.bind(authController));
 // Protected routes
 router.get('/me', authMiddleware.authenticate.bind(authMiddleware), authController.getCurrentUser.bind(authController));
 exports.default = router;

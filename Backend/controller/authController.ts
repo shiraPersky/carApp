@@ -56,6 +56,38 @@ export class AuthController {
     }
   }
 
+  // Add these methods to your AuthController in backend/controller/auth.controller.ts
+
+  async requestPasswordReset(req: Request, res: Response) {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ message: 'Email is required' });
+        }
+        
+        const result = await this.authService.requestPasswordReset(email);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Password reset request error:', error);
+        res.status(500).json({ message: 'Failed to request password reset' });
+    }
+  }
+
+  async resetPassword(req: Request, res: Response) {
+    try {
+        const { token, newPassword } = req.body;
+        if (!token || !newPassword) {
+            return res.status(400).json({ message: 'Token and new password are required' });
+        }
+        
+        const result = await this.authService.resetPassword(token, newPassword);
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Password reset error:', error);
+        res.status(400).json({ message: error.message || 'Failed to reset password' });
+    }
+  }
+
   async initiateSSO(req: Request, res: Response) {
     try {
       const data: SSOLoginDto = req.body;

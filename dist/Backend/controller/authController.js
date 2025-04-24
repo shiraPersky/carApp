@@ -61,6 +61,39 @@ class AuthController {
             }
         });
     }
+    // Add these methods to your AuthController in backend/controller/auth.controller.ts
+    requestPasswordReset(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { email } = req.body;
+                if (!email) {
+                    return res.status(400).json({ message: 'Email is required' });
+                }
+                const result = yield this.authService.requestPasswordReset(email);
+                res.status(200).json(result);
+            }
+            catch (error) {
+                console.error('Password reset request error:', error);
+                res.status(500).json({ message: 'Failed to request password reset' });
+            }
+        });
+    }
+    resetPassword(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { token, newPassword } = req.body;
+                if (!token || !newPassword) {
+                    return res.status(400).json({ message: 'Token and new password are required' });
+                }
+                const result = yield this.authService.resetPassword(token, newPassword);
+                res.status(200).json(result);
+            }
+            catch (error) {
+                console.error('Password reset error:', error);
+                res.status(400).json({ message: error.message || 'Failed to reset password' });
+            }
+        });
+    }
     initiateSSO(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
