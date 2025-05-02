@@ -22,6 +22,7 @@ router.post('/logout', authController.logout.bind(authController));
 // Password reset routes
 router.post('/forgot-password', authController.requestPasswordReset.bind(authController));
 router.post('/reset-password', authController.resetPassword.bind(authController));
+router.post('/google', authController.googleAuth.bind(authController));
 // Protected routes
 router.get('/me', authMiddleware.authenticate.bind(authMiddleware), authController.getCurrentUser.bind(authController));
 exports.default = router;

@@ -1,4 +1,8 @@
 "use strict";
+// // backend/controller/auth.controller.ts
+// import { Request, Response } from 'express';
+// import { AuthService } from '../services/authService';
+// import { LoginDto, RegisterDto, SSOLoginDto } from '../dto/authDto';
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -11,6 +15,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const authService_1 = require("../services/authService");
+const google_auth_library_1 = require("google-auth-library");
+const googleClient = new google_auth_library_1.OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 class AuthController {
     constructor() {
         this.authService = new authService_1.AuthService();
@@ -32,6 +38,42 @@ class AuthController {
             catch (error) {
                 console.error('Registration error:', error);
                 res.status(400).json({ message: error.message || 'Registration failed' });
+            }
+        });
+    }
+    googleAuth(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { token } = req.body;
+                if (!token) {
+                    return res.status(400).json({ message: 'Google token is required' });
+                }
+                // Verify the token with Google
+                const ticket = yield googleClient.verifyIdToken({
+                    idToken: token,
+                    audience: process.env.GOOGLE_CLIENT_ID
+                });
+                const payload = ticket.getPayload();
+                if (!payload || !payload.email) {
+                    return res.status(400).json({ message: 'Invalid Google token' });
+                }
+                // Login or register the user with Google info
+                const { sessionId, user } = yield this.authService.googleLogin({
+                    email: payload.email,
+                    name: payload.name || '',
+                    googleId: payload.sub
+                });
+                // Set session cookie
+                res.cookie('sessionId', sessionId, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+                });
+                res.status(200).json(user);
+            }
+            catch (error) {
+                console.error('Google authentication error:', error);
+                res.status(401).json({ message: error.message || 'Google authentication failed' });
             }
         });
     }

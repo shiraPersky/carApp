@@ -85,6 +85,87 @@ class AuthService {
             return userWithoutPassword;
         });
     }
+    googleLogin(data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // Check if user already exists
+                let user = yield prisma.user.findUnique({
+                    where: { email: data.email }
+                });
+                if (!user) {
+                    // Create new user if they don't exist
+                    user = yield prisma.user.create({
+                        data: {
+                            email: data.email,
+                            name: data.name || data.email.split('@')[0], // Use part of email as name if not provided
+                            // Remove googleId if it's not in your schema yet
+                            is_sso_user: true
+                        }
+                    });
+                    // If googleId is added to schema, you can update the user separately
+                    if (user) {
+                        try {
+                            user = yield prisma.user.update({
+                                where: { id: user.id },
+                                data: {
+                                    // This will work after adding googleId to the schema and running the migration
+                                    googleId: data.googleId
+                                }
+                            });
+                        }
+                        catch (err) {
+                            console.error('Could not update user with googleId:', err);
+                            // Continue even if this fails - the user is created
+                        }
+                    }
+                }
+                else if (user) {
+                    // Update existing user
+                    try {
+                        user = yield prisma.user.update({
+                            where: { id: user.id },
+                            data: {
+                                is_sso_user: true,
+                                // This will work after adding googleId to the schema and running the migration
+                                googleId: data.googleId
+                            }
+                        });
+                    }
+                    catch (err) {
+                        console.error('Could not update user with googleId:', err);
+                        // Continue with the existing user
+                    }
+                }
+                // Update last login time
+                yield prisma.user.update({
+                    where: { id: user.id },
+                    data: { last_login: new Date() }
+                });
+                // Create a new session for the authenticated user
+                const sessionId = crypto.randomBytes(32).toString('hex');
+                const expires = new Date();
+                expires.setHours(expires.getHours() + 24); // 24 hours session
+                yield prisma.session.create({
+                    data: {
+                        id: sessionId,
+                        user_id: user.id,
+                        expires,
+                        data: JSON.stringify({ authenticated: true, provider: 'google' })
+                    }
+                });
+                // Return the user without sensitive information
+                const { password } = user, userWithoutPassword = __rest(user, ["password"]);
+                return {
+                    sessionId,
+                    user: userWithoutPassword
+                };
+            }
+            catch (error) {
+                console.error('Google login error:', error);
+                throw new Error(`Google login failed: ${error.message}`);
+            }
+        });
+    }
     login(data) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield prisma.user.findUnique({

@@ -232,3 +232,16 @@ button:disabled {
   font-size: 20px;
   color: #ffcc00;
 }
+
+/* Add this to your CSS file */
+.google-signin-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.google-signin-button {
+  width: 100%;
+  max-width: 250px;
+}
