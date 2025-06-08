@@ -375,11 +375,22 @@ async resetPassword(token: string, newPassword: string) {
   }
 
   async logout(sessionId: string) {
+  try {
     await prisma.session.delete({
       where: { id: sessionId }
     });
-    return { message: 'Logged out successfully' };
+  } catch (error: any) {
+    if (error.code === 'P2025') {
+      console.warn(`Session not found when trying to delete: ${sessionId}`);
+    } else {
+      console.error('Unexpected logout error:', error);
+      throw error; // רק שגיאות אמיתיות
+    }
   }
 
-  e
+  return { message: 'Logged out successfully' };
+}
+
+
+  
 }

@@ -388,9 +388,20 @@ class AuthService {
     }
     logout(sessionId) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield prisma.session.delete({
-                where: { id: sessionId }
-            });
+            try {
+                yield prisma.session.delete({
+                    where: { id: sessionId }
+                });
+            }
+            catch (error) {
+                if (error.code === 'P2025') {
+                    console.warn(`Session not found when trying to delete: ${sessionId}`);
+                }
+                else {
+                    console.error('Unexpected logout error:', error);
+                    throw error; // רק שגיאות אמיתיות
+                }
+            }
             return { message: 'Logged out successfully' };
         });
     }

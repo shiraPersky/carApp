@@ -635,6 +635,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import React from 'react';
 import '../../styles/Cars.css';
 import { FaTachometerAlt } from 'react-icons/fa';
+import { useAuth } from '../../Context/AuthContext'; 
 
 import { FaPlus, FaSignOutAlt } from 'react-icons/fa';
 
@@ -673,9 +674,10 @@ const CarPage = () => {
     navigate(`/home/${carId}`);
   };
 
-  const goToLogin = () => {
-    window.location.href = '/login';
-  };
+  const { logout } = useAuth();
+  const goToLogin = async () => {
+   logout(); // 
+};
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
@@ -701,7 +703,7 @@ const CarPage = () => {
             <FaPlus className="add-car-icon" /> Add Car
           </Link>
           <button onClick={goToLogin} className="back-to-login-button">
-            <FaSignOutAlt className="login-icon" /> Back to Login
+            <FaSignOutAlt className="login-icon" /> Logout
           </button>
         </div>
       </div>

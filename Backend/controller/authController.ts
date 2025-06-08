@@ -324,19 +324,29 @@ async googleAuth(req: Request, res: Response) {
   }
 
   async logout(req: Request, res: Response) {
-    try {
-      const sessionId = req.sessionID;
-      await this.authService.logout(sessionId);
-      
-      // Clear the session cookie
-      res.clearCookie('sessionId');
-      
-      res.status(200).json({ message: 'Logged out successfully' });
-    } catch (error) {
-      console.error('Logout error:', error);
-      res.status(500).json({ message: 'Logout failed' });
+  try {
+    const sessionId = req.cookies.sessionId || req.headers['x-session-id'];
+
+    if (!sessionId) {
+      return res.status(400).json({ message: 'No sessionId provided' });
     }
+
+    await this.authService.logout(sessionId);
+
+    // Clear the session cookie
+    res.clearCookie('sessionId', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax'
+    });
+
+    res.status(200).json({ message: 'Logged out successfully' });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({ message: 'Logout failed' });
   }
+}
+
 
   async getCurrentUser(req: Request, res: Response) {
     try {

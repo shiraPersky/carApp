@@ -24,15 +24,12 @@ const AuthRouteHandler: React.FC<{ children: React.ReactNode }> = ({ children })
     if (!loading) {
       // If user is logged in and tries to access a route that should redirect when authenticated
       if (user && shouldRedirectWhenAuth) {
-        // Get the previous page from history state if available (for back button handling)
-        const previousPage = location.state?.from || '/cars';
-        
-        // Check if we're trying to go back to login from somewhere else
-        // This handles the case where user is already logged in and clicks "back" to login
-        if (location.key && previousPage !== '/login') {
-          navigate(previousPage);
+        const previousPage = location.state?.from;
+
+        if (previousPage && previousPage !== '/login') {
+          navigate(previousPage, { replace: true });
         } else {
-          navigate('/cars');
+          navigate('/home', { replace: true }); 
         }
       }
       

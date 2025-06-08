@@ -174,10 +174,17 @@ class AuthController {
     logout(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const sessionId = req.sessionID;
+                const sessionId = req.cookies.sessionId || req.headers['x-session-id'];
+                if (!sessionId) {
+                    return res.status(400).json({ message: 'No sessionId provided' });
+                }
                 yield this.authService.logout(sessionId);
                 // Clear the session cookie
-                res.clearCookie('sessionId');
+                res.clearCookie('sessionId', {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'lax'
+                });
                 res.status(200).json({ message: 'Logged out successfully' });
             }
             catch (error) {
